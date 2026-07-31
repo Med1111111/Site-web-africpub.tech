@@ -161,7 +161,7 @@ export default function WebGLBackground() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-background"
+      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-background opacity-100 [.light_&]:opacity-30"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(227,6,19,0.28),transparent_55%),radial-gradient(circle_at_85%_75%,rgba(255,110,40,0.18),transparent_55%)]" />
       <div ref={containerRef} className="absolute inset-0" />

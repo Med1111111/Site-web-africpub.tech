@@ -111,8 +111,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     const storedLang = localStorage.getItem("ap-lang") as Lang | null;
     if (storedLang && storedLang in dicts) setLangState(storedLang);
     const storedTheme = localStorage.getItem("ap-theme") as Theme | null;
+    // Thème sombre par défaut (identité premium) ; le choix utilisateur prime.
     if (storedTheme) setTheme(storedTheme);
-    else if (window.matchMedia("(prefers-color-scheme: light)").matches) setTheme("light");
   }, []);
 
   useEffect(() => {
