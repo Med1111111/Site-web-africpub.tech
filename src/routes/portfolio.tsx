@@ -33,8 +33,21 @@ function PortfolioPage() {
   const [filter, setFilter] = useState("Tous");
   const [lightbox, setLightbox] = useState<number | null>(null);
 
-  const visible = projects
-    .map((p, i) => ({ ...p, img: images[i], index: i }))
+  // Réalisations gérées depuis l'espace admin, repli sur le contenu statique.
+  const { data } = useQuery({ queryKey: ["public-portfolio"], queryFn: () => listPublicPortfolio() });
+
+  const items =
+    data && data.length > 0
+      ? data.map((p, i) => ({
+          title: p.title,
+          category: p.category,
+          city: p.city,
+          img: p.image_url || images[i % images.length],
+        }))
+      : projects.map((p, i) => ({ ...p, img: images[i % images.length] }));
+
+  const visible = items
+    .map((p, i) => ({ ...p, index: i }))
     .filter((p) => filter === "Tous" || p.category === filter);
 
   return (
