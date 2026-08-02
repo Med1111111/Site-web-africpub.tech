@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import PageHeader from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
+import { listPublicPortfolio } from "@/lib/content.functions";
 import { categories, projects } from "@/lib/site-data";
 import p1 from "@/assets/portfolio-1.jpg";
 import p2 from "@/assets/portfolio-2.jpg";
