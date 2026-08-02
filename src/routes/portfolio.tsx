@@ -107,21 +107,21 @@ function PortfolioPage() {
         <div
           role="dialog"
           aria-modal="true"
-          aria-label={projects[lightbox].title}
+          aria-label={items[lightbox].title}
           className="fixed inset-0 z-[60] grid place-items-center bg-black/70 p-4 backdrop-blur-md"
           onClick={() => setLightbox(null)}
         >
           <div className="w-full max-w-3xl rounded-3xl glass p-3" onClick={(e) => e.stopPropagation()}>
             <img
-              src={images[lightbox]}
-              alt={projects[lightbox].title}
+              src={items[lightbox].img}
+              alt={items[lightbox].title}
               width={1024}
               height={768}
               className="w-full rounded-2xl object-cover"
             />
             <div className="flex items-center justify-between px-3 py-4">
               <p className="text-sm font-medium">
-                {projects[lightbox].title} — {projects[lightbox].city}
+                {items[lightbox].title} — {items[lightbox].city}
               </p>
               <button
                 onClick={() => setLightbox(null)}
