@@ -19,10 +19,10 @@ export const Route = createFileRoute("/")({
         content:
           "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format, habillage de véhicules et branding partout en Algérie.",
       },
-      { property: "og:title", content: "Afric Pub — Communication globale" },
+      { property: "og:title", content: "Afric Pub — Enseignes lumineuses & signalétique en Algérie" },
       {
         property: "og:description",
-        content: "Enseignes lumineuses, signalétique et impression grand format. De la 3D à la pose.",
+        content: "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format, habillage de véhicules et branding partout en Algérie.",
       },
       { property: "og:url", content: "/" },
     ],
