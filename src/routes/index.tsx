@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { Reveal } from "@/components/Reveal";
 import { useApp } from "@/lib/app-context";
+import { listPublicTestimonials } from "@/lib/content.functions";
 import { clients, process, projects, services, stats, testimonials } from "@/lib/site-data";
 import stand from "@/assets/stand.jpg.asset.json";
 import p1 from "@/assets/portfolio-1.jpg";
@@ -202,18 +204,8 @@ function Home() {
             {t("section.testimonials")}
           </h2>
         </Reveal>
-        <ul className="mt-10 grid gap-4 lg:grid-cols-3">
-          {testimonials.map((tm, i) => (
-            <Reveal as="li" key={tm.name} delay={i * 80}>
-              <blockquote className="h-full rounded-3xl glass p-7">
-                <p className="text-base">“{tm.quote}”</p>
-                <footer className="mt-5 text-sm text-muted-foreground">
-                  <strong className="text-foreground">{tm.name}</strong> — {tm.role}
-                </footer>
-              </blockquote>
-            </Reveal>
-          ))}
-        </ul>
+        <TestimonialsGrid />
+
       </section>
 
       {/* ---------- CTA ---------- */}
@@ -232,5 +224,33 @@ function Home() {
         </Reveal>
       </section>
     </div>
+  );
+}
+
+// Témoignages pilotés par l'espace admin, avec repli sur le contenu statique.
+function TestimonialsGrid() {
+  const { data } = useQuery({
+    queryKey: ["public-testimonials"],
+    queryFn: () => listPublicTestimonials(),
+  });
+
+  const items =
+    data && data.length > 0
+      ? data.map((tm) => ({ quote: tm.quote, name: tm.name, role: tm.role }))
+      : testimonials;
+
+  return (
+    <ul className="mt-10 grid gap-4 lg:grid-cols-3">
+      {items.map((tm, i) => (
+        <Reveal as="li" key={`${tm.name}-${i}`} delay={i * 80}>
+          <blockquote className="h-full rounded-3xl glass p-7">
+            <p className="text-base">“{tm.quote}”</p>
+            <footer className="mt-5 text-sm text-muted-foreground">
+              <strong className="text-foreground">{tm.name}</strong> — {tm.role}
+            </footer>
+          </blockquote>
+        </Reveal>
+      ))}
+    </ul>
   );
 }

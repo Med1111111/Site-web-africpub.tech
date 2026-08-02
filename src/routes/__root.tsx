@@ -15,6 +15,7 @@ import { AppProvider } from "@/lib/app-context";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WebGLBackground from "@/components/WebGLBackground";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -143,6 +144,7 @@ function RootComponent() {
           <Outlet />
         </main>
         <Footer />
+        <Toaster position="top-center" />
       </AppProvider>
     </QueryClientProvider>
   );
