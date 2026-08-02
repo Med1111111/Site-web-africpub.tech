@@ -226,3 +226,31 @@ function Home() {
     </div>
   );
 }
+
+// Témoignages pilotés par l'espace admin, avec repli sur le contenu statique.
+function TestimonialsGrid() {
+  const { data } = useQuery({
+    queryKey: ["public-testimonials"],
+    queryFn: () => listPublicTestimonials(),
+  });
+
+  const items =
+    data && data.length > 0
+      ? data.map((tm) => ({ quote: tm.quote, name: tm.name, role: tm.role }))
+      : testimonials;
+
+  return (
+    <ul className="mt-10 grid gap-4 lg:grid-cols-3">
+      {items.map((tm, i) => (
+        <Reveal as="li" key={`${tm.name}-${i}`} delay={i * 80}>
+          <blockquote className="h-full rounded-3xl glass p-7">
+            <p className="text-base">“{tm.quote}”</p>
+            <footer className="mt-5 text-sm text-muted-foreground">
+              <strong className="text-foreground">{tm.name}</strong> — {tm.role}
+            </footer>
+          </blockquote>
+        </Reveal>
+      ))}
+    </ul>
+  );
+}
