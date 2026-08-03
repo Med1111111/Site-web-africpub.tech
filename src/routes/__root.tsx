@@ -16,6 +16,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WebGLBackground from "@/components/WebGLBackground";
 import { Toaster } from "@/components/ui/sonner";
+import WhatsAppButton from "@/components/WhatsAppButton";
+
 
 function NotFoundComponent() {
   return (
