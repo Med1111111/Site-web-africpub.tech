@@ -6,6 +6,8 @@ import type { Database } from "@/integrations/supabase/types";
 
 export type PortfolioItem = Database["public"]["Tables"]["portfolio_items"]["Row"];
 export type Testimonial = Database["public"]["Tables"]["testimonials"]["Row"];
+export type SiteSettings = Database["public"]["Tables"]["site_settings"]["Row"];
+
 
 function publicClient() {
   const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
