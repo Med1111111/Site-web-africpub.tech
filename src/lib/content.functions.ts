@@ -145,3 +145,45 @@ export const deleteTestimonial = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+/* ---------- Réglages globaux du site ---------- */
+
+export const getPublicSiteSettings = createServerFn({ method: "GET" }).handler(async () => {
+  const { data, error } = await publicClient()
+    .from("site_settings")
+    .select("*")
+    .limit(1)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  return data as SiteSettings | null;
+});
+
+const settingsInput = z.object({
+  id: z.string().uuid(),
+  site_title: z.string().max(120).default(""),
+  site_description: z.string().max(400).default(""),
+  hero_badge: z.string().max(160).default(""),
+  cta_title: z.string().max(160).default(""),
+  cta_sub: z.string().max(300).default(""),
+  cta_label: z.string().max(60).default(""),
+  whatsapp_number: z.string().max(20).default(""),
+  stats: z
+    .array(z.object({ value: z.string().max(20), label: z.string().max(60) }))
+    .max(8)
+    .default([]),
+});
+
+export const saveSiteSettings = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => settingsInput.parse(input))
+  .handler(async ({ data, context }) => {
+    const { id, ...values } = data;
+    const { data: row, error } = await context.supabase
+      .from("site_settings")
+      .update(values)
+      .eq("id", id)
+      .select()
+      .single();
+    if (error) throw new Error(error.message);
+    return row;
+  });
