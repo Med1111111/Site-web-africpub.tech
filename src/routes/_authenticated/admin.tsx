@@ -10,7 +10,9 @@ import {
   getMyAdminStatus,
   listAllPortfolio,
   listAllTestimonials,
+  getPublicSiteSettings,
   savePortfolioItem,
+  saveSiteSettings,
   saveTestimonial,
   type PortfolioItem,
   type Testimonial,
@@ -324,5 +326,166 @@ function TestimonialManager() {
         {list.data?.length === 0 && <li className="rounded-3xl glass p-6 text-sm text-muted-foreground">Aucun témoignage.</li>}
       </ul>
     </div>
+  );
+}
+
+type StatRow = { value: string; label: string };
+
+function SettingsManager() {
+  const qc = useQueryClient();
+  const settings = useQuery({ queryKey: ["site-settings"], queryFn: () => getPublicSiteSettings() });
+  const [draft, setDraft] = useState<null | {
+    id: string;
+    site_title: string;
+    site_description: string;
+    hero_badge: string;
+    cta_title: string;
+    cta_sub: string;
+    cta_label: string;
+    whatsapp_number: string;
+    stats: StatRow[];
+  }>(null);
+
+  const current =
+    draft ??
+    (settings.data
+      ? {
+          id: settings.data.id,
+          site_title: settings.data.site_title,
+          site_description: settings.data.site_description,
+          hero_badge: settings.data.hero_badge,
+          cta_title: settings.data.cta_title,
+          cta_sub: settings.data.cta_sub,
+          cta_label: settings.data.cta_label,
+          whatsapp_number: settings.data.whatsapp_number,
+          stats: (Array.isArray(settings.data.stats) ? settings.data.stats : []) as unknown as StatRow[],
+        }
+      : null);
+
+  const save = useMutation({
+    mutationFn: (d: NonNullable<typeof current>) => saveSiteSettings({ data: d }),
+    onSuccess: () => {
+      toast.success("Réglages enregistrés");
+      setDraft(null);
+      qc.invalidateQueries({ queryKey: ["site-settings"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  if (settings.isLoading) return <p className="text-sm text-muted-foreground">Chargement…</p>;
+  if (!current) return <p className="text-sm text-muted-foreground">Aucun réglage disponible.</p>;
+
+  const set = (patch: Partial<NonNullable<typeof current>>) => setDraft({ ...current, ...patch });
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        save.mutate(current);
+      }}
+      className="space-y-4 rounded-3xl glass p-6 sm:p-8"
+    >
+      <h2 className="text-lg font-semibold">Contenu global du site</h2>
+
+      <label className="block text-sm text-muted-foreground">
+        Titre du site
+        <input className={`${field} mt-1`} value={current.site_title} onChange={(e) => set({ site_title: e.target.value })} />
+      </label>
+
+      <label className="block text-sm text-muted-foreground">
+        Description
+        <textarea
+          className="mt-1 w-full rounded-2xl glass-soft p-4 text-sm text-foreground outline-none focus:ring-2 focus:ring-brand/60"
+          rows={3}
+          value={current.site_description}
+          onChange={(e) => set({ site_description: e.target.value })}
+        />
+      </label>
+
+      <label className="block text-sm text-muted-foreground">
+        Badge d'accroche (hero)
+        <input className={`${field} mt-1`} value={current.hero_badge} onChange={(e) => set({ hero_badge: e.target.value })} />
+      </label>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <label className="block text-sm text-muted-foreground">
+          Titre CTA
+          <input className={`${field} mt-1`} value={current.cta_title} onChange={(e) => set({ cta_title: e.target.value })} />
+        </label>
+        <label className="block text-sm text-muted-foreground">
+          Libellé du bouton CTA
+          <input className={`${field} mt-1`} value={current.cta_label} onChange={(e) => set({ cta_label: e.target.value })} />
+        </label>
+      </div>
+
+      <label className="block text-sm text-muted-foreground">
+        Sous-titre CTA
+        <input className={`${field} mt-1`} value={current.cta_sub} onChange={(e) => set({ cta_sub: e.target.value })} />
+      </label>
+
+      <label className="block text-sm text-muted-foreground">
+        Numéro WhatsApp (format international, ex. 213540481810)
+        <input
+          className={`${field} mt-1`}
+          value={current.whatsapp_number}
+          onChange={(e) => set({ whatsapp_number: e.target.value })}
+        />
+      </label>
+
+      <fieldset className="rounded-2xl glass-soft p-4">
+        <legend className="px-2 text-sm text-muted-foreground">Statistiques</legend>
+        <div className="space-y-3">
+          {current.stats.map((s, i) => (
+            <div key={i} className="flex gap-2">
+              <input
+                className={`${field} w-28`}
+                value={s.value}
+                aria-label={`Valeur ${i + 1}`}
+                onChange={(e) => {
+                  const stats = current.stats.map((x, j) => (j === i ? { ...x, value: e.target.value } : x));
+                  set({ stats });
+                }}
+              />
+              <input
+                className={field}
+                value={s.label}
+                aria-label={`Libellé ${i + 1}`}
+                onChange={(e) => {
+                  const stats = current.stats.map((x, j) => (j === i ? { ...x, label: e.target.value } : x));
+                  set({ stats });
+                }}
+              />
+              <button
+                type="button"
+                className={btnGhost}
+                onClick={() => set({ stats: current.stats.filter((_, j) => j !== i) })}
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+          {current.stats.length < 8 && (
+            <button
+              type="button"
+              className={btnGhost}
+              onClick={() => set({ stats: [...current.stats, { value: "", label: "" }] })}
+            >
+              + Ajouter une statistique
+            </button>
+          )}
+        </div>
+      </fieldset>
+
+      <div className="flex gap-2">
+        <button type="submit" disabled={save.isPending} className={btn}>
+          {save.isPending ? "Enregistrement…" : "Enregistrer les réglages"}
+        </button>
+        {draft && (
+          <button type="button" className={btnGhost} onClick={() => setDraft(null)}>
+            Annuler
+          </button>
+        )}
+      </div>
+    </form>
   );
 }
