@@ -58,9 +58,10 @@ const emptyTestimonial: TestimonialDraft = {
 function AdminPage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
-  const [tab, setTab] = useState<"portfolio" | "testimonials">("portfolio");
+  const [tab, setTab] = useState<"portfolio" | "testimonials" | "settings">("portfolio");
 
   const status = useQuery({ queryKey: ["admin-status"], queryFn: () => getMyAdminStatus() });
+
 
   async function signOut() {
     await qc.cancelQueries();
