@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Reveal } from "@/components/Reveal";
 import { useApp } from "@/lib/app-context";
-import { listPublicTestimonials } from "@/lib/content.functions";
+import { getPublicSiteSettings, listPublicTestimonials } from "@/lib/content.functions";
 import { clients, process, projects, services, stats, testimonials } from "@/lib/site-data";
 import stand from "@/assets/stand.jpg.asset.json";
 import p1 from "@/assets/portfolio-1.jpg";
@@ -34,6 +34,11 @@ const gallery = [p1, p2, p3];
 
 function Home() {
   const { t } = useApp();
+  const { data: settings } = useQuery({ queryKey: ["site-settings"], queryFn: () => getPublicSiteSettings() });
+  const liveStats =
+    settings && Array.isArray(settings.stats) && settings.stats.length > 0
+      ? (settings.stats as unknown as { value: string; label: string }[])
+      : stats;
 
   return (
     <div className="px-3 sm:px-6">
@@ -42,7 +47,7 @@ function Home() {
         <Reveal>
           <p className="inline-flex items-center gap-2 rounded-full glass-soft px-4 py-1.5 text-xs tracking-wide text-muted-foreground">
             <span className="size-1.5 rounded-full bg-primary" aria-hidden="true" />
-            {t("hero.badge")}
+            {settings?.hero_badge || t("hero.badge")}
           </p>
           <h1 className="mt-6 text-5xl font-extrabold leading-[1.02] sm:text-7xl">
             {t("hero.title1")} <span className="text-gradient">{t("hero.title2")}</span>
@@ -83,7 +88,7 @@ function Home() {
       <section aria-label="Chiffres clés" className="mx-auto mt-20 max-w-7xl">
         <Reveal>
           <ul className="grid grid-cols-2 gap-3 rounded-3xl glass p-6 sm:p-8 lg:grid-cols-4">
-            {stats.map((s) => (
+            {liveStats.map((s) => (
               <li key={s.label} className="text-center">
                 <p className="text-3xl font-extrabold text-gradient sm:text-4xl">{s.value}</p>
                 <p className="mt-1 text-xs text-muted-foreground sm:text-sm">{s.label}</p>
@@ -105,15 +110,19 @@ function Home() {
         <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((s, i) => (
             <Reveal as="li" key={s.slug} delay={i * 70}>
-              <article className="group h-full rounded-3xl glass card-3d p-7">
-                <span
-                  aria-hidden="true"
-                  className="grid size-12 place-items-center rounded-2xl bg-brand text-xl text-primary-foreground transition-transform duration-500 group-hover:rotate-12"
-                >
-                  {s.icon}
-                </span>
-                <h3 className="mt-5 text-xl font-semibold">{s.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+              <article className="group h-full overflow-hidden rounded-3xl glass card-3d p-3">
+                <img
+                  src={s.image}
+                  alt={s.alt}
+                  loading="lazy"
+                  width={1024}
+                  height={640}
+                  className="h-44 w-full rounded-2xl object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="p-4">
+                  <h3 className="text-xl font-semibold">{s.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+                </div>
               </article>
             </Reveal>
           ))}
@@ -212,13 +221,13 @@ function Home() {
       <section className="mx-auto mt-28 max-w-7xl">
         <Reveal>
           <div className="relative overflow-hidden rounded-3xl glass glow p-10 text-center sm:p-16">
-            <h2 className="text-3xl font-bold sm:text-5xl">{t("cta.title")}</h2>
-            <p className="mx-auto mt-4 max-w-xl text-muted-foreground">{t("cta.sub")}</p>
+            <h2 className="text-3xl font-bold sm:text-5xl">{settings?.cta_title || t("cta.title")}</h2>
+            <p className="mx-auto mt-4 max-w-xl text-muted-foreground">{settings?.cta_sub || t("cta.sub")}</p>
             <Link
               to="/contact"
               className="mt-8 inline-flex rounded-full bg-brand px-8 py-4 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.04]"
             >
-              {t("cta.quote")}
+              {settings?.cta_label || t("cta.quote")}
             </Link>
           </div>
         </Reveal>

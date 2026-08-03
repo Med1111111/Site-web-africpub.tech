@@ -34,15 +34,19 @@ function ServicesPage() {
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((s, i) => (
             <Reveal as="li" key={s.slug} delay={i * 70}>
-              <article className="group h-full rounded-3xl glass card-3d p-8">
-                <span
-                  aria-hidden="true"
-                  className="grid size-12 place-items-center rounded-2xl bg-brand text-xl text-primary-foreground transition-transform duration-500 group-hover:rotate-12"
-                >
-                  {s.icon}
-                </span>
-                <h2 className="mt-5 text-xl font-semibold">{s.title}</h2>
-                <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+              <article className="group h-full overflow-hidden rounded-3xl glass card-3d p-3">
+                <img
+                  src={s.image}
+                  alt={s.alt}
+                  loading="lazy"
+                  width={1024}
+                  height={640}
+                  className="h-52 w-full rounded-2xl object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="p-5">
+                  <h2 className="text-xl font-semibold">{s.title}</h2>
+                  <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+                </div>
               </article>
             </Reveal>
           ))}

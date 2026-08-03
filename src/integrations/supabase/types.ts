@@ -53,6 +53,51 @@ export type Database = {
         }
         Relationships: []
       }
+      site_settings: {
+        Row: {
+          created_at: string
+          cta_label: string
+          cta_sub: string
+          cta_title: string
+          hero_badge: string
+          id: string
+          singleton: boolean
+          site_description: string
+          site_title: string
+          stats: Json
+          updated_at: string
+          whatsapp_number: string
+        }
+        Insert: {
+          created_at?: string
+          cta_label?: string
+          cta_sub?: string
+          cta_title?: string
+          hero_badge?: string
+          id?: string
+          singleton?: boolean
+          site_description?: string
+          site_title?: string
+          stats?: Json
+          updated_at?: string
+          whatsapp_number?: string
+        }
+        Update: {
+          created_at?: string
+          cta_label?: string
+          cta_sub?: string
+          cta_title?: string
+          hero_badge?: string
+          id?: string
+          singleton?: boolean
+          site_description?: string
+          site_title?: string
+          stats?: Json
+          updated_at?: string
+          whatsapp_number?: string
+        }
+        Relationships: []
+      }
       testimonials: {
         Row: {
           created_at: string
