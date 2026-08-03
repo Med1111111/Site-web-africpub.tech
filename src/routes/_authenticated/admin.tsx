@@ -96,7 +96,7 @@ function AdminPage() {
 
       <div className="mx-auto mt-10 flex max-w-5xl flex-wrap items-center justify-between gap-3">
         <div role="tablist" aria-label="Sections" className="flex gap-2">
-          {(["portfolio", "testimonials"] as const).map((k) => (
+          {(["portfolio", "testimonials", "settings"] as const).map((k) => (
             <button
               key={k}
               role="tab"
@@ -106,7 +106,7 @@ function AdminPage() {
                 tab === k ? "bg-brand text-primary-foreground" : "glass-soft text-muted-foreground hover:text-foreground"
               }`}
             >
-              {k === "portfolio" ? "Portfolio" : "Témoignages"}
+              {k === "portfolio" ? "Portfolio" : k === "testimonials" ? "Témoignages" : "Réglages"}
             </button>
           ))}
         </div>
@@ -116,8 +116,9 @@ function AdminPage() {
       </div>
 
       <div className="mx-auto mt-8 max-w-5xl pb-24">
-        {tab === "portfolio" ? <PortfolioManager /> : <TestimonialManager />}
+        {tab === "portfolio" ? <PortfolioManager /> : tab === "testimonials" ? <TestimonialManager /> : <SettingsManager />}
       </div>
+
     </div>
   );
 }
