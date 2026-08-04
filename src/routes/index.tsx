@@ -11,9 +11,6 @@ import { clients, projects, services } from "@/lib/site-data";
 import standCutout from "@/assets/stand-cutout.png.asset.json";
 import enseigne3d from "@/assets/enseigne-3d.png.asset.json";
 
-import p1 from "@/assets/portfolio-1.jpg";
-import p2 from "@/assets/portfolio-2.jpg";
-import p3 from "@/assets/portfolio-3.jpg";
 
 const siteSettingsQuery = {
   queryKey: ["site-settings"] as const,
