@@ -52,7 +52,8 @@ export default {
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await withAssetHeaders(request, await normalizeCatastrophicSsrResponse(response));
+      const normalized = await normalizeCatastrophicSsrResponse(response);
+      return withSecurityHeaders(await withAssetHeaders(request, normalized));
 
     } catch (error) {
       console.error(error);
