@@ -97,9 +97,19 @@ function PortfolioPage() {
           title: p.title,
           category: p.category,
           img: p.image_url || projects[i % projects.length].image,
+          avif: p.image_url ? undefined : projects[i % projects.length].avif,
+          webp: p.image_url ? undefined : projects[i % projects.length].webp,
           alt: p.title,
         }))
-      : projects.map((p) => ({ title: p.title, category: p.category, img: p.image, alt: p.alt }));
+      : projects.map((p) => ({
+          title: p.title,
+          category: p.category,
+          img: p.image,
+          avif: p.avif,
+          webp: p.webp,
+          alt: p.alt,
+        }));
+
 
 
   const visible = items
