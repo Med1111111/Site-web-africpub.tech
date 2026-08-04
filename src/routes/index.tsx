@@ -37,7 +37,11 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:url", content: "https://premium-afric-vision.lovable.app/" },
     ],
-    links: [{ rel: "canonical", href: "https://premium-afric-vision.lovable.app/" }],
+    links: [
+      { rel: "canonical", href: "https://premium-afric-vision.lovable.app/" },
+      // Précharge l'image LCP du hero (seule image above-the-fold).
+      { rel: "preload", as: "image", href: standCutout.url, fetchpriority: "high" },
+    ],
     scripts: [
       {
         type: "application/ld+json",
