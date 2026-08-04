@@ -6,6 +6,10 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { imagetools } from "vite-imagetools";
+import { VitePWA } from "vite-plugin-pwa";
+
+const YEAR = 60 * 60 * 24 * 365;
+const MONTH = 60 * 60 * 24 * 30;
 
 export default defineConfig({
   tanstackStart: {
@@ -14,6 +18,80 @@ export default defineConfig({
     server: { entry: "server" },
   },
   vite: {
-    plugins: [imagetools()],
+    plugins: [
+      imagetools(),
+      VitePWA({
+        strategies: "generateSW",
+        registerType: "autoUpdate",
+        injectRegister: null,
+        filename: "sw.js",
+        devOptions: { enabled: false },
+        manifest: false,
+        includeAssets: ["favicon.png", "manifest.webmanifest"],
+        workbox: {
+          // Pré-cache : app shell + visuels critiques (hero détouré, enseigne 3D, logo)
+          globPatterns: [
+            "**/*.{js,css,html,webmanifest}",
+            "**/{stand-cutout,hero,enseigne-3d,logo}*.{png,webp,avif}",
+          ],
+          maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
+          cleanupOutdatedCaches: true,
+          clientsClaim: true,
+          skipWaiting: true,
+          navigateFallback: "/",
+          navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//, /^\/_serverFn\//],
+          runtimeCaching: [
+            {
+              // Navigations HTML : toujours le réseau d'abord, repli cache hors-ligne
+              urlPattern: ({ request }: { request: Request }) => request.mode === "navigate",
+              handler: "NetworkFirst",
+              options: {
+                cacheName: "html-navigations",
+                networkTimeoutSeconds: 3,
+                expiration: { maxEntries: 30, maxAgeSeconds: MONTH },
+              },
+            },
+            {
+              // Vignettes portfolio et visuels AVIF/WebP générés par imagetools
+              urlPattern: ({ request, url }: { request: Request; url: URL }) =>
+                request.destination === "image" &&
+                url.origin === self.location.origin &&
+                /\.(avif|webp)$/i.test(url.pathname),
+              handler: "CacheFirst",
+              options: {
+                cacheName: "images-modern",
+                expiration: { maxEntries: 80, maxAgeSeconds: MONTH * 6, purgeOnQuotaError: true },
+                cacheableResponse: { statuses: [0, 200] },
+              },
+            },
+            {
+              // Repli JPEG/PNG/SVG (navigateurs sans AVIF/WebP)
+              urlPattern: ({ request, url }: { request: Request; url: URL }) =>
+                request.destination === "image" && url.origin === self.location.origin,
+              handler: "StaleWhileRevalidate",
+              options: {
+                cacheName: "images-legacy",
+                expiration: { maxEntries: 60, maxAgeSeconds: MONTH, purgeOnQuotaError: true },
+                cacheableResponse: { statuses: [0, 200] },
+              },
+            },
+            {
+              // Assets hashés (JS/CSS/polices) : immuables
+              urlPattern: ({ request, url }: { request: Request; url: URL }) =>
+                url.origin === self.location.origin &&
+                (request.destination === "script" ||
+                  request.destination === "style" ||
+                  request.destination === "font"),
+              handler: "CacheFirst",
+              options: {
+                cacheName: "static-assets",
+                expiration: { maxEntries: 120, maxAgeSeconds: YEAR },
+                cacheableResponse: { statuses: [0, 200] },
+              },
+            },
+          ],
+        },
+      }),
+    ],
   },
 });
