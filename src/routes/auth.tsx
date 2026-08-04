@@ -12,7 +12,10 @@ function safeNext(value: unknown): string | null {
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
-  validateSearch: (s: Record<string, unknown>) => ({ next: safeNext(s['next']) ?? undefined }),
+  validateSearch: (s: Record<string, unknown>): { next?: string } => {
+    const next = safeNext(s['next']);
+    return next ? { next } : {};
+  },
   head: () => ({
     meta: [
       { title: "Connexion — Espace admin Afric Pub" },
