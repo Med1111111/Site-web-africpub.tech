@@ -3,9 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { Facebook, Instagram, MapPin, MessageCircle, Youtube } from "lucide-react";
 
 import { Reveal } from "@/components/Reveal";
+import { ProcessSteps } from "@/components/ProcessSteps";
 import { useApp } from "@/lib/app-context";
 import { getPublicSiteSettings } from "@/lib/content.functions";
-import { clients, process, projects, services, stats } from "@/lib/site-data";
+import { clients, projects, services } from "@/lib/site-data";
+
 import standCutout from "@/assets/stand-cutout.png.asset.json";
 import enseigne3d from "@/assets/enseigne-3d.png.asset.json";
 
