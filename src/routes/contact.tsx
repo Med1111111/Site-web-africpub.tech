@@ -111,6 +111,16 @@ function ContactPage() {
                 Merci ! Votre demande a bien été enregistrée, nous revenons vers vous sous 24h.
               </p>
             )}
+            {state === "throttled" && (
+              <p role="alert" className="mb-6 rounded-2xl glass-soft px-4 py-3 text-sm text-destructive">
+                Vous avez déjà envoyé plusieurs demandes récemment. Merci de patienter une heure, ou
+                écrivez-nous sur{" "}
+                <a href="https://wa.me/213540481810" target="_blank" rel="noreferrer noopener" className="underline">
+                  WhatsApp
+                </a>
+                .
+              </p>
+            )}
             {state === "error" && (
               <p role="alert" className="mb-6 rounded-2xl glass-soft px-4 py-3 text-sm text-destructive">
                 L'envoi a échoué. Réessayez, ou contactez-nous directement sur{" "}
