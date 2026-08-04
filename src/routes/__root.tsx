@@ -117,9 +117,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             "https://premium-afric-vision.lovable.app/__l5e/assets-v1/0ccd4f80-e125-4c61-b5a8-374f0e84bde0/logo.png",
           description:
             "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format et branding en Algérie.",
+          sameAs: [
+            "https://web.facebook.com/AFRICPUB",
+            "https://www.instagram.com/afric_pub/",
+            "https://www.youtube.com/channel/UCCyWZb1m1H8CQJhh7FgmHlw",
+            "https://wa.me/213540481810",
+          ],
           address: { "@type": "PostalAddress", addressCountry: "DZ", addressLocality: "Alger" },
           email: "contact@africpub.dz",
           telephone: "+213540481810",
+
           contactPoint: [
             {
               "@type": "ContactPoint",
