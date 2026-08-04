@@ -17,6 +17,8 @@ import {
   type PortfolioItem,
   type Testimonial,
 } from "@/lib/content.functions";
+import LeadsManager from "@/components/admin/LeadsManager";
+import { listContactMessages } from "@/lib/leads.functions";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminPage,
@@ -60,9 +62,15 @@ const emptyTestimonial: TestimonialDraft = {
 function AdminPage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
-  const [tab, setTab] = useState<"portfolio" | "testimonials" | "settings">("portfolio");
+  const [tab, setTab] = useState<"leads" | "portfolio" | "testimonials" | "settings">("leads");
 
   const status = useQuery({ queryKey: ["admin-status"], queryFn: () => getMyAdminStatus() });
+  const leads = useQuery({
+    queryKey: ["admin-leads"],
+    queryFn: () => listContactMessages(),
+    enabled: Boolean(status.data?.isAdmin),
+  });
+  const newLeads = (leads.data ?? []).filter((m) => m.status === "nouveau").length;
 
 
   async function signOut() {
@@ -94,11 +102,11 @@ function AdminPage() {
 
   return (
     <div className="px-3 sm:px-6">
-      <PageHeader eyebrow="Administration" title="Tableau de bord" sub="Gérez les réalisations et les témoignages affichés sur le site." />
+      <PageHeader eyebrow="Administration" title="Tableau de bord" sub="Suivez les demandes de devis et gérez le contenu du site." />
 
       <div className="mx-auto mt-10 flex max-w-5xl flex-wrap items-center justify-between gap-3">
         <div role="tablist" aria-label="Sections" className="flex gap-2">
-          {(["portfolio", "testimonials", "settings"] as const).map((k) => (
+          {(["leads", "portfolio", "testimonials", "settings"] as const).map((k) => (
             <button
               key={k}
               role="tab"
@@ -108,7 +116,20 @@ function AdminPage() {
                 tab === k ? "bg-brand text-primary-foreground" : "glass-soft text-muted-foreground hover:text-foreground"
               }`}
             >
-              {k === "portfolio" ? "Portfolio" : k === "testimonials" ? "Témoignages" : "Réglages"}
+              {k === "leads" ? (
+                <>
+                  Demandes
+                  {newLeads > 0 && (
+                    <span className="ml-2 rounded-full bg-primary-foreground/20 px-2 py-0.5 text-xs">{newLeads}</span>
+                  )}
+                </>
+              ) : k === "portfolio" ? (
+                "Portfolio"
+              ) : k === "testimonials" ? (
+                "Témoignages"
+              ) : (
+                "Réglages"
+              )}
             </button>
           ))}
         </div>
@@ -118,7 +139,15 @@ function AdminPage() {
       </div>
 
       <div className="mx-auto mt-8 max-w-5xl pb-24">
-        {tab === "portfolio" ? <PortfolioManager /> : tab === "testimonials" ? <TestimonialManager /> : <SettingsManager />}
+        {tab === "leads" ? (
+          <LeadsManager />
+        ) : tab === "portfolio" ? (
+          <PortfolioManager />
+        ) : tab === "testimonials" ? (
+          <TestimonialManager />
+        ) : (
+          <SettingsManager />
+        )}
       </div>
 
     </div>
