@@ -6,7 +6,7 @@ import { Reveal } from "@/components/Reveal";
 import { useApp } from "@/lib/app-context";
 import { getPublicSiteSettings, listPublicTestimonials } from "@/lib/content.functions";
 import { clients, process, projects, services, stats, testimonials } from "@/lib/site-data";
-import stand from "@/assets/stand-hero.png.asset.json";
+import standCutout from "@/assets/stand-cutout.png.asset.json";
 import p1 from "@/assets/portfolio-1.jpg";
 import p2 from "@/assets/portfolio-2.jpg";
 import p3 from "@/assets/portfolio-3.jpg";
@@ -111,31 +111,29 @@ function Home() {
         </Reveal>
 
         <Reveal delay={120}>
-          <div className="relative">
+          <div className="relative lg:-ml-16 xl:-ml-24">
             {/* Halo lumineux rouge/orange — renforce le thème "donner de la lumière" */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute -inset-6 -z-10 rounded-[2.5rem] opacity-80 blur-2xl"
+              className="pointer-events-none absolute -inset-16 -z-10 opacity-90 blur-3xl"
               style={{
                 background:
-                  "radial-gradient(ellipse 65% 50% at 50% 38%, rgba(255,90,30,0.45), transparent 70%), radial-gradient(ellipse 55% 40% at 50% 85%, rgba(227,6,19,0.35), transparent 72%)",
+                  "radial-gradient(ellipse 60% 45% at 50% 30%, rgba(255,120,40,0.5), transparent 70%), radial-gradient(ellipse 70% 45% at 50% 70%, rgba(227,6,19,0.42), transparent 72%)",
               }}
             />
-            {/* Reflet au sol */}
+            {/* Spot lumineux au sol */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-x-8 -bottom-4 -z-10 h-10 rounded-[100%] opacity-60 blur-xl"
-              style={{ background: "radial-gradient(ellipse at center, rgba(255,110,40,0.5), transparent 70%)" }}
+              className="pointer-events-none absolute inset-x-4 bottom-2 -z-10 h-16 rounded-[100%] opacity-70 blur-2xl"
+              style={{ background: "radial-gradient(ellipse at center, rgba(255,120,50,0.55), transparent 70%)" }}
             />
-            <div className="overflow-hidden rounded-3xl glass p-1.5 shadow-[var(--shadow-glow)]">
-              <img
-                src={stand.url}
-                alt="Stand d'exposition Afric Pub avec enseignes lumineuses rouges et écrans"
-                className="h-full w-full rounded-2xl object-cover aspect-[4/3] lg:aspect-[3/2.2]"
-                width={1512}
-                height={1024}
-              />
-            </div>
+            <img
+              src={standCutout.url}
+              alt="Stand d'exposition Afric Pub avec enseignes lumineuses rouges et écrans"
+              className="relative w-[118%] max-w-none -translate-x-[6%] scale-[1.06] drop-shadow-[0_30px_60px_rgba(227,6,19,0.35)] lg:w-[128%] lg:-translate-x-[4%]"
+              width={1512}
+              height={1024}
+            />
           </div>
         </Reveal>
       </section>
