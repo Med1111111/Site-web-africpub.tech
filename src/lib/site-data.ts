@@ -8,6 +8,12 @@ import triFold from "@/assets/service-print-tri-fold.jpg.asset.json";
 import packaging from "@/assets/service-packaging.jpg.asset.json";
 import affichageLed from "@/assets/service-affichage-led.jpg.asset.json";
 import stand from "@/assets/stand.jpg.asset.json";
+import realEnseigne from "@/assets/realisation-enseigne-led.jpg";
+import realSignaletique from "@/assets/realisation-signaletique.jpg";
+import realCovering from "@/assets/realisation-covering.jpg";
+import realStand from "@/assets/realisation-stand.jpg";
+import realTotem from "@/assets/realisation-totem.jpg";
+import realFacade from "@/assets/realisation-facade.jpg";
 
 export type Service = {
   slug: string;
@@ -110,13 +116,44 @@ export const stats = [
 ];
 
 export const projects = [
-  { title: "Enseigne LED — Retail Alger", category: "Enseignes", city: "Alger" },
-  { title: "Signalétique complète — Campus", category: "Signalétique", city: "Oran" },
-  { title: "Covering flotte — Logistique", category: "Véhicules", city: "Blida" },
-  { title: "Stand salon 120 m²", category: "Grand format", city: "Alger" },
-  { title: "Totem lumineux — Station", category: "Enseignes", city: "Sétif" },
-  { title: "Habillage façade — Banque", category: "Grand format", city: "Constantine" },
+  {
+    title: "Enseigne LED sur mesure",
+    category: "Enseignes",
+    image: realEnseigne,
+    alt: "Lettres boîtiers LED rouges rétroéclairées sur une façade de boutique la nuit",
+  },
+  {
+    title: "Signalétique intérieure premium",
+    category: "Signalétique",
+    image: realSignaletique,
+    alt: "Panneaux directionnels et totem lumineux dans un hall sombre",
+  },
+  {
+    title: "Covering de flotte professionnelle",
+    category: "Véhicules",
+    image: realCovering,
+    alt: "Flotte d'utilitaires floqués rouge et blanc alignés la nuit",
+  },
+  {
+    title: "Stand d'exposition modulaire",
+    category: "Grand format",
+    image: realStand,
+    alt: "Stand d'exposition noir souligné de LED rouges",
+  },
+  {
+    title: "Totem lumineux extérieur",
+    category: "Enseignes",
+    image: realTotem,
+    alt: "Totem publicitaire vertical à LED rouge et orange en extérieur",
+  },
+  {
+    title: "Habillage de façade composite",
+    category: "Grand format",
+    image: realFacade,
+    alt: "Façade en panneaux composites à facettes avec liserés lumineux rouges",
+  },
 ];
+
 
 export const categories = ["Tous", "Enseignes", "Signalétique", "Véhicules", "Grand format"];
 
