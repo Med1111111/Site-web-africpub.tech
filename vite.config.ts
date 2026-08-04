@@ -25,16 +25,17 @@ export default defineConfig({
         registerType: "autoUpdate",
         injectRegister: null,
         filename: "sw.js",
+        outDir: "dist/client",
         devOptions: { enabled: false },
         manifest: false,
         includeAssets: ["favicon.png", "manifest.webmanifest"],
         workbox: {
-          // Pré-cache : app shell + visuels critiques (hero détouré, enseigne 3D, logo)
-          globPatterns: [
-            "**/*.{js,css,html,webmanifest}",
-            "**/{stand-cutout,hero,enseigne-3d,logo}*.{png,webp,avif}",
-          ],
+          globDirectory: "dist/client",
+          // Pré-cache : app shell + visuels critiques du hero
+          globPatterns: ["**/*.{js,css,html,webmanifest}"],
+          additionalManifestEntries: HERO_ASSETS.map((url) => ({ url, revision: null })),
           maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
+
           cleanupOutdatedCaches: true,
           clientsClaim: true,
           skipWaiting: true,
