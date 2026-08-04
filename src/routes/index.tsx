@@ -271,27 +271,28 @@ function Home() {
         </Reveal>
 
         <ul className="mt-10 grid gap-4 md:grid-cols-3">
-          {gallery.map((src, i) => (
-            <Reveal as="li" key={src} delay={i * 90}>
+          {projects.slice(0, 3).map((p, i) => (
+            <Reveal as="li" key={p.title} delay={i * 90}>
               <figure className="group relative overflow-hidden rounded-3xl glass p-2">
                 <img
-                  src={src}
-                  alt={projects[i].title}
+                  src={p.image}
+                  alt={p.alt}
                   loading="lazy"
                   width={1024}
                   height={768}
                   className="h-64 w-full rounded-2xl object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <figcaption className="flex items-center justify-between px-3 py-4">
-                  <span className="text-sm font-medium">{projects[i].title}</span>
+                  <span className="text-sm font-medium">{p.title}</span>
                   <span className="rounded-full glass-soft px-3 py-1 text-xs text-muted-foreground">
-                    {projects[i].city}
+                    {p.category}
                   </span>
                 </figcaption>
               </figure>
             </Reveal>
           ))}
         </ul>
+
 
         <Reveal>
           <div className="mt-8">

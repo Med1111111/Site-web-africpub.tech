@@ -47,10 +47,10 @@ function search(query: string): Result[] {
     }
   }
   for (const p of projects) {
-    if (normalize(`${p.title} ${p.category} ${p.city}`).includes(q)) {
+    if (normalize(`${p.title} ${p.category}`).includes(q)) {
       results.push({
         title: p.title,
-        excerpt: `${p.category} — ${p.city}`,
+        excerpt: p.category,
         to: "/portfolio",
         kind: "Réalisation",
       });
