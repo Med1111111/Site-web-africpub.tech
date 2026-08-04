@@ -87,9 +87,6 @@ export const Route = createFileRoute("/portfolio")({
   }),
 });
 
-
-const images = [p1, p3, p2, p1, p2, p3];
-
 function PortfolioPage() {
   const [filter, setFilter] = useState("Tous");
   const [lightbox, setLightbox] = useState<number | null>(null);
@@ -102,10 +99,11 @@ function PortfolioPage() {
       ? data.map((p, i) => ({
           title: p.title,
           category: p.category,
-          city: p.city,
-          img: p.image_url || images[i % images.length],
+          img: p.image_url || projects[i % projects.length].image,
+          alt: p.title,
         }))
-      : projects.map((p, i) => ({ ...p, img: images[i % images.length] }));
+      : projects.map((p) => ({ title: p.title, category: p.category, img: p.image, alt: p.alt }));
+
 
   const visible = items
     .map((p, i) => ({ ...p, index: i }))

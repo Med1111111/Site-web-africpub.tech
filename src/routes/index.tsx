@@ -58,7 +58,7 @@ export const Route = createFileRoute("/")({
 
 });
 
-const gallery = [p1, p2, p3];
+
 
 const socials = [
   { label: "Facebook", href: "https://web.facebook.com/AFRICPUB", icon: Facebook },
