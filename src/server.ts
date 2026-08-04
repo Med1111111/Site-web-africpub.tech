@@ -3,6 +3,7 @@ import "./lib/error-capture";
 import { withAssetHeaders } from "./lib/asset-headers";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+import { withSecurityHeaders } from "./lib/security-headers";
 
 
 type ServerEntry = {
