@@ -1,0 +1,2 @@
+REVOKE EXECUTE ON FUNCTION public.register_lead_attempt(text, text, integer, integer) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.register_lead_attempt(text, text, integer, integer) TO service_role;
