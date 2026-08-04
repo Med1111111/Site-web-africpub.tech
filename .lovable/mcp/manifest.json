@@ -1,0 +1,309 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.1",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://ztddotfrmpvgwqlkculj.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "afric-brilliance",
+      "version": "0.1.0",
+      "title": "Afric Brilliance"
+    },
+    "tools": [
+      {
+        "name": "list_portfolio_items",
+        "title": "Lister les réalisations",
+        "description": "Liste les réalisations du portfolio Afric Pub (titre, catégorie, ville, description, image, publication).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "published_only": {
+              "description": "Ne renvoyer que les réalisations publiées.",
+              "type": "boolean"
+            },
+            "category": {
+              "description": "Filtrer sur une catégorie exacte (Enseignes, Signalétique…).",
+              "type": "string"
+            },
+            "limit": {
+              "description": "Nombre maximum de résultats (défaut 50, max 100).",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_portfolio_item",
+        "title": "Créer une réalisation",
+        "description": "Ajoute une réalisation au portfolio Afric Pub. Réservé aux administrateurs de l'application.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Titre de la réalisation."
+            },
+            "category": {
+              "description": "Catégorie (Enseignes, Signalétique, Véhicules, Grand format…).",
+              "type": "string"
+            },
+            "city": {
+              "description": "Ville ou wilaya du chantier.",
+              "type": "string"
+            },
+            "description": {
+              "description": "Description courte du projet.",
+              "type": "string"
+            },
+            "image_url": {
+              "description": "URL absolue du visuel.",
+              "type": "string"
+            },
+            "sort_order": {
+              "description": "Position d'affichage.",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "published": {
+              "description": "Publier immédiatement (défaut true).",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "title"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "update_portfolio_item",
+        "title": "Modifier une réalisation",
+        "description": "Met à jour une réalisation existante du portfolio (titre, catégorie, description, visuel, publication). Réservé aux administrateurs.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Identifiant UUID de la réalisation."
+            },
+            "title": {
+              "type": "string"
+            },
+            "category": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "image_url": {
+              "type": "string"
+            },
+            "sort_order": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "published": {
+              "description": "Publier ou dépublier la réalisation.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_testimonials",
+        "title": "Lister les témoignages",
+        "description": "Liste les témoignages clients d'Afric Pub (citation, auteur, note, publication).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "published_only": {
+              "description": "Ne renvoyer que les témoignages publiés.",
+              "type": "boolean"
+            },
+            "limit": {
+              "description": "Nombre maximum de résultats (défaut 50, max 100).",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_testimonial",
+        "title": "Ajouter un témoignage",
+        "description": "Ajoute un témoignage client au site Afric Pub. Réservé aux administrateurs.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "quote": {
+              "type": "string",
+              "description": "Texte du témoignage."
+            },
+            "name": {
+              "type": "string",
+              "description": "Nom ou initiales du client."
+            },
+            "role": {
+              "description": "Fonction et ville du client.",
+              "type": "string"
+            },
+            "rating": {
+              "description": "Note de 1 à 5 (défaut 5).",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "sort_order": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "published": {
+              "description": "Publier immédiatement (défaut true).",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "quote",
+            "name"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_contact_messages",
+        "title": "Lister les demandes de contact",
+        "description": "Liste les demandes de devis et messages reçus via le formulaire de contact. Réservé aux administrateurs.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "status": {
+              "description": "Filtrer par statut (nouveau, traité…).",
+              "type": "string"
+            },
+            "limit": {
+              "description": "Nombre maximum de résultats (défaut 25, max 100).",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_site_settings",
+        "title": "Lire les réglages du site",
+        "description": "Renvoie les réglages globaux du site Afric Pub : titre, description, accroche, textes d'appel à l'action, numéro WhatsApp et chiffres clés.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "update_site_settings",
+        "title": "Modifier les réglages du site",
+        "description": "Met à jour les réglages globaux du site Afric Pub (titre, description, accroche, appel à l'action, numéro WhatsApp). Réservé aux administrateurs.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "site_title": {
+              "type": "string"
+            },
+            "site_description": {
+              "type": "string"
+            },
+            "hero_badge": {
+              "type": "string"
+            },
+            "cta_title": {
+              "type": "string"
+            },
+            "cta_sub": {
+              "type": "string"
+            },
+            "cta_label": {
+              "type": "string"
+            },
+            "whatsapp_number": {
+              "description": "Numéro WhatsApp au format international sans +, ex. 213540481810.",
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
