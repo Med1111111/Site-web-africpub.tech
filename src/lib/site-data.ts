@@ -14,6 +14,20 @@ import realCovering from "@/assets/realisation-covering.jpg";
 import realStand from "@/assets/realisation-stand.jpg";
 import realTotem from "@/assets/realisation-totem.jpg";
 import realFacade from "@/assets/realisation-facade.jpg";
+// Variantes responsives AVIF/WebP générées au build (vite-imagetools).
+import realEnseigneAvif from "@/assets/realisation-enseigne-led.jpg?w=480;768;1024&format=avif&as=srcset";
+import realEnseigneWebp from "@/assets/realisation-enseigne-led.jpg?w=480;768;1024&format=webp&as=srcset";
+import realSignaletiqueAvif from "@/assets/realisation-signaletique.jpg?w=480;768;1024&format=avif&as=srcset";
+import realSignaletiqueWebp from "@/assets/realisation-signaletique.jpg?w=480;768;1024&format=webp&as=srcset";
+import realCoveringAvif from "@/assets/realisation-covering.jpg?w=480;768;1024&format=avif&as=srcset";
+import realCoveringWebp from "@/assets/realisation-covering.jpg?w=480;768;1024&format=webp&as=srcset";
+import realStandAvif from "@/assets/realisation-stand.jpg?w=480;768;1024&format=avif&as=srcset";
+import realStandWebp from "@/assets/realisation-stand.jpg?w=480;768;1024&format=webp&as=srcset";
+import realTotemAvif from "@/assets/realisation-totem.jpg?w=480;768;1024&format=avif&as=srcset";
+import realTotemWebp from "@/assets/realisation-totem.jpg?w=480;768;1024&format=webp&as=srcset";
+import realFacadeAvif from "@/assets/realisation-facade.jpg?w=480;768;1024&format=avif&as=srcset";
+import realFacadeWebp from "@/assets/realisation-facade.jpg?w=480;768;1024&format=webp&as=srcset";
+
 
 export type Service = {
   slug: string;
