@@ -4,6 +4,8 @@ import { useState } from "react";
 import PageHeader from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
 import { listPublicPortfolio } from "@/lib/content.functions";
+import { ResponsiveImage } from "@/components/ResponsiveImage";
+
 import { categories, projects } from "@/lib/site-data";
 import stand from "@/assets/stand.jpg.asset.json";
 
@@ -97,9 +99,19 @@ function PortfolioPage() {
           title: p.title,
           category: p.category,
           img: p.image_url || projects[i % projects.length].image,
+          avif: p.image_url ? undefined : projects[i % projects.length].avif,
+          webp: p.image_url ? undefined : projects[i % projects.length].webp,
           alt: p.title,
         }))
-      : projects.map((p) => ({ title: p.title, category: p.category, img: p.image, alt: p.alt }));
+      : projects.map((p) => ({
+          title: p.title,
+          category: p.category,
+          img: p.image,
+          avif: p.avif,
+          webp: p.webp,
+          alt: p.alt,
+        }));
+
 
 
   const visible = items
@@ -141,14 +153,15 @@ function PortfolioPage() {
                 className="group block w-full overflow-hidden rounded-3xl glass p-2 text-left card-3d"
                 aria-label={`Agrandir : ${p.title}`}
               >
-                <img
+                <ResponsiveImage
                   src={p.img}
+                  avif={p.avif}
+                  webp={p.webp}
                   alt={p.alt}
-                  loading="lazy"
-                  width={1024}
-                  height={768}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   className="h-60 w-full rounded-2xl object-cover transition-transform duration-700 group-hover:scale-105"
                 />
+
                 <span className="flex items-center justify-between px-3 py-4">
                   <span className="text-sm font-medium">{p.title}</span>
                   <span className="rounded-full glass-soft px-3 py-1 text-xs text-muted-foreground">{p.category}</span>
@@ -168,13 +181,16 @@ function PortfolioPage() {
           onClick={() => setLightbox(null)}
         >
           <div className="w-full max-w-3xl rounded-3xl glass p-3" onClick={(e) => e.stopPropagation()}>
-            <img
+            <ResponsiveImage
               src={items[lightbox].img}
+              avif={items[lightbox].avif}
+              webp={items[lightbox].webp}
               alt={items[lightbox].alt}
-              width={1024}
-              height={768}
+              loading="eager"
+              sizes="(min-width: 768px) 768px, 100vw"
               className="w-full rounded-2xl object-cover"
             />
+
             <div className="flex items-center justify-between px-3 py-4">
               <p className="text-sm font-medium">
                 {items[lightbox].title} — {items[lightbox].category}

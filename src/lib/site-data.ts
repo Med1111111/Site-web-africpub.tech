@@ -14,6 +14,20 @@ import realCovering from "@/assets/realisation-covering.jpg";
 import realStand from "@/assets/realisation-stand.jpg";
 import realTotem from "@/assets/realisation-totem.jpg";
 import realFacade from "@/assets/realisation-facade.jpg";
+// Variantes responsives AVIF/WebP générées au build (vite-imagetools).
+import realEnseigneAvif from "@/assets/realisation-enseigne-led.jpg?w=480;768;1024&format=avif&as=srcset";
+import realEnseigneWebp from "@/assets/realisation-enseigne-led.jpg?w=480;768;1024&format=webp&as=srcset";
+import realSignaletiqueAvif from "@/assets/realisation-signaletique.jpg?w=480;768;1024&format=avif&as=srcset";
+import realSignaletiqueWebp from "@/assets/realisation-signaletique.jpg?w=480;768;1024&format=webp&as=srcset";
+import realCoveringAvif from "@/assets/realisation-covering.jpg?w=480;768;1024&format=avif&as=srcset";
+import realCoveringWebp from "@/assets/realisation-covering.jpg?w=480;768;1024&format=webp&as=srcset";
+import realStandAvif from "@/assets/realisation-stand.jpg?w=480;768;1024&format=avif&as=srcset";
+import realStandWebp from "@/assets/realisation-stand.jpg?w=480;768;1024&format=webp&as=srcset";
+import realTotemAvif from "@/assets/realisation-totem.jpg?w=480;768;1024&format=avif&as=srcset";
+import realTotemWebp from "@/assets/realisation-totem.jpg?w=480;768;1024&format=webp&as=srcset";
+import realFacadeAvif from "@/assets/realisation-facade.jpg?w=480;768;1024&format=avif&as=srcset";
+import realFacadeWebp from "@/assets/realisation-facade.jpg?w=480;768;1024&format=webp&as=srcset";
+
 
 export type Service = {
   slug: string;
@@ -120,39 +134,52 @@ export const projects = [
     title: "Enseigne LED sur mesure",
     category: "Enseignes",
     image: realEnseigne,
+    avif: realEnseigneAvif,
+    webp: realEnseigneWebp,
     alt: "Lettres boîtiers LED rouges rétroéclairées sur une façade de boutique la nuit",
   },
   {
     title: "Signalétique intérieure premium",
     category: "Signalétique",
     image: realSignaletique,
+    avif: realSignaletiqueAvif,
+    webp: realSignaletiqueWebp,
     alt: "Panneaux directionnels et totem lumineux dans un hall sombre",
   },
   {
     title: "Covering de flotte professionnelle",
     category: "Véhicules",
     image: realCovering,
+    avif: realCoveringAvif,
+    webp: realCoveringWebp,
     alt: "Flotte d'utilitaires floqués rouge et blanc alignés la nuit",
   },
   {
     title: "Stand d'exposition modulaire",
     category: "Grand format",
     image: realStand,
+    avif: realStandAvif,
+    webp: realStandWebp,
     alt: "Stand d'exposition noir souligné de LED rouges",
   },
   {
     title: "Totem lumineux extérieur",
     category: "Enseignes",
     image: realTotem,
+    avif: realTotemAvif,
+    webp: realTotemWebp,
     alt: "Totem publicitaire vertical à LED rouge et orange en extérieur",
   },
   {
     title: "Habillage de façade composite",
     category: "Grand format",
     image: realFacade,
+    avif: realFacadeAvif,
+    webp: realFacadeWebp,
     alt: "Façade en panneaux composites à facettes avec liserés lumineux rouges",
   },
 ];
+
 
 
 export const categories = ["Tous", "Enseignes", "Signalétique", "Véhicules", "Grand format"];
