@@ -1,13 +1,15 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { leadsPublicClient } from "./leads.server";
+import { allowLeadAttempt, leadsPublicClient, looksLikeSpam, visitorFingerprint } from "./leads.server";
 import type { Database } from "@/integrations/supabase/types";
 
 export type ContactMessage = Database["public"]["Tables"]["contact_messages"]["Row"];
 export type NewsletterSubscriber = Database["public"]["Tables"]["newsletter_subscribers"]["Row"];
 
 export const CONTACT_STATUSES = ["nouveau", "en cours", "traité", "archivé"] as const;
+
+export type LeadResult = { ok: true } | { ok: false; reason: "throttled" };
 
 /* ---------- Soumissions publiques ---------- */
 
@@ -21,11 +23,33 @@ export const submitContactMessage = createServerFn({ method: "POST" })
         service: z.string().trim().max(80).optional().default(""),
         message: z.string().trim().min(10).max(1500),
         company: z.string().max(0).optional().default(""), // honeypot
+        elapsedMs: z.number().int().min(0).max(86_400_000).optional().default(-1),
       })
       .parse(input),
   )
-  .handler(async ({ data }) => {
-    if (data.company) return { ok: true as const };
+  .handler(async ({ data }): Promise<LeadResult> => {
+    // 1. Honeypot : succès silencieux, rien n'est enregistré.
+    if (data.company) return { ok: true };
+
+    const { fingerprint, userAgent } = visitorFingerprint();
+
+    // 2. Throttling : 3 demandes par heure et par visiteur.
+    const allowed = await allowLeadAttempt(fingerprint, "contact", 3, 3600);
+    if (!allowed) return { ok: false, reason: "throttled" };
+
+    // 3. Heuristiques bot / contenu : succès silencieux, rien n'est enregistré.
+    if (
+      looksLikeSpam({
+        name: data.name,
+        email: data.email,
+        message: data.message,
+        userAgent,
+        elapsedMs: data.elapsedMs,
+      })
+    ) {
+      return { ok: true };
+    }
+
     const { error } = await leadsPublicClient().from("contact_messages").insert({
       name: data.name,
       email: data.email,
@@ -34,18 +58,45 @@ export const submitContactMessage = createServerFn({ method: "POST" })
       message: data.message,
     });
     if (error) throw new Error(error.message);
-    return { ok: true as const };
+    return { ok: true };
   });
 
 export const subscribeNewsletter = createServerFn({ method: "POST" })
-  .inputValidator((input) => z.object({ email: z.string().trim().email().max(255) }).parse(input))
-  .handler(async ({ data }) => {
+  .inputValidator((input) =>
+    z
+      .object({
+        email: z.string().trim().email().max(255),
+        company: z.string().max(0).optional().default(""), // honeypot
+      })
+      .parse(input),
+  )
+  .handler(async ({ data }): Promise<LeadResult> => {
+    if (data.company) return { ok: true };
+
+    const { fingerprint, userAgent } = visitorFingerprint();
+
+    // 5 inscriptions par heure et par visiteur maximum.
+    const allowed = await allowLeadAttempt(fingerprint, "newsletter", 5, 3600);
+    if (!allowed) return { ok: false, reason: "throttled" };
+
+    if (
+      looksLikeSpam({
+        name: "",
+        email: data.email,
+        message: "",
+        userAgent,
+        elapsedMs: -1,
+      })
+    ) {
+      return { ok: true };
+    }
+
     const { error } = await leadsPublicClient()
       .from("newsletter_subscribers")
       .insert({ email: data.email.toLowerCase() });
     // 23505 = déjà inscrit : succès silencieux
     if (error && error.code !== "23505") throw new Error(error.message);
-    return { ok: true as const };
+    return { ok: true };
   });
 
 /* ---------- Espace admin ---------- */
