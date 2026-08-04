@@ -191,11 +191,16 @@ function ContactPage() {
               <form onSubmit={onNewsletter} className="mt-4 grid gap-2">
                 <label htmlFor="news" className="sr-only">Votre email</label>
                 <input id="news" name="news" type="email" required maxLength={255} className={field} placeholder="vous@entreprise.dz" />
+                {/* Honeypot anti-spam */}
+                <input type="text" name="company_news" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
                 <button disabled={news === "sending"} className="rounded-full glass-soft px-5 py-3 text-sm font-semibold disabled:opacity-60">
                   {news === "sending" ? "Inscription…" : "S'inscrire"}
                 </button>
                 {news === "sent" && (
                   <p role="status" className="text-xs text-muted-foreground">Merci, votre inscription est enregistrée.</p>
+                )}
+                {news === "throttled" && (
+                  <p role="alert" className="text-xs text-destructive">Trop de tentatives, réessayez dans une heure.</p>
                 )}
                 {news === "error" && (
                   <p role="alert" className="text-xs text-destructive">Inscription impossible pour le moment.</p>
