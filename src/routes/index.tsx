@@ -6,7 +6,7 @@ import { Reveal } from "@/components/Reveal";
 import { useApp } from "@/lib/app-context";
 import { getPublicSiteSettings, listPublicTestimonials } from "@/lib/content.functions";
 import { clients, process, projects, services, stats, testimonials } from "@/lib/site-data";
-import stand from "@/assets/stand.jpg.asset.json";
+import stand from "@/assets/stand-hero.png.asset.json";
 import p1 from "@/assets/portfolio-1.jpg";
 import p2 from "@/assets/portfolio-2.jpg";
 import p3 from "@/assets/portfolio-3.jpg";
