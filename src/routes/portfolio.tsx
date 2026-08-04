@@ -170,6 +170,8 @@ function PortfolioPage() {
                   avif={p.avif}
                   webp={p.webp}
                   alt={p.alt}
+                  loading={i === 0 ? "eager" : "lazy"}
+                  fetchPriority={i === 0 ? "high" : undefined}
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   className="h-60 w-full rounded-2xl object-cover transition-transform duration-700 group-hover:scale-105"
                 />
