@@ -117,7 +117,7 @@ function ContactPage() {
         </Reveal>
 
         <Reveal delay={100}>
-          <aside className="grid h-full content-start gap-4">
+          <div className="grid h-full content-start gap-4">
             <div className="rounded-3xl glass p-7">
               <h2 className="text-lg font-semibold">Coordonnées</h2>
               <ul className="mt-4 grid gap-2 text-sm text-muted-foreground">
