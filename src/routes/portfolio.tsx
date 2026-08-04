@@ -5,9 +5,6 @@ import PageHeader from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
 import { listPublicPortfolio } from "@/lib/content.functions";
 import { categories, projects } from "@/lib/site-data";
-import p1 from "@/assets/portfolio-1.jpg";
-import p2 from "@/assets/portfolio-2.jpg";
-import p3 from "@/assets/portfolio-3.jpg";
 import stand from "@/assets/stand.jpg.asset.json";
 
 
@@ -146,7 +143,7 @@ function PortfolioPage() {
               >
                 <img
                   src={p.img}
-                  alt={p.title}
+                  alt={p.alt}
                   loading="lazy"
                   width={1024}
                   height={768}
