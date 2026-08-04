@@ -33,30 +33,55 @@ export const Route = createFileRoute("/services")({
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
+          "@graph": services.map((s) => ({
+            "@type": "Service",
+            "@id": `${SERVICES_URL}#${s.slug}`,
+            name: s.title,
+            description: s.desc,
+            image: `${SITE_URL}${s.image}`,
+            url: `${SERVICES_URL}#${s.slug}`,
+            serviceType: s.title,
+            category: "Communication visuelle",
+            areaServed: { "@type": "Country", name: "Algérie" },
+            provider: { "@id": `${SITE_URL}/#organization` },
+            isPartOf: { "@id": `${SITE_URL}/#website` },
+            offers: {
+              "@type": "Offer",
+              url: `${SITE_URL}/contact`,
+              availability: "https://schema.org/InStock",
+              priceCurrency: "DZD",
+              priceSpecification: {
+                "@type": "PriceSpecification",
+                priceCurrency: "DZD",
+                valueAddedTaxIncluded: false,
+              },
+              areaServed: { "@type": "Country", name: "Algérie" },
+              seller: { "@id": `${SITE_URL}/#organization` },
+            },
+          })),
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
           "@type": "ItemList",
           "@id": `${SERVICES_URL}#services`,
           name: "Services Afric Pub",
           description: SERVICES_DESC,
           url: SERVICES_URL,
           itemListOrder: "https://schema.org/ItemListOrderAscending",
-
           numberOfItems: services.length,
           itemListElement: services.map((s, i) => ({
             "@type": "ListItem",
             position: i + 1,
             name: s.title,
-            item: {
-              "@type": "Service",
-              name: s.title,
-              description: s.desc,
-              image: `${SITE_URL}${s.image}`,
-              serviceType: s.title,
-              areaServed: { "@type": "Country", name: "Algérie" },
-              provider: { "@id": `${SITE_URL}/#organization` },
-            },
+            url: `${SERVICES_URL}#${s.slug}`,
+            item: { "@id": `${SERVICES_URL}#${s.slug}` },
           })),
         }),
       },
+
       {
         type: "application/ld+json",
         children: JSON.stringify({
