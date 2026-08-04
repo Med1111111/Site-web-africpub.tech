@@ -41,10 +41,13 @@ export const Route = createFileRoute("/portfolio")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "CollectionPage",
+          "@id": `${PORTFOLIO_URL}#collectionpage`,
           name: PORTFOLIO_TITLE,
           description: PORTFOLIO_DESC,
           url: PORTFOLIO_URL,
-          isPartOf: { "@type": "WebSite", name: "Afric Pub", url: SITE_URL },
+          inLanguage: "fr",
+          isPartOf: { "@id": `${SITE_URL}/#website` },
+          publisher: { "@id": `${SITE_URL}/#organization` },
           primaryImageOfPage: { "@type": "ImageObject", url: PORTFOLIO_IMAGE },
           mainEntity: {
             "@type": "ItemList",
@@ -57,7 +60,10 @@ export const Route = createFileRoute("/portfolio")({
               name: p.title,
               item: {
                 "@type": "CreativeWork",
+                "@id": `${PORTFOLIO_URL}#realisation-${i + 1}`,
                 name: p.title,
+                url: PORTFOLIO_URL,
+                image: `${SITE_URL}${images[i % images.length]}`,
                 genre: p.category,
                 creator: { "@id": `${SITE_URL}/#organization` },
                 locationCreated: {
@@ -68,6 +74,7 @@ export const Route = createFileRoute("/portfolio")({
             })),
           },
         }),
+
       },
       {
         type: "application/ld+json",
