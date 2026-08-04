@@ -45,18 +45,21 @@ export const Route = createFileRoute("/portfolio")({
           description: PORTFOLIO_DESC,
           url: PORTFOLIO_URL,
           isPartOf: { "@type": "WebSite", name: "Afric Pub", url: SITE_URL },
+          primaryImageOfPage: { "@type": "ImageObject", url: PORTFOLIO_IMAGE },
           mainEntity: {
             "@type": "ItemList",
+            name: "Réalisations Afric Pub",
+            itemListOrder: "https://schema.org/ItemListOrderAscending",
             numberOfItems: projects.length,
             itemListElement: projects.map((p, i) => ({
               "@type": "ListItem",
               position: i + 1,
+              name: p.title,
               item: {
                 "@type": "CreativeWork",
                 name: p.title,
                 genre: p.category,
-                url: PORTFOLIO_URL,
-                creator: { "@type": "Organization", name: "Afric Pub", url: SITE_URL },
+                creator: { "@id": `${SITE_URL}/#organization` },
                 locationCreated: {
                   "@type": "Place",
                   address: { "@type": "PostalAddress", addressLocality: p.city, addressCountry: "DZ" },
