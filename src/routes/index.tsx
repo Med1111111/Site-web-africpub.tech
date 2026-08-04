@@ -4,6 +4,7 @@ import { Facebook, Instagram, MapPin, MessageCircle, Youtube } from "lucide-reac
 
 import { Reveal } from "@/components/Reveal";
 import { ProcessSteps } from "@/components/ProcessSteps";
+import { LiveActivity } from "@/components/LiveActivity";
 import { useApp } from "@/lib/app-context";
 import { getPublicSiteSettings } from "@/lib/content.functions";
 import { clients, projects, services } from "@/lib/site-data";
