@@ -1,10 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import PageHeader from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
-import { process, services } from "@/lib/site-data";
-import { ClipboardList, PenTool, Factory, ShieldCheck, type LucideIcon } from "lucide-react";
+import { ProcessSteps } from "@/components/ProcessSteps";
+import { services } from "@/lib/site-data";
 
-const stepIcons: LucideIcon[] = [ClipboardList, PenTool, Factory, ShieldCheck];
 
 export const Route = createFileRoute("/services")({
   component: ServicesPage,
