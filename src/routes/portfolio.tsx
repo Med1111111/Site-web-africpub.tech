@@ -5,9 +5,6 @@ import PageHeader from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
 import { listPublicPortfolio } from "@/lib/content.functions";
 import { categories, projects } from "@/lib/site-data";
-import p1 from "@/assets/portfolio-1.jpg";
-import p2 from "@/assets/portfolio-2.jpg";
-import p3 from "@/assets/portfolio-3.jpg";
 import stand from "@/assets/stand.jpg.asset.json";
 
 
@@ -63,13 +60,9 @@ export const Route = createFileRoute("/portfolio")({
                 "@id": `${PORTFOLIO_URL}#realisation-${i + 1}`,
                 name: p.title,
                 url: PORTFOLIO_URL,
-                image: `${SITE_URL}${images[i % images.length]}`,
+                image: `${SITE_URL}${p.image}`,
                 genre: p.category,
                 creator: { "@id": `${SITE_URL}/#organization` },
-                locationCreated: {
-                  "@type": "Place",
-                  address: { "@type": "PostalAddress", addressLocality: p.city, addressCountry: "DZ" },
-                },
               },
             })),
           },
@@ -91,9 +84,6 @@ export const Route = createFileRoute("/portfolio")({
   }),
 });
 
-
-const images = [p1, p3, p2, p1, p2, p3];
-
 function PortfolioPage() {
   const [filter, setFilter] = useState("Tous");
   const [lightbox, setLightbox] = useState<number | null>(null);
@@ -106,10 +96,11 @@ function PortfolioPage() {
       ? data.map((p, i) => ({
           title: p.title,
           category: p.category,
-          city: p.city,
-          img: p.image_url || images[i % images.length],
+          img: p.image_url || projects[i % projects.length].image,
+          alt: p.title,
         }))
-      : projects.map((p, i) => ({ ...p, img: images[i % images.length] }));
+      : projects.map((p) => ({ title: p.title, category: p.category, img: p.image, alt: p.alt }));
+
 
   const visible = items
     .map((p, i) => ({ ...p, index: i }))
@@ -120,7 +111,7 @@ function PortfolioPage() {
       <PageHeader
         eyebrow="Portfolio"
         title="Nos réalisations"
-        sub="Une sélection de projets livrés pour des enseignes nationales et des groupes internationaux implantés en Algérie."
+        sub="Un aperçu de nos savoir-faire : enseignes, signalétique, covering et grand format. Visuels d'illustration représentatifs de nos prestations."
       />
 
       <section className="mx-auto mt-12 max-w-7xl">
@@ -152,7 +143,7 @@ function PortfolioPage() {
               >
                 <img
                   src={p.img}
-                  alt={p.title}
+                  alt={p.alt}
                   loading="lazy"
                   width={1024}
                   height={768}
@@ -179,14 +170,14 @@ function PortfolioPage() {
           <div className="w-full max-w-3xl rounded-3xl glass p-3" onClick={(e) => e.stopPropagation()}>
             <img
               src={items[lightbox].img}
-              alt={items[lightbox].title}
+              alt={items[lightbox].alt}
               width={1024}
               height={768}
               className="w-full rounded-2xl object-cover"
             />
             <div className="flex items-center justify-between px-3 py-4">
               <p className="text-sm font-medium">
-                {items[lightbox].title} — {items[lightbox].city}
+                {items[lightbox].title} — {items[lightbox].category}
               </p>
               <button
                 onClick={() => setLightbox(null)}
