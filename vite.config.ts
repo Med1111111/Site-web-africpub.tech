@@ -11,6 +11,13 @@ import { VitePWA } from "vite-plugin-pwa";
 const YEAR = 60 * 60 * 24 * 365;
 const MONTH = 60 * 60 * 24 * 30;
 
+// Visuels critiques hébergés sur le CDN (pointeurs .asset.json) : pré-cachés pour l'offline.
+const HERO_ASSETS: string[] = [
+  "/__l5e/assets-v1/1d42f71a-4db9-4c99-a505-9559f3adc35f/stand-cutout.png",
+  "/__l5e/assets-v1/e7e509ce-512d-4ea7-879b-8a6e9f445341/enseigne-3d.png",
+];
+
+
 export default defineConfig({
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
