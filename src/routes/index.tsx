@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { Facebook, Instagram, MapPin, MessageCircle, Youtube } from "lucide-react";
+
 import { Reveal } from "@/components/Reveal";
 import { useApp } from "@/lib/app-context";
 import { getPublicSiteSettings, listPublicTestimonials } from "@/lib/content.functions";
@@ -32,6 +34,13 @@ export const Route = createFileRoute("/")({
 
 const gallery = [p1, p2, p3];
 
+const socials = [
+  { label: "Facebook", href: "https://web.facebook.com/AFRICPUB", icon: Facebook },
+  { label: "Instagram", href: "https://www.instagram.com/afric_pub/", icon: Instagram },
+  { label: "YouTube", href: "https://www.youtube.com/channel/UCCyWZb1m1H8CQJhh7FgmHlw", icon: Youtube },
+];
+
+
 function Home() {
   const { t } = useApp();
   const { data: settings } = useQuery({ queryKey: ["site-settings"], queryFn: () => getPublicSiteSettings() });
@@ -55,20 +64,50 @@ function Home() {
             {t("hero.title3")}
           </h1>
           <p className="mt-6 max-w-xl text-base text-muted-foreground sm:text-lg">{t("hero.sub")}</p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
               to="/contact"
               className="rounded-full bg-brand px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.04]"
             >
               {t("hero.cta1")}
             </Link>
-            <Link
-              to="/portfolio"
-              className="rounded-full glass px-7 py-3.5 text-sm font-semibold transition-transform hover:scale-[1.04]"
+            <a
+              href="https://wa.me/213540481810"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full glass px-7 py-3.5 text-sm font-semibold transition-transform hover:scale-[1.04]"
             >
-              {t("hero.cta2")}
-            </Link>
+              <MessageCircle className="size-4" aria-hidden="true" />
+              WhatsApp
+            </a>
+            <a
+              href="https://www.google.com/maps/place/Afric+Pub/@36.6379976,2.6934306,17z/data=!3m1!4b1!4m6!3m5!1s0x128f9d7138d27c07:0xb356a71bb9d8d9b6!8m2!3d36.6379976!4d2.6934306!16s%2Fg%2F11fcqqwyh5?hl=fr&entry=ttu"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full glass px-7 py-3.5 text-sm font-semibold transition-transform hover:scale-[1.04]"
+            >
+              <MapPin className="size-4" aria-hidden="true" />
+              Maps
+            </a>
           </div>
+
+          <ul className="mt-6 flex flex-wrap items-center gap-3">
+            {socials.map((s) => (
+              <li key={s.label}>
+                <a
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  title={s.label}
+                  className="inline-flex size-11 items-center justify-center rounded-full glass-soft transition-transform hover:scale-[1.08]"
+                >
+                  <s.icon className="size-5" aria-hidden="true" />
+                </a>
+              </li>
+            ))}
+          </ul>
+
         </Reveal>
 
         <Reveal delay={120}>
