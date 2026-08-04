@@ -147,10 +147,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@id": "https://premium-afric-vision.lovable.app/#website",
           url: "https://premium-afric-vision.lovable.app",
           name: "Afric Pub",
+          alternateName: "Afric Pub Communication Globale",
+          description:
+            "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format et branding en Algérie.",
           inLanguage: "fr",
           publisher: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
+          potentialAction: {
+            "@type": "SearchAction",
+            target: {
+              "@type": "EntryPoint",
+              urlTemplate: "https://premium-afric-vision.lovable.app/recherche?q={search_term_string}",
+            },
+            "query-input": "required name=search_term_string",
+          },
         }),
       },
+
     ],
   }),
 
