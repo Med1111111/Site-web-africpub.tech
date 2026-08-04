@@ -13,9 +13,9 @@ export const Route = createFileRoute("/confidentialite")({
       },
       { property: "og:title", content: "Politique de confidentialité — Afric Pub" },
       { property: "og:description", content: "Collecte, usage et protection de vos données personnelles." },
-      { property: "og:url", content: "/confidentialite" },
+      { property: "og:url", content: "https://premium-afric-vision.lovable.app/confidentialite" },
     ],
-    links: [{ rel: "canonical", href: "/confidentialite" }],
+    links: [{ rel: "canonical", href: "https://premium-afric-vision.lovable.app/confidentialite" }],
   }),
 });
 

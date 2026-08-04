@@ -15,9 +15,9 @@ export const Route = createFileRoute("/faq")({
       },
       { property: "og:title", content: "FAQ — Afric Pub" },
       { property: "og:description", content: "Délais, garanties, devis et autorisations : tout ce qu'il faut savoir." },
-      { property: "og:url", content: "/faq" },
+      { property: "og:url", content: "https://premium-afric-vision.lovable.app/faq" },
     ],
-    links: [{ rel: "canonical", href: "/faq" }],
+    links: [{ rel: "canonical", href: "https://premium-afric-vision.lovable.app/faq" }],
     scripts: [
       {
         type: "application/ld+json",
