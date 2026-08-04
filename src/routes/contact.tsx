@@ -81,10 +81,40 @@ const schema = z.object({
 
 function ContactPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [state, setState] = useState<"idle" | "sending" | "sent" | "error" | "throttled">("idle");
+  const [state, setState] = useState<"idle" | "sending" | "uploading" | "sent" | "error" | "throttled">("idle");
   const [news, setNews] = useState<"idle" | "sending" | "sent" | "error" | "throttled">("idle");
   // Horodatage d'ouverture : un envoi en moins de 2,5 s est considéré comme automatisé.
   const [mountedAt] = useState(() => Date.now());
+  const [file, setFile] = useState<File | null>(null);
+  const [fileError, setFileError] = useState("");
+  const [dragging, setDragging] = useState(false);
+  const fileInput = useRef<HTMLInputElement>(null);
+
+  const pickFile = (next: File | null) => {
+    if (!next) {
+      setFile(null);
+      setFileError("");
+      return;
+    }
+    if (!isAllowedAttachment(next.name)) {
+      setFile(null);
+      setFileError("Format non accepté. Formats autorisés : AI, EPS, SVG, PDF, JPG, PNG, WEBP, OBJ, SKP, DWG.");
+      return;
+    }
+    if (next.size > ATTACHMENT_MAX_BYTES) {
+      setFile(null);
+      setFileError("Fichier trop lourd (max 10 Mo).");
+      return;
+    }
+    setFileError("");
+    setFile(next);
+  };
+
+  const clearFile = () => {
+    setFile(null);
+    setFileError("");
+    if (fileInput.current) fileInput.current.value = "";
+  };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -100,10 +130,24 @@ function ContactPage() {
       return;
     }
     setErrors({});
-    setState("sending");
+
+    let attachmentPath = "";
+    let attachmentName = "";
     try {
+      if (file) {
+        setState("uploading");
+        const signed = await createLeadUploadUrl({ data: { fileName: file.name, size: file.size } });
+        const { error: upErr } = await supabase.storage
+          .from(ATTACHMENT_BUCKET)
+          .uploadToSignedUrl(signed.path, signed.token, file);
+        if (upErr) throw new Error(upErr.message);
+        attachmentPath = signed.path;
+        attachmentName = file.name.slice(0, 200);
+      }
+
+      setState("sending");
       const res = await submitContactMessage({
-        data: { ...result.data, elapsedMs: Date.now() - mountedAt },
+        data: { ...result.data, elapsedMs: Date.now() - mountedAt, attachmentPath, attachmentName },
       });
       if (!res.ok) {
         setState("throttled");
@@ -111,10 +155,12 @@ function ContactPage() {
       }
       setState("sent");
       form.reset();
+      clearFile();
     } catch {
       setState("error");
     }
   };
+
 
   const onNewsletter = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
