@@ -4,6 +4,7 @@ import { z } from "zod";
 import PageHeader from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
 import { services } from "@/lib/site-data";
+import { submitContactMessage, subscribeNewsletter } from "@/lib/leads.functions";
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
@@ -35,11 +36,13 @@ const schema = z.object({
 
 function ContactPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [sent, setSent] = useState(false);
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [news, setNews] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const data = Object.fromEntries(new FormData(e.currentTarget));
+    const form = e.currentTarget;
+    const data = Object.fromEntries(new FormData(form));
     const result = schema.safeParse({ ...data, company: data.company ?? "" });
     if (!result.success) {
       const next: Record<string, string> = {};
@@ -50,7 +53,29 @@ function ContactPage() {
       return;
     }
     setErrors({});
-    setSent(true);
+    setState("sending");
+    try {
+      await submitContactMessage({ data: result.data });
+      setState("sent");
+      form.reset();
+    } catch {
+      setState("error");
+    }
+  };
+
+  const onNewsletter = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const email = String(new FormData(form).get("news") ?? "").trim();
+    if (!email) return;
+    setNews("sending");
+    try {
+      await subscribeNewsletter({ data: { email } });
+      setNews("sent");
+      form.reset();
+    } catch {
+      setNews("error");
+    }
   };
 
   const field =
@@ -67,9 +92,18 @@ function ContactPage() {
       <section className="mx-auto mt-14 grid max-w-7xl gap-4 lg:grid-cols-[1.3fr_0.7fr]">
         <Reveal>
           <form onSubmit={onSubmit} noValidate className="rounded-3xl glass p-8">
-            {sent && (
+            {state === "sent" && (
               <p role="status" className="mb-6 rounded-2xl bg-brand px-4 py-3 text-sm text-primary-foreground">
                 Merci ! Votre demande a bien été enregistrée, nous revenons vers vous sous 24h.
+              </p>
+            )}
+            {state === "error" && (
+              <p role="alert" className="mb-6 rounded-2xl glass-soft px-4 py-3 text-sm text-destructive">
+                L'envoi a échoué. Réessayez, ou contactez-nous directement sur{" "}
+                <a href="https://wa.me/213540481810" target="_blank" rel="noreferrer noopener" className="underline">
+                  WhatsApp
+                </a>
+                .
               </p>
             )}
 
@@ -109,9 +143,10 @@ function ContactPage() {
 
             <button
               type="submit"
+              disabled={state === "sending"}
               className="mt-7 w-full rounded-full bg-brand px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.02] sm:w-auto"
             >
-              Envoyer la demande
+              {state === "sending" ? "Envoi en cours…" : "Envoyer la demande"}
             </button>
           </form>
         </Reveal>
@@ -123,19 +158,24 @@ function ContactPage() {
               <ul className="mt-4 grid gap-2 text-sm text-muted-foreground">
                 <li>Alger, Algérie</li>
                 <li><a href="mailto:contact@africpub.dz" className="hover:text-foreground">contact@africpub.dz</a></li>
-                <li><a href="tel:+213000000000" className="hover:text-foreground">+213 00 00 00 00</a></li>
+                <li><a href="tel:+213540481810" className="hover:text-foreground">+213 540 48 18 10</a></li>
               </ul>
             </div>
             <div className="rounded-3xl glass p-7">
               <h2 className="text-lg font-semibold">Newsletter</h2>
               <p className="mt-2 text-sm text-muted-foreground">Nos réalisations et conseils, une fois par mois.</p>
-              <form
-                onSubmit={(e) => e.preventDefault()}
-                className="mt-4 grid gap-2"
-              >
+              <form onSubmit={onNewsletter} className="mt-4 grid gap-2">
                 <label htmlFor="news" className="sr-only">Votre email</label>
-                <input id="news" type="email" required maxLength={255} className={field} placeholder="vous@entreprise.dz" />
-                <button className="rounded-full glass-soft px-5 py-3 text-sm font-semibold">S'inscrire</button>
+                <input id="news" name="news" type="email" required maxLength={255} className={field} placeholder="vous@entreprise.dz" />
+                <button disabled={news === "sending"} className="rounded-full glass-soft px-5 py-3 text-sm font-semibold disabled:opacity-60">
+                  {news === "sending" ? "Inscription…" : "S'inscrire"}
+                </button>
+                {news === "sent" && (
+                  <p role="status" className="text-xs text-muted-foreground">Merci, votre inscription est enregistrée.</p>
+                )}
+                {news === "error" && (
+                  <p role="alert" className="text-xs text-destructive">Inscription impossible pour le moment.</p>
+                )}
               </form>
             </div>
           </div>
