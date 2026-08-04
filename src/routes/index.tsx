@@ -142,20 +142,36 @@ function Home() {
 
         <Reveal delay={120}>
           <div className="relative lg:-ml-16 xl:-ml-24">
-            {/* Halo lumineux rouge/orange — renforce le thème "donner de la lumière" */}
+            {/* Halo lumineux orange/rouge diffus */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute -inset-16 -z-10 opacity-90 blur-3xl"
+              className="pointer-events-none absolute -inset-20 -z-10 opacity-95 blur-3xl animate-[pulse_6s_cubic-bezier(0.4,0,0.6,1)_infinite]"
               style={{
                 background:
-                  "radial-gradient(ellipse 60% 45% at 50% 30%, rgba(255,120,40,0.5), transparent 70%), radial-gradient(ellipse 70% 45% at 50% 70%, rgba(227,6,19,0.42), transparent 72%)",
+                  "radial-gradient(ellipse 55% 42% at 50% 28%, rgba(255,150,60,0.55), transparent 70%), radial-gradient(ellipse 72% 48% at 50% 68%, rgba(227,6,19,0.45), transparent 72%)",
               }}
             />
-            {/* Spot lumineux au sol */}
+            {/* Faisceaux de projecteurs */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-x-4 bottom-2 -z-10 h-16 rounded-[100%] opacity-70 blur-2xl"
-              style={{ background: "radial-gradient(ellipse at center, rgba(255,120,50,0.55), transparent 70%)" }}
+              className="pointer-events-none absolute -top-16 left-[12%] -z-10 h-[70%] w-40 origin-top -rotate-12 opacity-60 blur-2xl"
+              style={{ background: "linear-gradient(to bottom, rgba(255,160,70,0.55), transparent 78%)" }}
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -top-16 right-[10%] -z-10 h-[70%] w-40 origin-top rotate-12 opacity-50 blur-2xl"
+              style={{ background: "linear-gradient(to bottom, rgba(227,6,19,0.5), transparent 78%)" }}
+            />
+            {/* Reflet au sol : spot large + traînée lumineuse */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-24 rounded-[100%] opacity-80 blur-3xl"
+              style={{ background: "radial-gradient(ellipse at center, rgba(255,140,60,0.6), transparent 70%)" }}
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-1/4 bottom-1 -z-10 h-6 rounded-[100%] opacity-70 blur-xl"
+              style={{ background: "radial-gradient(ellipse at center, rgba(255,220,180,0.55), transparent 70%)" }}
             />
             <img
               src={standCutout.url}
@@ -167,9 +183,36 @@ function Home() {
               decoding="async"
               fetchPriority="high"
             />
+            {/* Reflet miroir de l'image au sol */}
+            <img
+              src={standCutout.url}
+              alt=""
+              aria-hidden="true"
+              className="pointer-events-none relative -mt-6 w-[118%] max-w-none -translate-x-[6%] scale-[1.06] -scale-y-100 opacity-20 blur-[2px] [mask-image:linear-gradient(to_top,transparent,black)] lg:w-[128%] lg:-translate-x-[4%]"
+              width={1512}
+              height={1024}
+              loading="lazy"
+              decoding="async"
+            />
           </div>
         </Reveal>
       </section>
+
+      {/* ---------- ACTIVITÉ DU SITE ---------- */}
+      <section aria-labelledby="live-title" className="mx-auto mt-24 max-w-7xl">
+        <Reveal>
+          <h2 id="live-title" className="text-3xl font-bold sm:text-5xl">
+            La vie du site en direct
+          </h2>
+          <p className="mt-3 max-w-xl text-muted-foreground">
+            Interactions, demandes et engagement de la communauté Afric Pub.
+          </p>
+        </Reveal>
+        <div className="mt-10">
+          <LiveActivity />
+        </div>
+      </section>
+
 
       {/* ---------- QUI SOMMES-NOUS ---------- */}
       <section aria-labelledby="about-title" className="mx-auto mt-20 max-w-7xl">
