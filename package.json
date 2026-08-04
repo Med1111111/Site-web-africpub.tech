@@ -10,7 +10,10 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "security:check": "node scripts/security-check.mjs",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:serve": "node scripts/serve-prod.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -73,6 +76,7 @@
   "devDependencies": {
     "@eslint/js": "^9.32.0",
     "@lovable.dev/vite-tanstack-config": "2.8.5",
+    "@playwright/test": "1.56.0",
     "@types/node": "^22.16.5",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
