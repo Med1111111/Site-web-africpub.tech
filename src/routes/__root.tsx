@@ -18,6 +18,8 @@ import WebGLBackground from "@/components/WebGLBackground";
 import { Toaster } from "@/components/ui/sonner";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { services } from "@/lib/site-data";
+import { registerServiceWorker } from "@/lib/register-sw";
+
 
 
 function NotFoundComponent() {
