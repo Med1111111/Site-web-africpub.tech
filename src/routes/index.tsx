@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+
 import { Facebook, Instagram, MapPin, MessageCircle, Youtube } from "lucide-react";
 
 import { Reveal } from "@/components/Reveal";
