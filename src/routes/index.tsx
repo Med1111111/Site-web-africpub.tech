@@ -190,19 +190,18 @@ function Home() {
         </div>
       </section>
 
-      {/* ---------- STATISTIQUES ---------- */}
-      <section aria-label="Chiffres clés" className="mx-auto mt-20 max-w-7xl">
+      {/* ---------- NOTRE PROCESSUS ---------- */}
+      <section aria-labelledby="process-title" className="mx-auto mt-20 max-w-7xl">
         <Reveal>
-          <ul className="grid grid-cols-2 gap-3 rounded-3xl glass p-6 sm:p-8 lg:grid-cols-4">
-            {liveStats.map((s) => (
-              <li key={s.label} className="text-center">
-                <p className="text-3xl font-extrabold text-gradient sm:text-4xl">{s.value}</p>
-                <p className="mt-1 text-xs text-muted-foreground sm:text-sm">{s.label}</p>
-              </li>
-            ))}
-          </ul>
+          <h2 id="process-title" className="text-3xl font-bold sm:text-5xl">
+            {t("section.process")}
+          </h2>
         </Reveal>
+        <div className="mt-10">
+          <ProcessSteps />
+        </div>
       </section>
+
 
       {/* ---------- SERVICES ---------- */}
       <section aria-labelledby="services-title" className="mx-auto mt-28 max-w-7xl">
