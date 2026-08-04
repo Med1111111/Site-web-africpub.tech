@@ -49,7 +49,7 @@ export default defineConfig({
           clientsClaim: true,
           skipWaiting: true,
           navigateFallback: "/",
-          navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//, /^\/_serverFn\//],
+          navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//, /^\/_serverFn\//, /^\/mcp/, /^\/\.mcp/, /^\/\.well-known/, /^\/\.lovable/],
           runtimeCaching: [
             {
               // Navigations HTML : toujours le réseau d'abord, repli cache hors-ligne
