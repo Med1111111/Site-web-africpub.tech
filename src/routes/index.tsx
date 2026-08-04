@@ -39,7 +39,26 @@ export const Route = createFileRoute("/")({
       { property: "og:url", content: "https://premium-afric-vision.lovable.app/" },
     ],
     links: [{ rel: "canonical", href: "https://premium-afric-vision.lovable.app/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "@id": "https://premium-afric-vision.lovable.app/#webpage",
+          url: "https://premium-afric-vision.lovable.app/",
+          name: "Afric Pub — Enseignes lumineuses & signalétique en Algérie",
+          description:
+            "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format, habillage de véhicules et branding partout en Algérie.",
+          inLanguage: "fr",
+          isPartOf: { "@id": "https://premium-afric-vision.lovable.app/#website" },
+          about: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
+          publisher: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
+        }),
+      },
+    ],
   }),
+
 });
 
 const gallery = [p1, p2, p3];

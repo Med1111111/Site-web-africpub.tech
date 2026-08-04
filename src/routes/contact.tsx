@@ -16,12 +16,47 @@ export const Route = createFileRoute("/contact")({
         content:
           "Demandez votre devis gratuit pour une enseigne lumineuse, de la signalétique ou une impression grand format. Réponse sous 24h.",
       },
+      { property: "og:type", content: "website" },
       { property: "og:title", content: "Contact — Afric Pub" },
       { property: "og:description", content: "Étude technique et devis gratuits sous 24 à 48h." },
       { property: "og:url", content: "https://premium-afric-vision.lovable.app/contact" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Contact — Afric Pub" },
+      { name: "twitter:description", content: "Étude technique et devis gratuits sous 24 à 48h." },
     ],
     links: [{ rel: "canonical", href: "https://premium-afric-vision.lovable.app/contact" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "ContactPage",
+              "@id": "https://premium-afric-vision.lovable.app/contact#webpage",
+              url: "https://premium-afric-vision.lovable.app/contact",
+              name: "Contact & devis gratuit — Afric Pub",
+              description:
+                "Demandez votre devis gratuit pour une enseigne lumineuse, de la signalétique ou une impression grand format. Réponse sous 24h.",
+              inLanguage: "fr",
+              isPartOf: { "@id": "https://premium-afric-vision.lovable.app/#website" },
+              about: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
+              publisher: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://premium-afric-vision.lovable.app/contact#breadcrumb",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Accueil", item: "https://premium-afric-vision.lovable.app/" },
+                { "@type": "ListItem", position: 2, name: "Contact", item: "https://premium-afric-vision.lovable.app/contact" },
+              ],
+            },
+          ],
+        }),
+      },
+    ],
   }),
+
 });
 
 // Validation stricte côté client (longueurs bornées, trim, anti-spam honeypot).

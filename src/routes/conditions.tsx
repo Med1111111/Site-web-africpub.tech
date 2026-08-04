@@ -11,12 +11,50 @@ export const Route = createFileRoute("/conditions")({
         name: "description",
         content: "Conditions générales de vente et d'utilisation : devis, délais, paiement, garanties et propriété intellectuelle.",
       },
+      { property: "og:type", content: "website" },
       { property: "og:title", content: "Conditions générales — Afric Pub" },
       { property: "og:description", content: "Devis, délais, paiement, garanties et propriété intellectuelle." },
       { property: "og:url", content: "https://premium-afric-vision.lovable.app/conditions" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Conditions générales — Afric Pub" },
+      { name: "twitter:description", content: "Devis, délais, paiement, garanties et propriété intellectuelle." },
     ],
     links: [{ rel: "canonical", href: "https://premium-afric-vision.lovable.app/conditions" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": "https://premium-afric-vision.lovable.app/conditions#webpage",
+              url: "https://premium-afric-vision.lovable.app/conditions",
+              name: "Conditions générales — Afric Pub",
+              description: "Devis, délais, paiement, garanties et propriété intellectuelle.",
+              inLanguage: "fr",
+              isPartOf: { "@id": "https://premium-afric-vision.lovable.app/#website" },
+              publisher: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://premium-afric-vision.lovable.app/conditions#breadcrumb",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Accueil", item: "https://premium-afric-vision.lovable.app/" },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Conditions générales",
+                  item: "https://premium-afric-vision.lovable.app/conditions",
+                },
+              ],
+            },
+          ],
+        }),
+      },
+    ],
   }),
+
 });
 
 const sections = [

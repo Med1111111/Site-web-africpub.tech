@@ -34,10 +34,12 @@ export const Route = createFileRoute("/services")({
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "ItemList",
+          "@id": `${SERVICES_URL}#services`,
           name: "Services Afric Pub",
           description: SERVICES_DESC,
           url: SERVICES_URL,
           itemListOrder: "https://schema.org/ItemListOrderAscending",
+
           numberOfItems: services.length,
           itemListElement: services.map((s, i) => ({
             "@type": "ListItem",
