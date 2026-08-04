@@ -18,7 +18,7 @@ export default function Footer() {
           </div>
 
           <nav aria-label="Services">
-            <h3 className="text-sm font-semibold">Services</h3>
+            <h2 className="text-sm font-semibold">Services</h2>
             <ul className="mt-4 grid gap-2 text-sm text-muted-foreground">
               {services.slice(0, 5).map((s) => (
                 <li key={s.slug}>
@@ -31,7 +31,7 @@ export default function Footer() {
           </nav>
 
           <nav aria-label="Pages">
-            <h3 className="text-sm font-semibold">Agence</h3>
+            <h2 className="text-sm font-semibold">Agence</h2>
             <ul className="mt-4 grid gap-2 text-sm text-muted-foreground">
               <li><Link to="/a-propos" className="hover:text-foreground">{t("nav.about")}</Link></li>
               <li><Link to="/portfolio" className="hover:text-foreground">{t("nav.portfolio")}</Link></li>
@@ -42,7 +42,7 @@ export default function Footer() {
           </nav>
 
           <div>
-            <h3 className="text-sm font-semibold">Contact</h3>
+            <h2 className="text-sm font-semibold">Contact</h2>
             <ul className="mt-4 grid gap-2 text-sm text-muted-foreground">
               <li>Alger, Algérie</li>
               <li>
