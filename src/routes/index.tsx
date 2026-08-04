@@ -3,9 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { Facebook, Instagram, MapPin, MessageCircle, Youtube } from "lucide-react";
 
 import { Reveal } from "@/components/Reveal";
+import { ProcessSteps } from "@/components/ProcessSteps";
 import { useApp } from "@/lib/app-context";
 import { getPublicSiteSettings } from "@/lib/content.functions";
-import { clients, process, projects, services, stats } from "@/lib/site-data";
+import { clients, projects, services } from "@/lib/site-data";
+
 import standCutout from "@/assets/stand-cutout.png.asset.json";
 import enseigne3d from "@/assets/enseigne-3d.png.asset.json";
 
@@ -46,10 +48,8 @@ const socials = [
 function Home() {
   const { t } = useApp();
   const { data: settings } = useQuery({ queryKey: ["site-settings"], queryFn: () => getPublicSiteSettings() });
-  const liveStats =
-    settings && Array.isArray(settings.stats) && settings.stats.length > 0
-      ? (settings.stats as unknown as { value: string; label: string }[])
-      : stats;
+
+
 
   return (
     <div className="px-3 sm:px-6">
@@ -190,19 +190,18 @@ function Home() {
         </div>
       </section>
 
-      {/* ---------- STATISTIQUES ---------- */}
-      <section aria-label="Chiffres clés" className="mx-auto mt-20 max-w-7xl">
+      {/* ---------- NOTRE PROCESSUS ---------- */}
+      <section aria-labelledby="process-title" className="mx-auto mt-20 max-w-7xl">
         <Reveal>
-          <ul className="grid grid-cols-2 gap-3 rounded-3xl glass p-6 sm:p-8 lg:grid-cols-4">
-            {liveStats.map((s) => (
-              <li key={s.label} className="text-center">
-                <p className="text-3xl font-extrabold text-gradient sm:text-4xl">{s.value}</p>
-                <p className="mt-1 text-xs text-muted-foreground sm:text-sm">{s.label}</p>
-              </li>
-            ))}
-          </ul>
+          <h2 id="process-title" className="text-3xl font-bold sm:text-5xl">
+            {t("section.process")}
+          </h2>
         </Reveal>
+        <div className="mt-10">
+          <ProcessSteps />
+        </div>
       </section>
+
 
       {/* ---------- SERVICES ---------- */}
       <section aria-labelledby="services-title" className="mx-auto mt-28 max-w-7xl">
@@ -276,25 +275,6 @@ function Home() {
         </Reveal>
       </section>
 
-      {/* ---------- PROCESSUS ---------- */}
-      <section aria-labelledby="process-title" className="mx-auto mt-28 max-w-7xl">
-        <Reveal>
-          <h2 id="process-title" className="text-3xl font-bold sm:text-5xl">
-            {t("section.process")}
-          </h2>
-        </Reveal>
-        <ol className="mt-10 grid gap-4 lg:grid-cols-4">
-          {process.map((p, i) => (
-            <Reveal as="li" key={p.step} delay={i * 80}>
-              <div className="h-full rounded-3xl glass p-7">
-                <span className="text-sm font-semibold text-primary">{p.step}</span>
-                <h3 className="mt-3 text-lg font-semibold">{p.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{p.desc}</p>
-              </div>
-            </Reveal>
-          ))}
-        </ol>
-      </section>
 
       {/* ---------- CLIENTS ---------- */}
       <section aria-labelledby="clients-title" className="mx-auto mt-28 max-w-7xl">

@@ -1,10 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import PageHeader from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
-import { process, services } from "@/lib/site-data";
-import { ClipboardList, PenTool, Factory, ShieldCheck, type LucideIcon } from "lucide-react";
+import { ProcessSteps } from "@/components/ProcessSteps";
+import { services } from "@/lib/site-data";
 
-const stepIcons: LucideIcon[] = [ClipboardList, PenTool, Factory, ShieldCheck];
 
 export const Route = createFileRoute("/services")({
   component: ServicesPage,
@@ -60,32 +59,11 @@ function ServicesPage() {
         <Reveal>
           <h2 className="text-3xl font-bold sm:text-4xl">Méthodologie</h2>
         </Reveal>
-        <ol className="relative mt-10 grid gap-4 lg:grid-cols-4">
-          {/* connecteur en dégradé orange → rouge reliant les 4 étapes */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute left-0 right-0 top-[3.25rem] hidden h-px bg-gradient-to-r from-orange-400/0 via-primary to-primary/0 lg:block"
-          />
-          {process.map((p, i) => {
-            const Icon = stepIcons[i] ?? ClipboardList;
-            return (
-              <Reveal as="li" key={p.step} delay={i * 80}>
-                <div className="relative h-full rounded-3xl glass p-7">
-                  <div className="flex items-center gap-4">
-                    <span className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand text-primary-foreground shadow-[0_0_30px_-6px_var(--color-primary)]">
-                      <span className="absolute inset-0 rounded-full bg-brand blur-lg opacity-60" />
-                      <Icon className="relative h-6 w-6" strokeWidth={2} />
-                    </span>
-                    <span className="text-sm font-semibold text-primary">{p.step}</span>
-                  </div>
-                  <h3 className="mt-4 text-lg font-semibold">{p.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{p.desc}</p>
-                </div>
-              </Reveal>
-            );
-          })}
-        </ol>
+        <div className="mt-10">
+          <ProcessSteps />
+        </div>
       </section>
+
 
       <section className="mx-auto mt-20 max-w-7xl">
         <Reveal>
