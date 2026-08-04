@@ -11,12 +11,50 @@ export const Route = createFileRoute("/confidentialite")({
         name: "description",
         content: "Comment Afric Pub collecte, utilise et protège vos données personnelles lors d'une demande de devis.",
       },
+      { property: "og:type", content: "website" },
       { property: "og:title", content: "Politique de confidentialité — Afric Pub" },
       { property: "og:description", content: "Collecte, usage et protection de vos données personnelles." },
       { property: "og:url", content: "https://premium-afric-vision.lovable.app/confidentialite" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Politique de confidentialité — Afric Pub" },
+      { name: "twitter:description", content: "Collecte, usage et protection de vos données personnelles." },
     ],
     links: [{ rel: "canonical", href: "https://premium-afric-vision.lovable.app/confidentialite" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": "https://premium-afric-vision.lovable.app/confidentialite#webpage",
+              url: "https://premium-afric-vision.lovable.app/confidentialite",
+              name: "Politique de confidentialité — Afric Pub",
+              description: "Comment Afric Pub collecte, utilise et protège vos données personnelles.",
+              inLanguage: "fr",
+              isPartOf: { "@id": "https://premium-afric-vision.lovable.app/#website" },
+              publisher: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://premium-afric-vision.lovable.app/confidentialite#breadcrumb",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Accueil", item: "https://premium-afric-vision.lovable.app/" },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Politique de confidentialité",
+                  item: "https://premium-afric-vision.lovable.app/confidentialite",
+                },
+              ],
+            },
+          ],
+        }),
+      },
+    ],
   }),
+
 });
 
 const sections = [

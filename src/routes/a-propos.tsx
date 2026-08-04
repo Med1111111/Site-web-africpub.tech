@@ -14,12 +14,47 @@ export const Route = createFileRoute("/a-propos")({
         content:
           "Mission, vision, valeurs et atelier d'Afric Pub : 18 ans d'expérience en enseignes lumineuses et communication visuelle en Algérie.",
       },
+      { property: "og:type", content: "website" },
       { property: "og:title", content: "À propos — Afric Pub" },
       { property: "og:description", content: "Notre histoire, notre atelier et nos engagements qualité." },
       { property: "og:url", content: "https://premium-afric-vision.lovable.app/a-propos" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "À propos — Afric Pub" },
+      { name: "twitter:description", content: "Notre histoire, notre atelier et nos engagements qualité." },
     ],
     links: [{ rel: "canonical", href: "https://premium-afric-vision.lovable.app/a-propos" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "AboutPage",
+              "@id": "https://premium-afric-vision.lovable.app/a-propos#webpage",
+              url: "https://premium-afric-vision.lovable.app/a-propos",
+              name: "À propos — Afric Pub, agence de communication globale",
+              description:
+                "Mission, vision, valeurs et atelier d'Afric Pub : 18 ans d'expérience en enseignes lumineuses et communication visuelle en Algérie.",
+              inLanguage: "fr",
+              isPartOf: { "@id": "https://premium-afric-vision.lovable.app/#website" },
+              about: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
+              publisher: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://premium-afric-vision.lovable.app/a-propos#breadcrumb",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Accueil", item: "https://premium-afric-vision.lovable.app/" },
+                { "@type": "ListItem", position: 2, name: "À propos", item: "https://premium-afric-vision.lovable.app/a-propos" },
+              ],
+            },
+          ],
+        }),
+      },
+    ],
   }),
+
 });
 
 const values = [
