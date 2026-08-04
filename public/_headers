@@ -1,3 +1,13 @@
+# Sécurité — appliquée à toutes les réponses statiques.
+# La CSP complète est posée par le runtime serveur sur les documents HTML
+# (voir src/lib/security-headers.ts).
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  X-Permitted-Cross-Domain-Policies: none
+
 # Cache & compression headers for static assets
 # Hashed build output — safe to cache forever
 /_build/*
