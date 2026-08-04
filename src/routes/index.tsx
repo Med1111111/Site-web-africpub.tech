@@ -77,7 +77,7 @@ function Home() {
               href="https://wa.me/213540481810"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full glass px-7 py-3.5 text-sm font-semibold transition-transform hover:scale-[1.04]"
+              className="inline-flex items-center gap-2 rounded-full neon-social-pill px-7 py-3.5 text-sm font-semibold"
             >
               <MessageCircle className="size-4" aria-hidden="true" />
               WhatsApp
@@ -86,7 +86,7 @@ function Home() {
               href="https://www.google.com/maps/place/Afric+Pub/@36.6379976,2.6934306,17z/data=!3m1!4b1!4m6!3m5!1s0x128f9d7138d27c07:0xb356a71bb9d8d9b6!8m2!3d36.6379976!4d2.6934306!16s%2Fg%2F11fcqqwyh5?hl=fr&entry=ttu"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full glass px-7 py-3.5 text-sm font-semibold transition-transform hover:scale-[1.04]"
+              className="inline-flex items-center gap-2 rounded-full neon-social-pill px-7 py-3.5 text-sm font-semibold"
             >
               <MapPin className="size-4" aria-hidden="true" />
               Maps
