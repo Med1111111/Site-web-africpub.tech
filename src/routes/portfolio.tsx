@@ -8,24 +8,79 @@ import { categories, projects } from "@/lib/site-data";
 import p1 from "@/assets/portfolio-1.jpg";
 import p2 from "@/assets/portfolio-2.jpg";
 import p3 from "@/assets/portfolio-3.jpg";
+import stand from "@/assets/stand.jpg.asset.json";
+
+
+const SITE_URL = "https://premium-afric-vision.lovable.app";
+const PORTFOLIO_URL = `${SITE_URL}/portfolio`;
+const PORTFOLIO_TITLE = "Portfolio — Réalisations Afric Pub en Algérie";
+const PORTFOLIO_DESC =
+  "Découvrez nos réalisations : enseignes lumineuses, signalétique, covering de flotte, stands et habillage de façade livrés dans toute l'Algérie.";
+const PORTFOLIO_IMAGE = `${SITE_URL}${stand.url}`;
 
 export const Route = createFileRoute("/portfolio")({
   component: PortfolioPage,
   head: () => ({
     meta: [
-      { title: "Portfolio — Réalisations Afric Pub" },
-      {
-        name: "description",
-        content:
-          "Découvrez nos réalisations : enseignes lumineuses, signalétique, covering de flotte et habillage de façade dans toute l'Algérie.",
-      },
-      { property: "og:title", content: "Portfolio — Afric Pub" },
-      { property: "og:description", content: "Enseignes, signalétique, véhicules et grand format : nos projets livrés." },
-      { property: "og:url", content: "/portfolio" },
+      { title: PORTFOLIO_TITLE },
+      { name: "description", content: PORTFOLIO_DESC },
+      { property: "og:type", content: "website" },
+      { property: "og:title", content: PORTFOLIO_TITLE },
+      { property: "og:description", content: PORTFOLIO_DESC },
+      { property: "og:url", content: PORTFOLIO_URL },
+      { property: "og:image", content: PORTFOLIO_IMAGE },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: PORTFOLIO_TITLE },
+      { name: "twitter:description", content: PORTFOLIO_DESC },
+      { name: "twitter:image", content: PORTFOLIO_IMAGE },
     ],
-    links: [{ rel: "canonical", href: "/portfolio" }],
+    links: [{ rel: "canonical", href: PORTFOLIO_URL }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: PORTFOLIO_TITLE,
+          description: PORTFOLIO_DESC,
+          url: PORTFOLIO_URL,
+          isPartOf: { "@type": "WebSite", name: "Afric Pub", url: SITE_URL },
+          mainEntity: {
+            "@type": "ItemList",
+            numberOfItems: projects.length,
+            itemListElement: projects.map((p, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              item: {
+                "@type": "CreativeWork",
+                name: p.title,
+                genre: p.category,
+                url: PORTFOLIO_URL,
+                creator: { "@type": "Organization", name: "Afric Pub", url: SITE_URL },
+                locationCreated: {
+                  "@type": "Place",
+                  address: { "@type": "PostalAddress", addressLocality: p.city, addressCountry: "DZ" },
+                },
+              },
+            })),
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Accueil", item: `${SITE_URL}/` },
+            { "@type": "ListItem", position: 2, name: "Portfolio", item: PORTFOLIO_URL },
+          ],
+        }),
+      },
+    ],
   }),
 });
+
 
 const images = [p1, p3, p2, p1, p2, p3];
 

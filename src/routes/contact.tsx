@@ -17,9 +17,9 @@ export const Route = createFileRoute("/contact")({
       },
       { property: "og:title", content: "Contact — Afric Pub" },
       { property: "og:description", content: "Étude technique et devis gratuits sous 24 à 48h." },
-      { property: "og:url", content: "/contact" },
+      { property: "og:url", content: "https://premium-afric-vision.lovable.app/contact" },
     ],
-    links: [{ rel: "canonical", href: "/contact" }],
+    links: [{ rel: "canonical", href: "https://premium-afric-vision.lovable.app/contact" }],
   }),
 });
 

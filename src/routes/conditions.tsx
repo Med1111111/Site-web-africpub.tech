@@ -13,9 +13,9 @@ export const Route = createFileRoute("/conditions")({
       },
       { property: "og:title", content: "Conditions générales — Afric Pub" },
       { property: "og:description", content: "Devis, délais, paiement, garanties et propriété intellectuelle." },
-      { property: "og:url", content: "/conditions" },
+      { property: "og:url", content: "https://premium-afric-vision.lovable.app/conditions" },
     ],
-    links: [{ rel: "canonical", href: "/conditions" }],
+    links: [{ rel: "canonical", href: "https://premium-afric-vision.lovable.app/conditions" }],
   }),
 });
 

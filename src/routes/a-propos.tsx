@@ -16,9 +16,9 @@ export const Route = createFileRoute("/a-propos")({
       },
       { property: "og:title", content: "À propos — Afric Pub" },
       { property: "og:description", content: "Notre histoire, notre atelier et nos engagements qualité." },
-      { property: "og:url", content: "/a-propos" },
+      { property: "og:url", content: "https://premium-afric-vision.lovable.app/a-propos" },
     ],
-    links: [{ rel: "canonical", href: "/a-propos" }],
+    links: [{ rel: "canonical", href: "https://premium-afric-vision.lovable.app/a-propos" }],
   }),
 });
 

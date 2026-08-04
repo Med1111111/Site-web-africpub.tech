@@ -30,9 +30,9 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format, habillage de véhicules et branding partout en Algérie.",
       },
-      { property: "og:url", content: "/" },
+      { property: "og:url", content: "https://premium-afric-vision.lovable.app/" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: "https://premium-afric-vision.lovable.app/" }],
   }),
 });
 

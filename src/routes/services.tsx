@@ -4,24 +4,71 @@ import { Reveal } from "@/components/Reveal";
 import { ProcessSteps } from "@/components/ProcessSteps";
 import { services } from "@/lib/site-data";
 
+const SITE_URL = "https://premium-afric-vision.lovable.app";
+const SERVICES_URL = `${SITE_URL}/services`;
+const SERVICES_TITLE = "Services — Enseignes, signalétique & impression | Afric Pub";
+const SERVICES_DESC =
+  "Enseignes lumineuses LED, habillage Alucobond 3D, découpe CNC, roll-up, impression petit et grand format, packaging et stands d'exposition en Algérie.";
+const SERVICES_IMAGE = `${SITE_URL}${services[0].image}`;
 
 export const Route = createFileRoute("/services")({
   component: ServicesPage,
   head: () => ({
     meta: [
-      { title: "Services — Enseignes, signalétique & impression | Afric Pub" },
-      {
-        name: "description",
-        content:
-          "Enseignes lumineuses LED, signalétique, impression numérique, habillage de véhicules, branding et impression grand format en Algérie.",
-      },
-      { property: "og:title", content: "Nos services — Afric Pub" },
-      { property: "og:description", content: "De la conception 3D à la pose : la chaîne complète de la communication visuelle." },
-      { property: "og:url", content: "/services" },
+      { title: SERVICES_TITLE },
+      { name: "description", content: SERVICES_DESC },
+      { property: "og:type", content: "website" },
+      { property: "og:title", content: SERVICES_TITLE },
+      { property: "og:description", content: SERVICES_DESC },
+      { property: "og:url", content: SERVICES_URL },
+      { property: "og:image", content: SERVICES_IMAGE },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: SERVICES_TITLE },
+      { name: "twitter:description", content: SERVICES_DESC },
+      { name: "twitter:image", content: SERVICES_IMAGE },
     ],
-    links: [{ rel: "canonical", href: "/services" }],
+    links: [{ rel: "canonical", href: SERVICES_URL }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: "Services Afric Pub",
+          description: SERVICES_DESC,
+          url: SERVICES_URL,
+          numberOfItems: services.length,
+          itemListElement: services.map((s, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            item: {
+              "@type": "Service",
+              name: s.title,
+              description: s.desc,
+              image: `${SITE_URL}${s.image}`,
+              url: SERVICES_URL,
+              serviceType: s.title,
+              areaServed: { "@type": "Country", name: "Algérie" },
+              provider: { "@type": "Organization", name: "Afric Pub", url: SITE_URL },
+            },
+          })),
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Accueil", item: `${SITE_URL}/` },
+            { "@type": "ListItem", position: 2, name: "Services", item: SERVICES_URL },
+          ],
+        }),
+      },
+    ],
   }),
 });
+
 
 function ServicesPage() {
   return (
