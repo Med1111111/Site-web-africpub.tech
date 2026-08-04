@@ -277,25 +277,6 @@ function Home() {
         </Reveal>
       </section>
 
-      {/* ---------- PROCESSUS ---------- */}
-      <section aria-labelledby="process-title" className="mx-auto mt-28 max-w-7xl">
-        <Reveal>
-          <h2 id="process-title" className="text-3xl font-bold sm:text-5xl">
-            {t("section.process")}
-          </h2>
-        </Reveal>
-        <ol className="mt-10 grid gap-4 lg:grid-cols-4">
-          {process.map((p, i) => (
-            <Reveal as="li" key={p.step} delay={i * 80}>
-              <div className="h-full rounded-3xl glass p-7">
-                <span className="text-sm font-semibold text-primary">{p.step}</span>
-                <h3 className="mt-3 text-lg font-semibold">{p.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{p.desc}</p>
-              </div>
-            </Reveal>
-          ))}
-        </ol>
-      </section>
 
       {/* ---------- CLIENTS ---------- */}
       <section aria-labelledby="clients-title" className="mx-auto mt-28 max-w-7xl">
