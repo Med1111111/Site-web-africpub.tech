@@ -36,8 +36,10 @@ const schema = z.object({
 
 function ContactPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
-  const [news, setNews] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "error" | "throttled">("idle");
+  const [news, setNews] = useState<"idle" | "sending" | "sent" | "error" | "throttled">("idle");
+  // Horodatage d'ouverture : un envoi en moins de 2,5 s est considéré comme automatisé.
+  const [mountedAt] = useState(() => Date.now());
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,7 +57,13 @@ function ContactPage() {
     setErrors({});
     setState("sending");
     try {
-      await submitContactMessage({ data: result.data });
+      const res = await submitContactMessage({
+        data: { ...result.data, elapsedMs: Date.now() - mountedAt },
+      });
+      if (!res.ok) {
+        setState("throttled");
+        return;
+      }
       setState("sent");
       form.reset();
     } catch {
@@ -66,11 +74,17 @@ function ContactPage() {
   const onNewsletter = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
-    const email = String(new FormData(form).get("news") ?? "").trim();
+    const fd = new FormData(form);
+    const email = String(fd.get("news") ?? "").trim();
+    const company = String(fd.get("company_news") ?? "");
     if (!email) return;
     setNews("sending");
     try {
-      await subscribeNewsletter({ data: { email } });
+      const res = await subscribeNewsletter({ data: { email, company } });
+      if (!res.ok) {
+        setNews("throttled");
+        return;
+      }
       setNews("sent");
       form.reset();
     } catch {
