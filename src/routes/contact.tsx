@@ -36,8 +36,10 @@ const schema = z.object({
 
 function ContactPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
-  const [news, setNews] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "error" | "throttled">("idle");
+  const [news, setNews] = useState<"idle" | "sending" | "sent" | "error" | "throttled">("idle");
+  // Horodatage d'ouverture : un envoi en moins de 2,5 s est considéré comme automatisé.
+  const [mountedAt] = useState(() => Date.now());
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,7 +57,13 @@ function ContactPage() {
     setErrors({});
     setState("sending");
     try {
-      await submitContactMessage({ data: result.data });
+      const res = await submitContactMessage({
+        data: { ...result.data, elapsedMs: Date.now() - mountedAt },
+      });
+      if (!res.ok) {
+        setState("throttled");
+        return;
+      }
       setState("sent");
       form.reset();
     } catch {
@@ -66,11 +74,17 @@ function ContactPage() {
   const onNewsletter = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
-    const email = String(new FormData(form).get("news") ?? "").trim();
+    const fd = new FormData(form);
+    const email = String(fd.get("news") ?? "").trim();
+    const company = String(fd.get("company_news") ?? "");
     if (!email) return;
     setNews("sending");
     try {
-      await subscribeNewsletter({ data: { email } });
+      const res = await subscribeNewsletter({ data: { email, company } });
+      if (!res.ok) {
+        setNews("throttled");
+        return;
+      }
       setNews("sent");
       form.reset();
     } catch {
@@ -95,6 +109,16 @@ function ContactPage() {
             {state === "sent" && (
               <p role="status" className="mb-6 rounded-2xl bg-brand px-4 py-3 text-sm text-primary-foreground">
                 Merci ! Votre demande a bien été enregistrée, nous revenons vers vous sous 24h.
+              </p>
+            )}
+            {state === "throttled" && (
+              <p role="alert" className="mb-6 rounded-2xl glass-soft px-4 py-3 text-sm text-destructive">
+                Vous avez déjà envoyé plusieurs demandes récemment. Merci de patienter une heure, ou
+                écrivez-nous sur{" "}
+                <a href="https://wa.me/213540481810" target="_blank" rel="noreferrer noopener" className="underline">
+                  WhatsApp
+                </a>
+                .
               </p>
             )}
             {state === "error" && (
@@ -167,11 +191,16 @@ function ContactPage() {
               <form onSubmit={onNewsletter} className="mt-4 grid gap-2">
                 <label htmlFor="news" className="sr-only">Votre email</label>
                 <input id="news" name="news" type="email" required maxLength={255} className={field} placeholder="vous@entreprise.dz" />
+                {/* Honeypot anti-spam */}
+                <input type="text" name="company_news" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
                 <button disabled={news === "sending"} className="rounded-full glass-soft px-5 py-3 text-sm font-semibold disabled:opacity-60">
                   {news === "sending" ? "Inscription…" : "S'inscrire"}
                 </button>
                 {news === "sent" && (
                   <p role="status" className="text-xs text-muted-foreground">Merci, votre inscription est enregistrée.</p>
+                )}
+                {news === "throttled" && (
+                  <p role="alert" className="text-xs text-destructive">Trop de tentatives, réessayez dans une heure.</p>
                 )}
                 {news === "error" && (
                   <p role="alert" className="text-xs text-destructive">Inscription impossible pour le moment.</p>
