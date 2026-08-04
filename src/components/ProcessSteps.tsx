@@ -21,10 +21,7 @@ export function ProcessSteps({ label = "Les étapes de notre processus" }: { lab
                 className="pointer-events-none absolute left-[3.25rem] top-full bottom-[-1rem] w-px bg-gradient-to-b from-orange-400 to-primary/40 lg:bottom-auto lg:left-auto lg:right-[-1rem] lg:top-[3.25rem] lg:h-px lg:w-4 lg:bg-gradient-to-r lg:from-orange-400 lg:to-primary/40"
               />
             )}
-            <div
-              tabIndex={0}
-              className="relative h-full rounded-3xl glass p-7 outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            >
+            <div className="relative h-full rounded-3xl glass p-7">
               <div className="flex items-center gap-4">
                 <span
                   aria-hidden="true"

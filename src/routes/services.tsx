@@ -60,7 +60,7 @@ function ServicesPage() {
           <h2 className="text-3xl font-bold sm:text-4xl">Méthodologie</h2>
         </Reveal>
         <div className="mt-10">
-          <ProcessSteps />
+          <ProcessSteps label="Les étapes de notre méthodologie" />
         </div>
       </section>
 
