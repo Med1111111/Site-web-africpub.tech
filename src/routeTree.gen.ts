@@ -18,6 +18,7 @@ import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
+import { Route as RechercheRouteImport } from './routes/recherche'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
@@ -65,6 +66,11 @@ const PortfolioRoute = PortfolioRouteImport.update({
   path: '/portfolio',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RechercheRoute = RechercheRouteImport.update({
+  id: '/recherche',
+  path: '/recherche',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
@@ -85,6 +91,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/portfolio': typeof PortfolioRoute
+  '/recherche': typeof RechercheRoute
   '/services': typeof ServicesRoute
   '/admin': typeof AuthenticatedAdminRoute
 }
@@ -97,6 +104,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/portfolio': typeof PortfolioRoute
+  '/recherche': typeof RechercheRoute
   '/services': typeof ServicesRoute
   '/admin': typeof AuthenticatedAdminRoute
 }
@@ -111,6 +119,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/portfolio': typeof PortfolioRoute
+  '/recherche': typeof RechercheRoute
   '/services': typeof ServicesRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
 }
@@ -125,6 +134,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/portfolio'
+    | '/recherche'
     | '/services'
     | '/admin'
   fileRoutesByTo: FileRoutesByTo
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/portfolio'
+    | '/recherche'
     | '/services'
     | '/admin'
   id:
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/faq'
     | '/portfolio'
+    | '/recherche'
     | '/services'
     | '/_authenticated/admin'
   fileRoutesById: FileRoutesById
@@ -164,6 +176,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
   PortfolioRoute: typeof PortfolioRoute
+  RechercheRoute: typeof RechercheRoute
   ServicesRoute: typeof ServicesRoute
 }
 
@@ -232,6 +245,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortfolioRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/recherche': {
+      id: '/recherche'
+      path: '/recherche'
+      fullPath: '/recherche'
+      preLoaderRoute: typeof RechercheRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services': {
       id: '/services'
       path: '/services'
@@ -270,6 +290,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
   PortfolioRoute: PortfolioRoute,
+  RechercheRoute: RechercheRoute,
   ServicesRoute: ServicesRoute,
 }
 export const routeTree = rootRouteImport
