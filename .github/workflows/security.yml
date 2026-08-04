@@ -1,0 +1,44 @@
+name: Security checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: "URL à auditer (headers HTTP / CSP)"
+        required: false
+        default: ""
+  schedule:
+    # Audit quotidien du site publié (05:30 UTC)
+    - cron: "30 5 * * *"
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Headers, CSP & endpoints exposés
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Audit statique (code, endpoints publics, politique CSP)
+        run: bun run security:check
+
+      - name: Audit du site déployé (en-têtes HTTP réels)
+        env:
+          TARGET_URL: ${{ github.event.inputs.target_url || vars.SECURITY_TARGET_URL || 'https://premium-afric-vision.lovable.app' }}
+        run: bun run security:check -- --url "$TARGET_URL"
+
+      - name: Audit des dépendances
+        run: bun audit --audit-level=high || echo "::warning::Vulnérabilités de dépendances détectées"
