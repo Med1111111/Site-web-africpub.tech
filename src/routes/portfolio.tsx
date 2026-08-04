@@ -33,7 +33,19 @@ export const Route = createFileRoute("/portfolio")({
       { name: "twitter:description", content: PORTFOLIO_DESC },
       { name: "twitter:image", content: PORTFOLIO_IMAGE },
     ],
-    links: [{ rel: "canonical", href: PORTFOLIO_URL }],
+    links: [
+      { rel: "canonical", href: PORTFOLIO_URL },
+      // Précharge la première vignette (candidat LCP), en AVIF responsive.
+      {
+        rel: "preload",
+        as: "image",
+        href: projects[0].image,
+        imagesrcset: projects[0].avif,
+        imagesizes: "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw",
+        type: "image/avif",
+        fetchpriority: "high",
+      },
+    ],
     scripts: [
       {
         type: "application/ld+json",
