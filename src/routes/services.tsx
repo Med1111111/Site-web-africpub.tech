@@ -55,9 +55,9 @@ function ServicesPage() {
         </ul>
       </section>
 
-      <section className="mx-auto mt-24 max-w-7xl">
+      <section aria-labelledby="methodologie-title" className="mx-auto mt-24 max-w-7xl">
         <Reveal>
-          <h2 className="text-3xl font-bold sm:text-4xl">Méthodologie</h2>
+          <h2 id="methodologie-title" className="text-3xl font-bold sm:text-4xl">Méthodologie</h2>
         </Reveal>
         <div className="mt-10">
           <ProcessSteps label="Les étapes de notre méthodologie" />
