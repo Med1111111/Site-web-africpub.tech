@@ -16,6 +16,8 @@ export type Database = {
     Tables: {
       contact_messages: {
         Row: {
+          attachment_name: string
+          attachment_path: string
           created_at: string
           email: string
           id: string
@@ -27,6 +29,8 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          attachment_name?: string
+          attachment_path?: string
           created_at?: string
           email: string
           id?: string
@@ -38,6 +42,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          attachment_name?: string
+          attachment_path?: string
           created_at?: string
           email?: string
           id?: string

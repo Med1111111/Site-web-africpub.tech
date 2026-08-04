@@ -2,6 +2,12 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { allowLeadAttempt, leadsPublicClient, looksLikeSpam, visitorFingerprint } from "./leads.server";
+import {
+  ATTACHMENT_BUCKET,
+  ATTACHMENT_EXTENSIONS,
+  ATTACHMENT_MAX_BYTES,
+  attachmentExtension,
+} from "./leads-upload";
 import type { Database } from "@/integrations/supabase/types";
 
 export type ContactMessage = Database["public"]["Tables"]["contact_messages"]["Row"];
@@ -10,6 +16,58 @@ export type NewsletterSubscriber = Database["public"]["Tables"]["newsletter_subs
 export const CONTACT_STATUSES = ["nouveau", "en cours", "traité", "archivé"] as const;
 
 export type LeadResult = { ok: true } | { ok: false; reason: "throttled" };
+
+/* ---------- Pièce jointe : URL d'upload signée ---------- */
+
+export const createLeadUploadUrl = createServerFn({ method: "POST" })
+  .inputValidator((input) =>
+    z
+      .object({
+        fileName: z.string().trim().min(1).max(200),
+        size: z.number().int().min(1).max(ATTACHMENT_MAX_BYTES),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data }) => {
+    const ext = attachmentExtension(data.fileName);
+    if (!(ATTACHMENT_EXTENSIONS as readonly string[]).includes(ext)) {
+      throw new Error("Format de fichier non accepté.");
+    }
+
+    const { fingerprint } = visitorFingerprint();
+    const allowed = await allowLeadAttempt(fingerprint, "contact", 8, 3600);
+    if (!allowed) throw new Error("Trop de tentatives, réessayez plus tard.");
+
+    const path = `${new Date().toISOString().slice(0, 10)}/${crypto.randomUUID()}.${ext}`;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: signed, error } = await supabaseAdmin.storage
+      .from(ATTACHMENT_BUCKET)
+      .createSignedUploadUrl(path);
+    if (error || !signed) throw new Error(error?.message ?? "Upload indisponible.");
+    return { path, token: signed.token };
+  });
+
+export const getLeadAttachmentUrl = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) => z.object({ id: z.string().uuid() }).parse(input))
+  .handler(async ({ data, context }) => {
+    // La lecture passe par le client de l'utilisateur : seuls les admins voient les demandes (RLS).
+    const { data: row, error } = await context.supabase
+      .from("contact_messages")
+      .select("attachment_path")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!row?.attachment_path) throw new Error("Aucune pièce jointe.");
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: signed, error: signError } = await supabaseAdmin.storage
+      .from(ATTACHMENT_BUCKET)
+      .createSignedUrl(row.attachment_path, 3600);
+    if (signError || !signed) throw new Error(signError?.message ?? "Lien indisponible.");
+    return { url: signed.signedUrl };
+  });
+
 
 /* ---------- Soumissions publiques ---------- */
 
@@ -24,6 +82,14 @@ export const submitContactMessage = createServerFn({ method: "POST" })
         message: z.string().trim().min(10).max(1500),
         company: z.string().max(0).optional().default(""), // honeypot
         elapsedMs: z.number().int().min(0).max(86_400_000).optional().default(-1),
+        attachmentPath: z
+          .string()
+          .trim()
+          .max(200)
+          .regex(/^$|^\d{4}-\d{2}-\d{2}\/[a-f0-9-]{36}\.[a-z0-9]{2,5}$/i)
+          .optional()
+          .default(""),
+        attachmentName: z.string().trim().max(200).optional().default(""),
       })
       .parse(input),
   )
@@ -56,7 +122,10 @@ export const submitContactMessage = createServerFn({ method: "POST" })
       phone: data.phone,
       service: data.service,
       message: data.message,
+      attachment_path: data.attachmentPath,
+      attachment_name: data.attachmentName,
     });
+
     if (error) throw new Error(error.message);
     return { ok: true };
   });

@@ -1,11 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { z } from "zod";
-import { Phone, Mail, MapPin, Clock, ExternalLink } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, ExternalLink, Paperclip, X } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
 import { services } from "@/lib/site-data";
-import { submitContactMessage, subscribeNewsletter } from "@/lib/leads.functions";
+import { createLeadUploadUrl, submitContactMessage, subscribeNewsletter } from "@/lib/leads.functions";
+import { supabase } from "@/integrations/supabase/client";
+import {
+  ATTACHMENT_ACCEPT,
+  ATTACHMENT_BUCKET,
+  ATTACHMENT_MAX_BYTES,
+  formatBytes,
+  isAllowedAttachment,
+} from "@/lib/leads-upload";
+
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
@@ -72,10 +81,40 @@ const schema = z.object({
 
 function ContactPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [state, setState] = useState<"idle" | "sending" | "sent" | "error" | "throttled">("idle");
+  const [state, setState] = useState<"idle" | "sending" | "uploading" | "sent" | "error" | "throttled">("idle");
   const [news, setNews] = useState<"idle" | "sending" | "sent" | "error" | "throttled">("idle");
   // Horodatage d'ouverture : un envoi en moins de 2,5 s est considéré comme automatisé.
   const [mountedAt] = useState(() => Date.now());
+  const [file, setFile] = useState<File | null>(null);
+  const [fileError, setFileError] = useState("");
+  const [dragging, setDragging] = useState(false);
+  const fileInput = useRef<HTMLInputElement>(null);
+
+  const pickFile = (next: File | null) => {
+    if (!next) {
+      setFile(null);
+      setFileError("");
+      return;
+    }
+    if (!isAllowedAttachment(next.name)) {
+      setFile(null);
+      setFileError("Format non accepté. Formats autorisés : AI, EPS, SVG, PDF, JPG, PNG, WEBP, OBJ, SKP, DWG.");
+      return;
+    }
+    if (next.size > ATTACHMENT_MAX_BYTES) {
+      setFile(null);
+      setFileError("Fichier trop lourd (max 10 Mo).");
+      return;
+    }
+    setFileError("");
+    setFile(next);
+  };
+
+  const clearFile = () => {
+    setFile(null);
+    setFileError("");
+    if (fileInput.current) fileInput.current.value = "";
+  };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -91,10 +130,24 @@ function ContactPage() {
       return;
     }
     setErrors({});
-    setState("sending");
+
+    let attachmentPath = "";
+    let attachmentName = "";
     try {
+      if (file) {
+        setState("uploading");
+        const signed = await createLeadUploadUrl({ data: { fileName: file.name, size: file.size } });
+        const { error: upErr } = await supabase.storage
+          .from(ATTACHMENT_BUCKET)
+          .uploadToSignedUrl(signed.path, signed.token, file);
+        if (upErr) throw new Error(upErr.message);
+        attachmentPath = signed.path;
+        attachmentName = file.name.slice(0, 200);
+      }
+
+      setState("sending");
       const res = await submitContactMessage({
-        data: { ...result.data, elapsedMs: Date.now() - mountedAt },
+        data: { ...result.data, elapsedMs: Date.now() - mountedAt, attachmentPath, attachmentName },
       });
       if (!res.ok) {
         setState("throttled");
@@ -102,10 +155,12 @@ function ContactPage() {
       }
       setState("sent");
       form.reset();
+      clearFile();
     } catch {
       setState("error");
     }
   };
+
 
   const onNewsletter = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -198,16 +253,78 @@ function ContactPage() {
               {errors.message && <p className="mt-1 text-xs text-destructive">{errors.message}</p>}
             </div>
 
+            <div className="mt-5">
+              <label htmlFor="attachment" className="text-sm font-medium">
+                Joindre votre logo / photo de la façade{" "}
+                <span className="font-normal text-muted-foreground">(vectoriel, photo ou plan 3D)</span>
+              </label>
+              <div
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setDragging(true);
+                }}
+                onDragLeave={() => setDragging(false)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setDragging(false);
+                  pickFile(e.dataTransfer.files?.[0] ?? null);
+                }}
+                className={`mt-2 rounded-2xl glass-soft px-4 py-4 transition-shadow focus-within:ring-2 focus-within:ring-brand/60 ${
+                  dragging ? "ring-2 ring-brand/60" : ""
+                }`}
+              >
+                <input
+                  ref={fileInput}
+                  id="attachment"
+                  type="file"
+                  accept={ATTACHMENT_ACCEPT}
+                  className="sr-only"
+                  onChange={(e) => pickFile(e.target.files?.[0] ?? null)}
+                />
+                {file ? (
+                  <div className="flex flex-wrap items-center gap-3 text-sm">
+                    <Paperclip className="size-4 shrink-0 text-brand" aria-hidden="true" />
+                    <span className="min-w-0 flex-1 truncate">{file.name}</span>
+                    <span className="text-xs text-muted-foreground">{formatBytes(file.size)}</span>
+                    <button
+                      type="button"
+                      onClick={clearFile}
+                      className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      <X className="size-3.5" aria-hidden="true" />
+                      Retirer
+                    </button>
+                  </div>
+                ) : (
+                  <label htmlFor="attachment" className="flex cursor-pointer items-center gap-3 text-sm text-muted-foreground">
+                    <Paperclip className="size-4 shrink-0 text-brand" aria-hidden="true" />
+                    <span>
+                      Cliquez ou déposez un fichier ici — optionnel
+                      <span className="block text-xs text-muted-foreground/80">
+                        AI, EPS, SVG, PDF, JPG, PNG, WEBP, OBJ, SKP, DWG — 10 Mo max.
+                      </span>
+                    </span>
+                  </label>
+                )}
+              </div>
+              {fileError && <p role="alert" className="mt-1 text-xs text-destructive">{fileError}</p>}
+            </div>
+
             {/* Honeypot anti-spam, masqué aux utilisateurs et aux lecteurs d'écran */}
             <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
 
             <button
               type="submit"
-              disabled={state === "sending"}
+              disabled={state === "sending" || state === "uploading"}
               className="mt-7 w-full rounded-full bg-brand px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.02] sm:w-auto"
             >
-              {state === "sending" ? "Envoi en cours…" : "Envoyer la demande"}
+              {state === "uploading"
+                ? "Envoi du fichier…"
+                : state === "sending"
+                  ? "Envoi en cours…"
+                  : "Envoyer la demande"}
             </button>
+
           </form>
         </Reveal>
 

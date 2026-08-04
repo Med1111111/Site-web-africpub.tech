@@ -3,10 +3,12 @@ import { toast } from "sonner";
 import {
   CONTACT_STATUSES,
   deleteContactMessage,
+  getLeadAttachmentUrl,
   listContactMessages,
   listNewsletterSubscribers,
   updateContactMessageStatus,
 } from "@/lib/leads.functions";
+
 
 const btnGhost = "min-h-11 rounded-full glass-soft px-4 text-sm font-medium";
 
@@ -85,7 +87,24 @@ export default function LeadsManager() {
                   </a>
                 </>
               )}
+              {m.attachment_path && (
+                <button
+                  type="button"
+                  className={btnGhost}
+                  onClick={async () => {
+                    try {
+                      const { url } = await getLeadAttachmentUrl({ data: { id: m.id } });
+                      window.open(url, "_blank", "noopener,noreferrer");
+                    } catch (e) {
+                      toast.error((e as Error).message);
+                    }
+                  }}
+                >
+                  Pièce jointe{m.attachment_name ? ` — ${m.attachment_name}` : ""}
+                </button>
+              )}
             </div>
+
 
             <div className="mt-4 flex flex-wrap items-center gap-2">
               <label className="text-xs text-muted-foreground" htmlFor={`status-${m.id}`}>
