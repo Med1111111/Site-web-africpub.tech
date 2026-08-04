@@ -114,10 +114,10 @@ function Home() {
           <div className="overflow-hidden rounded-3xl glass p-2">
             <img
               src={stand.url}
-              alt="Stand Afric Pub illuminé en rouge lors d'un salon professionnel"
-              className="h-full w-full rounded-2xl object-cover"
-              width={1280}
-              height={719}
+              alt="Stand d'exposition Afric Pub avec enseignes lumineuses rouges et écrans"
+              className="h-full w-full rounded-2xl object-contain"
+              width={1512}
+              height={1024}
             />
           </div>
         </Reveal>
