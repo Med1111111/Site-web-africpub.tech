@@ -48,10 +48,8 @@ const socials = [
 function Home() {
   const { t } = useApp();
   const { data: settings } = useQuery({ queryKey: ["site-settings"], queryFn: () => getPublicSiteSettings() });
-  const liveStats =
-    settings && Array.isArray(settings.stats) && settings.stats.length > 0
-      ? (settings.stats as unknown as { value: string; label: string }[])
-      : stats;
+
+
 
   return (
     <div className="px-3 sm:px-6">
