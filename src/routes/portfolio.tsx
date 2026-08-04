@@ -111,7 +111,7 @@ function PortfolioPage() {
       <PageHeader
         eyebrow="Portfolio"
         title="Nos réalisations"
-        sub="Une sélection de projets livrés pour des enseignes nationales et des groupes internationaux implantés en Algérie."
+        sub="Un aperçu de nos savoir-faire : enseignes, signalétique, covering et grand format. Visuels d'illustration représentatifs de nos prestations."
       />
 
       <section className="mx-auto mt-12 max-w-7xl">
@@ -170,7 +170,7 @@ function PortfolioPage() {
           <div className="w-full max-w-3xl rounded-3xl glass p-3" onClick={(e) => e.stopPropagation()}>
             <img
               src={items[lightbox].img}
-              alt={items[lightbox].title}
+              alt={items[lightbox].alt}
               width={1024}
               height={768}
               className="w-full rounded-2xl object-cover"
