@@ -215,11 +215,39 @@ function ContactPage() {
           <div className="grid h-full content-start gap-4">
             <div className="rounded-3xl glass p-7">
               <h2 className="text-lg font-semibold">Coordonnées</h2>
-              <ul className="mt-4 grid gap-2 text-sm text-muted-foreground">
-                <li>Alger, Algérie</li>
-                <li><a href="mailto:contact@africpub.dz" className="hover:text-foreground">contact@africpub.dz</a></li>
-                <li><a href="tel:+213540481810" className="hover:text-foreground">+213 540 48 18 10</a></li>
+              <ul className="mt-4 grid gap-4 text-sm text-muted-foreground">
+                <li className="flex items-start gap-3">
+                  <MapPin className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
+                  <span>
+                    Bouismail, Tipaza, Algérie
+                    <span className="block text-xs text-muted-foreground/80">(Pose et intervention sur 58 Wilayas)</span>
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Clock className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
+                  <span>Dimanche - Jeudi : 08h30 - 17h00</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Phone className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
+                  <span className="grid gap-1">
+                    <a href="tel:+213540481810" className="hover:text-foreground">+213 540 48 18 10</a>
+                    <a href="tel:+213559119888" className="hover:text-foreground">+213 559 11 98 88</a>
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Mail className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
+                  <a href="mailto:contact@africpub.com" className="hover:text-foreground">contact@africpub.com</a>
+                </li>
               </ul>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Bouismail%2C+Tipaza%2C+Alg%C3%A9rie"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                Voir sur Google Maps
+                <ExternalLink className="size-3.5" aria-hidden="true" />
+              </a>
             </div>
             <div className="rounded-3xl glass p-7">
               <h2 className="text-lg font-semibold">Newsletter</h2>
