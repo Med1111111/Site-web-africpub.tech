@@ -36,7 +36,7 @@ export const Route = createFileRoute("/faq")({
               description:
                 "Réponses aux questions fréquentes : délais de fabrication, couverture nationale, devis gratuit, garanties LED et autorisations de pose.",
               inLanguage: "fr",
-              isPartOf: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
+              isPartOf: { "@id": "https://premium-afric-vision.lovable.app/#website" },
               publisher: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
               mainEntity: faq.map((f, i) => ({
                 "@type": "Question",

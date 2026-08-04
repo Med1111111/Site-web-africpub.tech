@@ -139,8 +139,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           ],
         }),
       },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "@id": "https://premium-afric-vision.lovable.app/#website",
+          url: "https://premium-afric-vision.lovable.app",
+          name: "Afric Pub",
+          inLanguage: "fr",
+          publisher: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
+        }),
+      },
     ],
   }),
+
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
