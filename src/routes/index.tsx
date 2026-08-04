@@ -15,8 +15,14 @@ import p1 from "@/assets/portfolio-1.jpg";
 import p2 from "@/assets/portfolio-2.jpg";
 import p3 from "@/assets/portfolio-3.jpg";
 
+const siteSettingsQuery = {
+  queryKey: ["site-settings"] as const,
+  queryFn: () => getPublicSiteSettings(),
+};
+
 export const Route = createFileRoute("/")({
   component: Home,
+  loader: ({ context }) => context.queryClient.ensureQueryData(siteSettingsQuery),
   head: () => ({
     meta: [
       { title: "Afric Pub — Enseignes lumineuses & signalétique en Algérie" },
@@ -47,7 +53,7 @@ const socials = [
 
 function Home() {
   const { t } = useApp();
-  const { data: settings } = useQuery({ queryKey: ["site-settings"], queryFn: () => getPublicSiteSettings() });
+  const { data: settings } = useQuery(siteSettingsQuery);
 
 
 
