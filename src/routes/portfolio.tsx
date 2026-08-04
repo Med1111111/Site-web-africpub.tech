@@ -181,13 +181,16 @@ function PortfolioPage() {
           onClick={() => setLightbox(null)}
         >
           <div className="w-full max-w-3xl rounded-3xl glass p-3" onClick={(e) => e.stopPropagation()}>
-            <img
+            <ResponsiveImage
               src={items[lightbox].img}
+              avif={items[lightbox].avif}
+              webp={items[lightbox].webp}
               alt={items[lightbox].alt}
-              width={1024}
-              height={768}
+              loading="eager"
+              sizes="(min-width: 768px) 768px, 100vw"
               className="w-full rounded-2xl object-cover"
             />
+
             <div className="flex items-center justify-between px-3 py-4">
               <p className="text-sm font-medium">
                 {items[lightbox].title} — {items[lightbox].category}
