@@ -52,7 +52,7 @@ function Home() {
   return (
     <div className="px-3 sm:px-6">
       {/* ---------- HERO ---------- */}
-      <section className="mx-auto grid max-w-7xl items-center gap-10 pt-32 sm:pt-40 lg:grid-cols-[1.1fr_0.9fr]">
+      <section className="mx-auto grid max-w-7xl items-center gap-6 pt-32 sm:pt-40 lg:grid-cols-[1.05fr_1fr]">
         <Reveal>
           <p className="inline-flex items-center gap-2 rounded-full glass-soft px-4 py-1.5 text-xs tracking-wide text-muted-foreground">
             <span className="size-1.5 rounded-full bg-primary" aria-hidden="true" />
