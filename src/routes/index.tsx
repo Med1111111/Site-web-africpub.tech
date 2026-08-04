@@ -102,7 +102,7 @@ function Home() {
                   rel="noopener noreferrer"
                   aria-label={s.label}
                   title={s.label}
-                  className="inline-flex size-11 items-center justify-center rounded-full glass-soft transition-transform hover:scale-[1.08]"
+                  className="inline-flex size-11 items-center justify-center rounded-full neon-social"
                 >
                   <s.icon className="size-5" aria-hidden="true" />
                 </a>
