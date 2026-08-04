@@ -135,7 +135,7 @@ function PortfolioPage() {
       <PageHeader
         eyebrow="Portfolio"
         title="Nos réalisations"
-        sub="Un aperçu de nos savoir-faire : enseignes, signalétique, covering et grand format. Visuels d'illustration représentatifs de nos prestations."
+        sub="Quelques-unes de nos réalisations : enseignes, signalétique, covering, impression grand format et packaging."
       />
 
       <section className="mx-auto mt-12 max-w-7xl">
