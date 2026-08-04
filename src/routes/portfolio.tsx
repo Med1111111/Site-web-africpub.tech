@@ -180,7 +180,7 @@ function PortfolioPage() {
             />
             <div className="flex items-center justify-between px-3 py-4">
               <p className="text-sm font-medium">
-                {items[lightbox].title} — {items[lightbox].city}
+                {items[lightbox].title} — {items[lightbox].category}
               </p>
               <button
                 onClick={() => setLightbox(null)}
