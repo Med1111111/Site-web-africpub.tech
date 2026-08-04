@@ -6,6 +6,7 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { imagetools } from "vite-imagetools";
+import { mcpPlugin } from "@lovable.dev/mcp-js/stacks/tanstack/vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 const YEAR = 60 * 60 * 24 * 365;
@@ -27,6 +28,7 @@ export default defineConfig({
   vite: {
     plugins: [
       imagetools(),
+      mcpPlugin(),
       VitePWA({
         strategies: "generateSW",
         registerType: "autoUpdate",
