@@ -4,6 +4,8 @@ import { useState } from "react";
 import PageHeader from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
 import { listPublicPortfolio } from "@/lib/content.functions";
+import { ResponsiveImage } from "@/components/ResponsiveImage";
+
 import { categories, projects } from "@/lib/site-data";
 import stand from "@/assets/stand.jpg.asset.json";
 
@@ -151,14 +153,15 @@ function PortfolioPage() {
                 className="group block w-full overflow-hidden rounded-3xl glass p-2 text-left card-3d"
                 aria-label={`Agrandir : ${p.title}`}
               >
-                <img
+                <ResponsiveImage
                   src={p.img}
+                  avif={p.avif}
+                  webp={p.webp}
                   alt={p.alt}
-                  loading="lazy"
-                  width={1024}
-                  height={768}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                   className="h-60 w-full rounded-2xl object-cover transition-transform duration-700 group-hover:scale-105"
                 />
+
                 <span className="flex items-center justify-between px-3 py-4">
                   <span className="text-sm font-medium">{p.title}</span>
                   <span className="rounded-full glass-soft px-3 py-1 text-xs text-muted-foreground">{p.category}</span>
