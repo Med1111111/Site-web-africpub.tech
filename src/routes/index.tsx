@@ -7,6 +7,8 @@ import { ProcessSteps } from "@/components/ProcessSteps";
 import { useApp } from "@/lib/app-context";
 import { getPublicSiteSettings } from "@/lib/content.functions";
 import { clients, projects, services } from "@/lib/site-data";
+import { ResponsiveImage } from "@/components/ResponsiveImage";
+
 
 import standCutout from "@/assets/stand-cutout.png.asset.json";
 import enseigne3d from "@/assets/enseigne-3d.png.asset.json";
@@ -271,14 +273,15 @@ function Home() {
           {projects.slice(0, 3).map((p, i) => (
             <Reveal as="li" key={p.title} delay={i * 90}>
               <figure className="group relative overflow-hidden rounded-3xl glass p-2">
-                <img
+                <ResponsiveImage
                   src={p.image}
+                  avif={p.avif}
+                  webp={p.webp}
                   alt={p.alt}
-                  loading="lazy"
-                  width={1024}
-                  height={768}
+                  sizes="(min-width: 768px) 33vw, 100vw"
                   className="h-64 w-full rounded-2xl object-cover transition-transform duration-700 group-hover:scale-105"
                 />
+
                 <figcaption className="flex items-center justify-between px-3 py-4">
                   <span className="text-sm font-medium">{p.title}</span>
                   <span className="rounded-full glass-soft px-3 py-1 text-xs text-muted-foreground">
