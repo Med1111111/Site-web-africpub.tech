@@ -153,6 +153,40 @@
   box-shadow: var(--shadow-glow);
 }
 
+@utility neon-social {
+  border: 1px solid oklch(0.573 0.234 27.5 / 35%);
+  box-shadow:
+    0 0 0 1px oklch(0.573 0.234 27.5 / 20%),
+    0 0 18px -2px oklch(0.573 0.234 27.5 / 55%),
+    0 0 40px -8px oklch(0.74 0.19 55 / 40%);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  &:hover {
+    transform: scale(1.12);
+    border-color: oklch(0.74 0.19 55 / 70%);
+    box-shadow:
+      0 0 0 1px oklch(0.573 0.234 27.5 / 40%),
+      0 0 28px -1px oklch(0.573 0.234 27.5 / 75%),
+      0 0 60px -6px oklch(0.74 0.19 55 / 65%);
+  }
+}
+
+@utility neon-social-pill {
+  border: 1px solid oklch(0.573 0.234 27.5 / 30%);
+  box-shadow:
+    0 0 0 1px oklch(0.573 0.234 27.5 / 16%),
+    0 0 22px -4px oklch(0.573 0.234 27.5 / 50%),
+    0 0 50px -10px oklch(0.74 0.19 55 / 35%);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  &:hover {
+    transform: scale(1.05);
+    border-color: oklch(0.74 0.19 55 / 65%);
+    box-shadow:
+      0 0 0 1px oklch(0.573 0.234 27.5 / 38%),
+      0 0 32px -2px oklch(0.573 0.234 27.5 / 72%),
+      0 0 70px -8px oklch(0.74 0.19 55 / 58%);
+  }
+}
+
 @utility text-gradient {
   background-image: var(--gradient-brand);
   background-clip: text;
