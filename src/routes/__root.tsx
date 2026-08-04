@@ -106,11 +106,30 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Organization",
+          "@id": "https://premium-afric-vision.lovable.app/#organization",
           name: "Afric Pub",
+          url: "https://premium-afric-vision.lovable.app",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://premium-afric-vision.lovable.app/__l5e/assets-v1/0ccd4f80-e125-4c61-b5a8-374f0e84bde0/logo.png",
+          },
+          image:
+            "https://premium-afric-vision.lovable.app/__l5e/assets-v1/0ccd4f80-e125-4c61-b5a8-374f0e84bde0/logo.png",
           description:
             "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format et branding en Algérie.",
           address: { "@type": "PostalAddress", addressCountry: "DZ", addressLocality: "Alger" },
           email: "contact@africpub.dz",
+          telephone: "+213540481810",
+          contactPoint: [
+            {
+              "@type": "ContactPoint",
+              contactType: "customer service",
+              telephone: "+213540481810",
+              email: "contact@africpub.dz",
+              areaServed: "DZ",
+              availableLanguage: ["fr", "ar", "en"],
+            },
+          ],
         }),
       },
     ],
