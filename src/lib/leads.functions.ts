@@ -82,6 +82,14 @@ export const submitContactMessage = createServerFn({ method: "POST" })
         message: z.string().trim().min(10).max(1500),
         company: z.string().max(0).optional().default(""), // honeypot
         elapsedMs: z.number().int().min(0).max(86_400_000).optional().default(-1),
+        attachmentPath: z
+          .string()
+          .trim()
+          .max(200)
+          .regex(/^$|^\d{4}-\d{2}-\d{2}\/[a-f0-9-]{36}\.[a-z0-9]{2,5}$/i)
+          .optional()
+          .default(""),
+        attachmentName: z.string().trim().max(200).optional().default(""),
       })
       .parse(input),
   )
@@ -114,7 +122,10 @@ export const submitContactMessage = createServerFn({ method: "POST" })
       phone: data.phone,
       service: data.service,
       message: data.message,
+      attachment_path: data.attachmentPath,
+      attachment_name: data.attachmentName,
     });
+
     if (error) throw new Error(error.message);
     return { ok: true };
   });
