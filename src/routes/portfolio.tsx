@@ -8,6 +8,8 @@ import { categories, projects } from "@/lib/site-data";
 import p1 from "@/assets/portfolio-1.jpg";
 import p2 from "@/assets/portfolio-2.jpg";
 import p3 from "@/assets/portfolio-3.jpg";
+import stand from "@/assets/stand.jpg.asset.json";
+
 
 const SITE_URL = "https://premium-afric-vision.lovable.app";
 const PORTFOLIO_URL = `${SITE_URL}/portfolio`;
