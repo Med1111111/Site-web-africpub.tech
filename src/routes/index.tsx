@@ -72,7 +72,9 @@ const socials = [
 
 function Home() {
   const { t } = useApp();
-  const { data: settings } = useQuery(siteSettingsQuery);
+  // Données issues du loader : identiques au SSR, donc pas de décalage d'hydratation.
+  const settings = Route.useLoaderData();
+
 
 
 
