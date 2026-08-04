@@ -111,7 +111,7 @@ function ServicesPage() {
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((s, i) => (
             <Reveal as="li" key={s.slug} delay={i * 70}>
-              <article className="group h-full overflow-hidden rounded-3xl glass card-3d p-3">
+              <article id={s.slug} className="group h-full overflow-hidden rounded-3xl glass card-3d p-3 scroll-mt-24">
                 <img
                   src={s.image}
                   alt={s.alt}
