@@ -17,6 +17,7 @@ import Footer from "@/components/Footer";
 import WebGLBackground from "@/components/WebGLBackground";
 import { Toaster } from "@/components/ui/sonner";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { services } from "@/lib/site-data";
 
 
 function NotFoundComponent() {
@@ -162,7 +163,73 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           },
         }),
       },
-
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ProfessionalService",
+          "@id": "https://premium-afric-vision.lovable.app/#localbusiness",
+          name: "Afric Pub",
+          alternateName: "Afric Pub Communication Globale",
+          url: "https://premium-afric-vision.lovable.app",
+          logo: "https://premium-afric-vision.lovable.app/__l5e/assets-v1/0ccd4f80-e125-4c61-b5a8-374f0e84bde0/logo.png",
+          image:
+            "https://premium-afric-vision.lovable.app/__l5e/assets-v1/0ccd4f80-e125-4c61-b5a8-374f0e84bde0/logo.png",
+          description:
+            "Agence de communication globale à Alger : enseignes lumineuses LED, habillage Alucobond 3D, signalétique, découpe CNC, impression petit et grand format, packaging et stands d'exposition.",
+          parentOrganization: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
+          isPartOf: { "@id": "https://premium-afric-vision.lovable.app/#website" },
+          telephone: "+213540481810",
+          email: "contact@africpub.dz",
+          priceRange: "$$",
+          currenciesAccepted: "DZD",
+          paymentAccepted: "Espèces, Virement bancaire, Chèque",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Alger",
+            addressRegion: "Alger",
+            addressCountry: "DZ",
+          },
+          areaServed: { "@type": "Country", name: "Algérie" },
+          knowsLanguage: ["fr", "ar", "en"],
+          sameAs: [
+            "https://web.facebook.com/AFRICPUB",
+            "https://www.instagram.com/afric_pub/",
+            "https://www.youtube.com/channel/UCCyWZb1m1H8CQJhh7FgmHlw",
+            "https://wa.me/213540481810",
+          ],
+          openingHoursSpecification: [
+            {
+              "@type": "OpeningHoursSpecification",
+              dayOfWeek: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+              opens: "08:30",
+              closes: "17:30",
+            },
+            {
+              "@type": "OpeningHoursSpecification",
+              dayOfWeek: "Saturday",
+              opens: "09:00",
+              closes: "14:00",
+            },
+          ],
+          hasOfferCatalog: {
+            "@type": "OfferCatalog",
+            name: "Services Afric Pub",
+            itemListElement: services.map((s) => ({
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                "@id": `https://premium-afric-vision.lovable.app/services#${s.slug}`,
+                name: s.title,
+                description: s.desc,
+                serviceType: s.title,
+                areaServed: { "@type": "Country", name: "Algérie" },
+                provider: { "@id": "https://premium-afric-vision.lovable.app/#localbusiness" },
+              },
+            })),
+          },
+        }),
+      },
     ],
   }),
 
