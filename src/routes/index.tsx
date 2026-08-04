@@ -4,9 +4,11 @@ import { Facebook, Instagram, MapPin, MessageCircle, Youtube } from "lucide-reac
 
 import { Reveal } from "@/components/Reveal";
 import { useApp } from "@/lib/app-context";
-import { getPublicSiteSettings, listPublicTestimonials } from "@/lib/content.functions";
-import { clients, process, projects, services, stats, testimonials } from "@/lib/site-data";
+import { getPublicSiteSettings } from "@/lib/content.functions";
+import { clients, process, projects, services, stats } from "@/lib/site-data";
 import standCutout from "@/assets/stand-cutout.png.asset.json";
+import enseigne3d from "@/assets/enseigne-3d.png.asset.json";
+
 import p1 from "@/assets/portfolio-1.jpg";
 import p2 from "@/assets/portfolio-2.jpg";
 import p3 from "@/assets/portfolio-3.jpg";
