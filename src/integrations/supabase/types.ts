@@ -50,6 +50,27 @@ export type Database = {
         }
         Relationships: []
       }
+      lead_throttle: {
+        Row: {
+          created_at: string
+          fingerprint: string
+          id: string
+          kind: string
+        }
+        Insert: {
+          created_at?: string
+          fingerprint: string
+          id?: string
+          kind: string
+        }
+        Update: {
+          created_at?: string
+          fingerprint?: string
+          id?: string
+          kind?: string
+        }
+        Relationships: []
+      }
       newsletter_subscribers: {
         Row: {
           created_at: string
@@ -224,6 +245,15 @@ export type Database = {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
+        }
+        Returns: boolean
+      }
+      register_lead_attempt: {
+        Args: {
+          _fingerprint: string
+          _kind: string
+          _max_attempts: number
+          _window_seconds: number
         }
         Returns: boolean
       }
