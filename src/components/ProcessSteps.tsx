@@ -1,0 +1,39 @@
+import { ClipboardList, PenTool, Factory, ShieldCheck, type LucideIcon } from "lucide-react";
+
+import { Reveal } from "@/components/Reveal";
+import { process } from "@/lib/site-data";
+
+const stepIcons: LucideIcon[] = [ClipboardList, PenTool, Factory, ShieldCheck];
+
+/** Les 4 étapes de la méthodologie, avec badges à halo et connecteur en dégradé. */
+export function ProcessSteps() {
+  return (
+    <ol className="relative grid gap-4 lg:grid-cols-4">
+      {/* connecteur en dégradé orange → rouge reliant les 4 étapes */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-0 right-0 top-[3.25rem] hidden h-px bg-gradient-to-r from-orange-400/0 via-primary to-primary/0 lg:block"
+      />
+      {process.map((p, i) => {
+        const Icon = stepIcons[i] ?? ClipboardList;
+        return (
+          <Reveal as="li" key={p.step} delay={i * 80}>
+            <div className="relative h-full rounded-3xl glass p-7">
+              <div className="flex items-center gap-4">
+                <span className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand text-primary-foreground shadow-[0_0_30px_-6px_var(--color-primary)]">
+                  <span className="absolute inset-0 rounded-full bg-brand blur-lg opacity-60" />
+                  <Icon className="relative h-6 w-6" strokeWidth={2} />
+                </span>
+                <span className="text-sm font-semibold text-primary">{p.step}</span>
+              </div>
+              <h3 className="mt-4 text-lg font-semibold">{p.title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{p.desc}</p>
+            </div>
+          </Reveal>
+        );
+      })}
+    </ol>
+  );
+}
+
+export default ProcessSteps;
