@@ -138,7 +138,7 @@ function ContactPage() {
                 <button className="rounded-full glass-soft px-5 py-3 text-sm font-semibold">S'inscrire</button>
               </form>
             </div>
-          </aside>
+          </div>
         </Reveal>
       </section>
     </div>
