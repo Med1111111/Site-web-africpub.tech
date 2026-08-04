@@ -9,15 +9,18 @@ const stepIcons: LucideIcon[] = [ClipboardList, PenTool, Factory, ShieldCheck];
 export function ProcessSteps() {
   return (
     <ol className="relative grid gap-4 lg:grid-cols-4">
-      {/* connecteur en dégradé orange → rouge reliant les 4 étapes */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-0 right-0 top-[3.25rem] hidden h-px bg-gradient-to-r from-orange-400/0 via-primary to-primary/0 lg:block"
-      />
       {process.map((p, i) => {
         const Icon = stepIcons[i] ?? ClipboardList;
+        const isLast = i === process.length - 1;
         return (
-          <Reveal as="li" key={p.step} delay={i * 80}>
+          <Reveal as="li" key={p.step} delay={i * 80} className="relative h-full">
+            {/* connecteur orange → rouge : vertical sur mobile, horizontal sur desktop */}
+            {!isLast && (
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute left-[3.25rem] top-full bottom-[-1rem] w-px bg-gradient-to-b from-orange-400 to-primary/40 lg:bottom-auto lg:left-auto lg:right-[-1rem] lg:top-[3.25rem] lg:h-px lg:w-4 lg:bg-gradient-to-r lg:from-orange-400 lg:to-primary/40"
+              />
+            )}
             <div className="relative h-full rounded-3xl glass p-7">
               <div className="flex items-center gap-4">
                 <span className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand text-primary-foreground shadow-[0_0_30px_-6px_var(--color-primary)]">
@@ -34,6 +37,7 @@ export function ProcessSteps() {
       })}
     </ol>
   );
+
 }
 
 export default ProcessSteps;
