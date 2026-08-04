@@ -165,6 +165,9 @@ function Home() {
               className="relative w-[118%] max-w-none -translate-x-[6%] scale-[1.06] drop-shadow-[0_30px_60px_rgba(227,6,19,0.35)] lg:w-[128%] lg:-translate-x-[4%]"
               width={1512}
               height={1024}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
             />
           </div>
         </Reveal>
