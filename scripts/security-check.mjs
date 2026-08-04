@@ -162,7 +162,8 @@ async function auditPublicRoutes() {
 const FORBIDDEN_IN_CLIENT = [
   ["SUPABASE_SERVICE_ROLE_KEY", "clé service role"],
   ["SUPABASE_DB_URL", "URL de base de données"],
-  ["sb_secret_", "clé secrète Supabase en dur"],
+  [/["'`]sb_secret_[A-Za-z0-9_-]{8,}/, "clé secrète Supabase en dur"],
+  [/["'`]eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}/, "clé JWT en dur"],
 ];
 
 async function auditClientSecrets() {
@@ -176,9 +177,10 @@ async function auditClientSecrets() {
     if (rel.startsWith("scripts/")) continue;
     const src = await readFile(file, "utf8");
     for (const [needle, label] of FORBIDDEN_IN_CLIENT) {
-      if (src.includes(needle)) {
+      const found = typeof needle === "string" ? src.includes(needle) : needle.test(src);
+      if (found) {
         leaks += 1;
-        fail("secrets", `${rel} référence une ${label} (${needle}) hors d'un module *.server.ts.`);
+        fail("secrets", `${rel} référence une ${label} hors d'un module *.server.ts.`);
       }
     }
     if (/import\.meta\.env\.[A-Z_]*(SERVICE_ROLE|SECRET)/.test(src)) {
