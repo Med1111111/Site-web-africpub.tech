@@ -111,14 +111,31 @@ function Home() {
         </Reveal>
 
         <Reveal delay={120}>
-          <div className="overflow-hidden rounded-3xl glass p-2">
-            <img
-              src={stand.url}
-              alt="Stand d'exposition Afric Pub avec enseignes lumineuses rouges et écrans"
-              className="h-full w-full rounded-2xl object-contain"
-              width={1512}
-              height={1024}
+          <div className="relative">
+            {/* Halo lumineux rouge/orange — renforce le thème "donner de la lumière" */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -inset-6 -z-10 rounded-[2.5rem] opacity-80 blur-2xl"
+              style={{
+                background:
+                  "radial-gradient(ellipse 65% 50% at 50% 38%, rgba(255,90,30,0.45), transparent 70%), radial-gradient(ellipse 55% 40% at 50% 85%, rgba(227,6,19,0.35), transparent 72%)",
+              }}
             />
+            {/* Reflet au sol */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-8 -bottom-4 -z-10 h-10 rounded-[100%] opacity-60 blur-xl"
+              style={{ background: "radial-gradient(ellipse at center, rgba(255,110,40,0.5), transparent 70%)" }}
+            />
+            <div className="overflow-hidden rounded-3xl glass p-1.5 shadow-[var(--shadow-glow)]">
+              <img
+                src={stand.url}
+                alt="Stand d'exposition Afric Pub avec enseignes lumineuses rouges et écrans"
+                className="h-full w-full rounded-2xl object-cover aspect-[4/3] lg:aspect-[3/2.2]"
+                width={1512}
+                height={1024}
+              />
+            </div>
           </div>
         </Reveal>
       </section>
