@@ -46,7 +46,10 @@ export async function allowLeadAttempt(
   maxAttempts: number,
   windowSeconds: number,
 ): Promise<boolean> {
-  const { data, error } = await leadsPublicClient().rpc("register_lead_attempt", {
+  // Le compteur est une fonction SECURITY DEFINER privée : seul le service role
+  // (côté serveur) peut l'exécuter, elle n'est pas exposée à l'API publique.
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await supabaseAdmin.rpc("register_lead_attempt", {
     _fingerprint: fingerprint,
     _kind: kind,
     _max_attempts: maxAttempts,
