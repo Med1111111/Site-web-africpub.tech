@@ -18,7 +18,7 @@ export function ProcessSteps() {
             {!isLast && (
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute left-[3.25rem] top-[4.75rem] bottom-[-1.25rem] w-px bg-gradient-to-b from-orange-400 to-primary/20 lg:bottom-auto lg:left-[4.25rem] lg:right-[-1.25rem] lg:top-[3.25rem] lg:h-px lg:w-auto lg:bg-gradient-to-r lg:from-orange-400 lg:to-primary/30"
+                className="pointer-events-none absolute left-[3.25rem] top-full bottom-[-1rem] w-px bg-gradient-to-b from-orange-400 to-primary/40 lg:bottom-auto lg:left-auto lg:right-[-1rem] lg:top-[3.25rem] lg:h-px lg:w-4 lg:bg-gradient-to-r lg:from-orange-400 lg:to-primary/40"
               />
             )}
             <div className="relative h-full rounded-3xl glass p-7">
