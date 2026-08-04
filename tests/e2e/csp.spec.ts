@@ -117,27 +117,25 @@ test.describe("CSP — en-têtes envoyés par le serveur", () => {
 test.describe("CSP — blocages effectifs dans le navigateur", () => {
   for (const route of ROUTES) {
     test(`${route} bloque eval() et new Function()`, async ({ page }) => {
+      await injectIntoDocument(
+        page,
+        route,
+        `window.__cspProbe = {};
+         try { (0, eval)("1 + 1"); window.__cspProbe.eval = "executed"; }
+         catch (error) { window.__cspProbe.eval = error.name; }
+         try { new Function("return 1 + 1")(); window.__cspProbe.fn = "executed"; }
+         catch (error) { window.__cspProbe.fn = error.name; }`,
+      );
       await gotoRoute(page, route);
 
-      // Important : `page.evaluate` passe par le protocole de débogage, qui contourne
-      // la CSP. L'évaluation doit donc être déclenchée par un script de la page.
-      const result = await page.evaluate(async () => {
-        const probe = document.createElement("script");
-        probe.textContent = `
-          window.__cspProbe = { eval: null, fn: null };
-          try { (0, eval)("1 + 1"); window.__cspProbe.eval = "executed"; }
-          catch (error) { window.__cspProbe.eval = error.name; }
-          try { new Function("return 1 + 1")(); window.__cspProbe.fn = "executed"; }
-          catch (error) { window.__cspProbe.fn = error.name; }
-        `;
-        document.head.appendChild(probe);
-        await new Promise((resolve) => setTimeout(resolve, 200));
-        return (window as unknown as Record<string, { eval: string; fn: string }>)["__cspProbe"];
-      });
+      const result = await page.evaluate(
+        () => (window as unknown as Record<string, { eval: string; fn: string }>)["__cspProbe"],
+      );
 
-      expect(result.eval, `eval() n'a pas été bloqué sur ${route}`).toBe("EvalError");
-      expect(result.fn, `new Function() n'a pas été bloqué sur ${route}`).toBe("EvalError");
+      expect(result?.eval, `eval() n'a pas été bloqué sur ${route}`).toBe("EvalError");
+      expect(result?.fn, `new Function() n'a pas été bloqué sur ${route}`).toBe("EvalError");
     });
+
 
 
     test(`${route} bloque un script externe non autorisé`, async ({ page }) => {
