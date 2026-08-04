@@ -53,7 +53,7 @@ const socials = [
 
 function Home() {
   const { t } = useApp();
-  const { data: settings } = useQuery({ queryKey: ["site-settings"], queryFn: () => getPublicSiteSettings() });
+  const { data: settings } = useQuery(siteSettingsQuery);
 
 
 
