@@ -56,14 +56,23 @@ export function securityHeaders(): Record<string, string> {
   };
 }
 
-/** Applique les en-têtes de sécurité aux documents HTML sans toucher aux assets. */
+/**
+ * Applique les en-têtes de sécurité aux documents HTML sans toucher aux assets.
+ *
+ * En développement, la CSP est posée en mode « report-only » : l'outillage de
+ * l'aperçu (HMR, exécution de snippets) a besoin de `eval`, que la politique de
+ * production interdit volontairement.
+ */
 export function withSecurityHeaders(response: Response): Response {
   const contentType = response.headers.get("content-type") ?? "";
   if (!contentType.includes("text/html")) return response;
 
+  const isDev = import.meta.env?.DEV === true;
   const headers = new Headers(response.headers);
   for (const [name, value] of Object.entries(securityHeaders())) {
-    if (!headers.has(name)) headers.set(name, value);
+    const headerName =
+      isDev && name === "content-security-policy" ? "content-security-policy-report-only" : name;
+    if (!headers.has(headerName)) headers.set(headerName, value);
   }
 
   return new Response(response.body, {

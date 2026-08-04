@@ -218,7 +218,11 @@ async function auditLiveHeaders(origin) {
 
   for (const [header, validate] of Object.entries(EXPECTED_HEADERS)) {
     if (header === "strict-transport-security" && !isHttps) continue;
-    const value = response.headers.get(header);
+    const value =
+      response.headers.get(header) ??
+      (allowInsecure && header === "content-security-policy"
+        ? response.headers.get("content-security-policy-report-only")
+        : null);
     if (!value) {
       if (allowInsecure) warn("http", `En-tête ${header} absent (toléré : --allow-insecure).`);
       else fail("http", `En-tête ${header} absent.`);
