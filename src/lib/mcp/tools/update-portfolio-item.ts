@@ -1,6 +1,9 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
 import { supabaseForUser } from "../supabase";
+import type { Database } from "@/integrations/supabase/types";
+
+type PortfolioUpdate = Database["public"]["Tables"]["portfolio_items"]["Update"];
 
 export default defineTool({
   name: "update_portfolio_item",
@@ -22,7 +25,9 @@ export default defineTool({
     if (!ctx.isAuthenticated()) {
       return { content: [{ type: "text", text: "Non authentifié." }], isError: true };
     }
-    const patch = Object.fromEntries(Object.entries(fields).filter(([, v]) => v !== undefined));
+    const patch = Object.fromEntries(
+      Object.entries(fields).filter(([, v]) => v !== undefined),
+    ) as PortfolioUpdate;
     if (!id || Object.keys(patch).length === 0) {
       return { content: [{ type: "text", text: "Fournir un id et au moins un champ à modifier." }], isError: true };
     }

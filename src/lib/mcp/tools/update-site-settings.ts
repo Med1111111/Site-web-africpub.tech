@@ -1,6 +1,9 @@
 import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
 import { supabaseForUser } from "../supabase";
+import type { Database } from "@/integrations/supabase/types";
+
+type SettingsUpdate = Database["public"]["Tables"]["site_settings"]["Update"];
 
 export default defineTool({
   name: "update_site_settings",
@@ -21,7 +24,9 @@ export default defineTool({
     if (!ctx.isAuthenticated()) {
       return { content: [{ type: "text", text: "Non authentifié." }], isError: true };
     }
-    const patch = Object.fromEntries(Object.entries(input).filter(([, v]) => v !== undefined));
+    const patch = Object.fromEntries(
+      Object.entries(input).filter(([, v]) => v !== undefined),
+    ) as SettingsUpdate;
     if (Object.keys(patch).length === 0) {
       return { content: [{ type: "text", text: "Aucun champ à modifier." }], isError: true };
     }
