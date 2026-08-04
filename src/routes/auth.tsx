@@ -5,8 +5,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import PageHeader from "@/components/PageHeader";
 
+function safeNext(value: unknown): string | null {
+  if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//")) return null;
+  return value;
+}
+
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
+  validateSearch: (s: Record<string, unknown>): { next?: string } => {
+    const next = safeNext(s['next']);
+    return next ? { next } : {};
+  },
   head: () => ({
     meta: [
       { title: "Connexion — Espace admin Afric Pub" },
@@ -20,6 +29,7 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +37,9 @@ function AuthPage() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/admin", replace: true });
+      if (!data.session) return;
+      if (next) window.location.replace(next);
+      else navigate({ to: "/admin", replace: true });
     });
   }, [navigate]);
 
@@ -38,16 +50,19 @@ function AuthPage() {
       if (mode === "signin") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate({ to: "/admin", replace: true });
+        if (next) window.location.replace(next);
+        else navigate({ to: "/admin", replace: true });
       } else {
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: `${window.location.origin}/admin` },
+          options: { emailRedirectTo: `${window.location.origin}${next ?? "/admin"}` },
         });
         if (error) throw error;
         if (!data.session) {
           toast.success("Vérifiez votre boîte mail pour confirmer votre compte.");
+        } else if (next) {
+          window.location.replace(next);
         } else {
           navigate({ to: "/admin", replace: true });
         }
@@ -61,14 +76,15 @@ function AuthPage() {
 
   async function onGoogle() {
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+      redirect_uri: `${window.location.origin}${next ?? "/"}`,
     });
     if (result.error) {
       toast.error("Connexion Google impossible pour le moment.");
       return;
     }
     if (result.redirected) return;
-    navigate({ to: "/admin", replace: true });
+    if (next) window.location.replace(next);
+    else navigate({ to: "/admin", replace: true });
   }
 
   return (
