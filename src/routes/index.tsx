@@ -4,9 +4,11 @@ import { Facebook, Instagram, MapPin, MessageCircle, Youtube } from "lucide-reac
 
 import { Reveal } from "@/components/Reveal";
 import { useApp } from "@/lib/app-context";
-import { getPublicSiteSettings, listPublicTestimonials } from "@/lib/content.functions";
-import { clients, process, projects, services, stats, testimonials } from "@/lib/site-data";
+import { getPublicSiteSettings } from "@/lib/content.functions";
+import { clients, process, projects, services, stats } from "@/lib/site-data";
 import standCutout from "@/assets/stand-cutout.png.asset.json";
+import enseigne3d from "@/assets/enseigne-3d.png.asset.json";
+
 import p1 from "@/assets/portfolio-1.jpg";
 import p2 from "@/assets/portfolio-2.jpg";
 import p3 from "@/assets/portfolio-3.jpg";
@@ -260,16 +262,56 @@ function Home() {
         </Reveal>
       </section>
 
-      {/* ---------- TEMOIGNAGES ---------- */}
-      <section aria-labelledby="testimonials-title" className="mx-auto mt-28 max-w-7xl">
-        <Reveal>
-          <h2 id="testimonials-title" className="text-3xl font-bold sm:text-5xl">
-            {t("section.testimonials")}
-          </h2>
-        </Reveal>
-        <TestimonialsGrid />
+      {/* ---------- QUI SOMMES-NOUS ---------- */}
+      <section aria-labelledby="about-title" className="mx-auto mt-28 max-w-7xl">
+        <div className="grid items-center gap-10 lg:grid-cols-2">
+          <Reveal>
+            <h2 id="about-title" className="text-3xl font-bold sm:text-5xl">
+              Qui sommes-nous ?
+            </h2>
+            <p className="mt-5 max-w-xl text-base text-muted-foreground sm:text-lg">
+              Afric Pub est une agence de communication globale basée à Alger, spécialisée dans les
+              enseignes lumineuses, la signalétique et l'impression grand format en Algérie. De
+              l'étude technique à la pose, notre atelier intégré conçoit et fabrique des supports
+              qui donnent de la lumière à votre marque.
+            </p>
+            <ul className="mt-8 grid grid-cols-3 gap-3">
+              {[
+                { value: "18", label: "Années d'expérience" },
+                { value: "58", label: "Wilayas couvertes" },
+                { value: "1 200+", label: "Projets livrés" },
+              ].map((s) => (
+                <li key={s.label} className="rounded-2xl glass-soft p-4 text-center">
+                  <p className="text-2xl font-extrabold text-gradient sm:text-3xl">{s.value}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{s.label}</p>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
 
+          <Reveal delay={120}>
+            <div className="relative">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -inset-10 -z-10 opacity-80 blur-3xl"
+                style={{
+                  background:
+                    "radial-gradient(ellipse 60% 50% at 50% 45%, rgba(255,120,40,0.45), transparent 70%), radial-gradient(ellipse 70% 50% at 50% 65%, rgba(227,6,19,0.4), transparent 72%)",
+                }}
+              />
+              <img
+                src={enseigne3d.url}
+                alt="Enseigne lumineuse 3D Afric Pub — Communication Globale"
+                loading="lazy"
+                width={1536}
+                height={1024}
+                className="w-full rounded-3xl object-cover shadow-[0_30px_60px_rgba(227,6,19,0.35)]"
+              />
+            </div>
+          </Reveal>
+        </div>
       </section>
+
 
       {/* ---------- CTA ---------- */}
       <section className="mx-auto mt-28 max-w-7xl">
@@ -287,33 +329,5 @@ function Home() {
         </Reveal>
       </section>
     </div>
-  );
-}
-
-// Témoignages pilotés par l'espace admin, avec repli sur le contenu statique.
-function TestimonialsGrid() {
-  const { data } = useQuery({
-    queryKey: ["public-testimonials"],
-    queryFn: () => listPublicTestimonials(),
-  });
-
-  const items =
-    data && data.length > 0
-      ? data.map((tm) => ({ quote: tm.quote, name: tm.name, role: tm.role }))
-      : testimonials;
-
-  return (
-    <ul className="mt-10 grid gap-4 lg:grid-cols-3">
-      {items.map((tm, i) => (
-        <Reveal as="li" key={`${tm.name}-${i}`} delay={i * 80}>
-          <blockquote className="h-full rounded-3xl glass p-7">
-            <p className="text-base">“{tm.quote}”</p>
-            <footer className="mt-5 text-sm text-muted-foreground">
-              <strong className="text-foreground">{tm.name}</strong> — {tm.role}
-            </footer>
-          </blockquote>
-        </Reveal>
-      ))}
-    </ul>
   );
 }
