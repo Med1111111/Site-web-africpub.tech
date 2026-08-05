@@ -265,14 +265,35 @@ function ContactPage() {
               </p>
             )}
             {state === "error" && (
-              <p role="alert" className="mb-6 rounded-2xl glass-soft px-4 py-3 text-sm text-destructive">
-                L'envoi a échoué. Réessayez, ou contactez-nous directement sur{" "}
-                <a href="https://wa.me/213540481810" target="_blank" rel="noreferrer noopener" className="underline">
-                  WhatsApp
-                </a>
-                .
-              </p>
+              <div role="alert" className="mb-6 rounded-2xl glass-soft px-4 py-3 text-sm">
+                <p className="flex items-start gap-2 font-medium text-destructive">
+                  <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                  <span>L'enregistrement de votre demande a échoué.</span>
+                </p>
+                <p className="mt-1 pl-6 text-xs text-muted-foreground">
+                  Vérifiez votre connexion Internet, puis réessayez — vos informations sont conservées.
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2 pl-6">
+                  <button
+                    type="button"
+                    onClick={() => formRef.current && runSubmit(formRef.current)}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-brand px-4 py-2 text-xs font-semibold text-primary-foreground transition-transform hover:scale-[1.03]"
+                  >
+                    <RotateCw className="size-3.5" aria-hidden="true" />
+                    Réessayer
+                  </button>
+                  <a
+                    href="https://wa.me/213540481810"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs text-muted-foreground underline transition-colors hover:text-foreground"
+                  >
+                    Nous écrire sur WhatsApp
+                  </a>
+                </div>
+              </div>
             )}
+
 
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
