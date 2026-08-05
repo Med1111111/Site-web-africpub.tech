@@ -90,11 +90,16 @@ function ContactPage() {
   const [dragging, setDragging] = useState(false);
   const [progress, setProgress] = useState<{ loaded: number; total: number } | null>(null);
   const [uploadDone, setUploadDone] = useState(false);
+  const [uploadFailure, setUploadFailure] = useState<
+    { message: string; hint: string; canRetry: boolean } | null
+  >(null);
   const fileInput = useRef<HTMLInputElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
 
 
   const pickFile = (next: File | null) => {
+    setUploadFailure(null);
     if (!next) {
       setFile(null);
       setFileError("");
@@ -119,6 +124,7 @@ function ContactPage() {
     setFileError("");
     setProgress(null);
     setUploadDone(false);
+    setUploadFailure(null);
     if (fileInput.current) fileInput.current.value = "";
   };
 
@@ -126,9 +132,7 @@ function ContactPage() {
     abortRef.current?.abort();
   };
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.currentTarget;
+  const runSubmit = async (form: HTMLFormElement, opts?: { skipFile?: boolean }) => {
     const data = Object.fromEntries(new FormData(form));
     const result = schema.safeParse({ ...data, company: data.company ?? "" });
     if (!result.success) {
@@ -140,20 +144,24 @@ function ContactPage() {
       return;
     }
     setErrors({});
+    setUploadFailure(null);
 
+    const withFile = file && !opts?.skipFile ? file : null;
     let attachmentPath = "";
     let attachmentName = "";
     try {
-      if (file) {
+      if (withFile) {
         setState("uploading");
         setUploadDone(false);
         setFileError("");
-        setProgress({ loaded: 0, total: file.size });
+        setProgress({ loaded: 0, total: withFile.size });
         const controller = new AbortController();
         abortRef.current = controller;
-        const signed = await createLeadUploadUrl({ data: { fileName: file.name, size: file.size } });
+        const signed = await createLeadUploadUrl({
+          data: { fileName: withFile.name, size: withFile.size },
+        });
         await uploadWithProgress({
-          file,
+          file: withFile,
           path: signed.path,
           token: signed.token,
           signal: controller.signal,
@@ -162,7 +170,7 @@ function ContactPage() {
         abortRef.current = null;
         setUploadDone(true);
         attachmentPath = signed.path;
-        attachmentName = file.name.slice(0, 200);
+        attachmentName = withFile.name.slice(0, 200);
       }
 
       setState("sending");
@@ -185,14 +193,21 @@ function ContactPage() {
         setFileError("Envoi du fichier annulé. Vos informations sont conservées.");
         return;
       }
-      if (file && !attachmentPath) {
+      if (withFile && !attachmentPath) {
         setState("idle");
-        setFileError("L'envoi du fichier a échoué, réessayez.");
+        setUploadFailure(describeUploadError(err));
         return;
       }
       setState("error");
     }
   };
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    formRef.current = e.currentTarget;
+    await runSubmit(e.currentTarget);
+  };
+
 
 
 
