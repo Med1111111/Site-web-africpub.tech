@@ -136,6 +136,7 @@ export function uploadWithProgress(options: {
     }
     const xhr = new XMLHttpRequest();
     xhr.open("PUT", url, true);
+    xhr.timeout = 120_000;
     xhr.setRequestHeader("x-upsert", "false");
     if (file.type) xhr.setRequestHeader("content-type", file.type);
 
@@ -151,18 +152,32 @@ export function uploadWithProgress(options: {
       if (xhr.status >= 200 && xhr.status < 300) {
         onProgress?.(file.size, file.size);
         resolve();
-      } else {
-        reject(new Error(`Upload échoué (${xhr.status})`));
+        return;
       }
+      const code: UploadErrorCode =
+        xhr.status === 413
+          ? "too-large"
+          : xhr.status === 400 || xhr.status === 401 || xhr.status === 403 || xhr.status === 409
+            ? "rejected"
+            : xhr.status >= 500 || xhr.status === 0
+              ? "server"
+              : "unknown";
+      reject(new UploadError(code, `Upload échoué (${xhr.status})`, xhr.status));
+    };
+    xhr.ontimeout = () => {
+      cleanup();
+      reject(new UploadError("timeout", "Upload expiré"));
     };
     xhr.onerror = () => {
       cleanup();
-      reject(new Error("Upload échoué"));
+      const offline = typeof navigator !== "undefined" && navigator.onLine === false;
+      reject(new UploadError(offline ? "offline" : "network", "Upload échoué"));
     };
     xhr.onabort = () => {
       cleanup();
       reject(new DOMException("Upload annulé", "AbortError"));
     };
+
     xhr.send(file);
   });
 }
