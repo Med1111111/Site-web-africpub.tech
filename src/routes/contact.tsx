@@ -88,7 +88,11 @@ function ContactPage() {
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState("");
   const [dragging, setDragging] = useState(false);
+  const [progress, setProgress] = useState<{ loaded: number; total: number } | null>(null);
+  const [uploadDone, setUploadDone] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
+
 
   const pickFile = (next: File | null) => {
     if (!next) {
