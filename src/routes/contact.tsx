@@ -420,6 +420,46 @@ function ContactPage() {
                 )}
               </div>
               {fileError && <p role="alert" className="mt-1 text-xs text-destructive">{fileError}</p>}
+              {uploadFailure && (
+                <div
+                  role="alert"
+                  className="mt-3 rounded-2xl glass-soft px-4 py-3 text-sm"
+                >
+                  <p className="flex items-start gap-2 font-medium text-destructive">
+                    <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                    <span>{uploadFailure.message}</span>
+                  </p>
+                  <p className="mt-1 pl-6 text-xs text-muted-foreground">{uploadFailure.hint}</p>
+                  <div className="mt-3 flex flex-wrap gap-2 pl-6">
+                    {uploadFailure.canRetry && (
+                      <button
+                        type="button"
+                        onClick={() => formRef.current && runSubmit(formRef.current)}
+                        className="inline-flex items-center gap-1.5 rounded-full bg-brand px-4 py-2 text-xs font-semibold text-primary-foreground transition-transform hover:scale-[1.03]"
+                      >
+                        <RotateCw className="size-3.5" aria-hidden="true" />
+                        Réessayer l'envoi
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => formRef.current && runSubmit(formRef.current, { skipFile: true })}
+                      className="inline-flex items-center gap-1.5 rounded-full glass-soft px-4 py-2 text-xs font-medium text-foreground transition-colors hover:text-brand"
+                    >
+                      Envoyer la demande sans le fichier
+                    </button>
+                    <a
+                      href="https://wa.me/213540481810"
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs text-muted-foreground underline transition-colors hover:text-foreground"
+                    >
+                      Nous l'envoyer par WhatsApp
+                    </a>
+                  </div>
+                </div>
+              )}
+
             </div>
 
             {/* Honeypot anti-spam, masqué aux utilisateurs et aux lecteurs d'écran */}
