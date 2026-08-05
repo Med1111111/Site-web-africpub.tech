@@ -1,19 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { z } from "zod";
-import { Phone, Mail, MapPin, Clock, ExternalLink, Paperclip, X } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, ExternalLink, Paperclip, X, Loader2, Check } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
 import { services } from "@/lib/site-data";
 import { createLeadUploadUrl, submitContactMessage, subscribeNewsletter } from "@/lib/leads.functions";
-import { supabase } from "@/integrations/supabase/client";
 import {
   ATTACHMENT_ACCEPT,
-  ATTACHMENT_BUCKET,
   ATTACHMENT_MAX_BYTES,
   formatBytes,
   isAllowedAttachment,
+  uploadWithProgress,
 } from "@/lib/leads-upload";
+
 
 
 export const Route = createFileRoute("/contact")({
@@ -88,7 +88,11 @@ function ContactPage() {
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState("");
   const [dragging, setDragging] = useState(false);
+  const [progress, setProgress] = useState<{ loaded: number; total: number } | null>(null);
+  const [uploadDone, setUploadDone] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
+
 
   const pickFile = (next: File | null) => {
     if (!next) {
@@ -113,7 +117,13 @@ function ContactPage() {
   const clearFile = () => {
     setFile(null);
     setFileError("");
+    setProgress(null);
+    setUploadDone(false);
     if (fileInput.current) fileInput.current.value = "";
+  };
+
+  const cancelUpload = () => {
+    abortRef.current?.abort();
   };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -136,11 +146,21 @@ function ContactPage() {
     try {
       if (file) {
         setState("uploading");
+        setUploadDone(false);
+        setFileError("");
+        setProgress({ loaded: 0, total: file.size });
+        const controller = new AbortController();
+        abortRef.current = controller;
         const signed = await createLeadUploadUrl({ data: { fileName: file.name, size: file.size } });
-        const { error: upErr } = await supabase.storage
-          .from(ATTACHMENT_BUCKET)
-          .uploadToSignedUrl(signed.path, signed.token, file);
-        if (upErr) throw new Error(upErr.message);
+        await uploadWithProgress({
+          file,
+          path: signed.path,
+          token: signed.token,
+          signal: controller.signal,
+          onProgress: (loaded, total) => setProgress({ loaded, total }),
+        });
+        abortRef.current = null;
+        setUploadDone(true);
         attachmentPath = signed.path;
         attachmentName = file.name.slice(0, 200);
       }
@@ -156,10 +176,25 @@ function ContactPage() {
       setState("sent");
       form.reset();
       clearFile();
-    } catch {
+    } catch (err) {
+      abortRef.current = null;
+      setProgress(null);
+      setUploadDone(false);
+      if (err instanceof DOMException && err.name === "AbortError") {
+        setState("idle");
+        setFileError("Envoi du fichier annulé. Vos informations sont conservées.");
+        return;
+      }
+      if (file && !attachmentPath) {
+        setState("idle");
+        setFileError("L'envoi du fichier a échoué, réessayez.");
+        return;
+      }
       setState("error");
     }
   };
+
+
 
 
   const onNewsletter = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -282,20 +317,80 @@ function ContactPage() {
                   onChange={(e) => pickFile(e.target.files?.[0] ?? null)}
                 />
                 {file ? (
-                  <div className="flex flex-wrap items-center gap-3 text-sm">
-                    <Paperclip className="size-4 shrink-0 text-brand" aria-hidden="true" />
-                    <span className="min-w-0 flex-1 truncate">{file.name}</span>
-                    <span className="text-xs text-muted-foreground">{formatBytes(file.size)}</span>
-                    <button
-                      type="button"
-                      onClick={clearFile}
-                      className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      <X className="size-3.5" aria-hidden="true" />
-                      Retirer
-                    </button>
+                  <div className="grid gap-2">
+                    <div className="flex flex-wrap items-center gap-3 text-sm">
+                      <Paperclip className="size-4 shrink-0 text-brand" aria-hidden="true" />
+                      <span className="min-w-0 flex-1 truncate">{file.name}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {progress && state === "uploading"
+                          ? `${formatBytes(progress.loaded)} / ${formatBytes(progress.total)}`
+                          : formatBytes(file.size)}
+                      </span>
+                      {state === "uploading" ? (
+                        <button
+                          type="button"
+                          onClick={cancelUpload}
+                          className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                          <X className="size-3.5" aria-hidden="true" />
+                          Annuler
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={clearFile}
+                          className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                          <X className="size-3.5" aria-hidden="true" />
+                          Retirer
+                        </button>
+                      )}
+                    </div>
+
+                    {(state === "uploading" || uploadDone) && progress && (
+                      <div>
+                        <div
+                          role="progressbar"
+                          aria-label="Progression de l'envoi du fichier"
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                          aria-valuenow={
+                            uploadDone
+                              ? 100
+                              : Math.min(100, Math.round((progress.loaded / Math.max(1, progress.total)) * 100))
+                          }
+                          className="h-1.5 w-full overflow-hidden rounded-full bg-foreground/10"
+                        >
+                          <div
+                            className="h-full rounded-full bg-gradient-to-r from-brand to-orange-500 transition-[width] duration-200"
+                            style={{
+                              width: `${
+                                uploadDone
+                                  ? 100
+                                  : Math.min(100, Math.round((progress.loaded / Math.max(1, progress.total)) * 100))
+                              }%`,
+                            }}
+                          />
+                        </div>
+                        <p role="status" aria-live="polite" className="mt-1.5 flex items-center gap-1.5 text-xs text-muted-foreground">
+                          {uploadDone ? (
+                            <>
+                              <Check className="size-3.5 text-brand" aria-hidden="true" />
+                              Fichier envoyé
+                            </>
+                          ) : (
+                            <>
+                              <Loader2 className="size-3.5 animate-spin text-brand" aria-hidden="true" />
+                              Envoi du fichier…{" "}
+                              {Math.min(100, Math.round((progress.loaded / Math.max(1, progress.total)) * 100))} %
+                            </>
+                          )}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 ) : (
+
                   <label htmlFor="attachment" className="flex cursor-pointer items-center gap-3 text-sm text-muted-foreground">
                     <Paperclip className="size-4 shrink-0 text-brand" aria-hidden="true" />
                     <span>
@@ -316,14 +411,22 @@ function ContactPage() {
             <button
               type="submit"
               disabled={state === "sending" || state === "uploading"}
-              className="mt-7 w-full rounded-full bg-brand px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.02] sm:w-auto"
+              className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.02] disabled:opacity-70 disabled:hover:scale-100 sm:w-auto"
             >
+              {(state === "uploading" || state === "sending") && (
+                <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+              )}
               {state === "uploading"
-                ? "Envoi du fichier…"
+                ? `Envoi du fichier… ${
+                    progress ? Math.min(100, Math.round((progress.loaded / Math.max(1, progress.total)) * 100)) : 0
+                  } %`
                 : state === "sending"
-                  ? "Envoi en cours…"
+                  ? file
+                    ? "Enregistrement de la demande…"
+                    : "Envoi en cours…"
                   : "Envoyer la demande"}
             </button>
+
 
           </form>
         </Reveal>
