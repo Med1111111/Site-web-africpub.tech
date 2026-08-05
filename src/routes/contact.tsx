@@ -1,19 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { z } from "zod";
-import { Phone, Mail, MapPin, Clock, ExternalLink, Paperclip, X } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, ExternalLink, Paperclip, X, Loader2, Check } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
 import { services } from "@/lib/site-data";
 import { createLeadUploadUrl, submitContactMessage, subscribeNewsletter } from "@/lib/leads.functions";
-import { supabase } from "@/integrations/supabase/client";
 import {
   ATTACHMENT_ACCEPT,
-  ATTACHMENT_BUCKET,
   ATTACHMENT_MAX_BYTES,
   formatBytes,
   isAllowedAttachment,
+  uploadWithProgress,
 } from "@/lib/leads-upload";
+
 
 
 export const Route = createFileRoute("/contact")({
