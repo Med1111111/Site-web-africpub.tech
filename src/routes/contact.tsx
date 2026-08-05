@@ -117,7 +117,13 @@ function ContactPage() {
   const clearFile = () => {
     setFile(null);
     setFileError("");
+    setProgress(null);
+    setUploadDone(false);
     if (fileInput.current) fileInput.current.value = "";
+  };
+
+  const cancelUpload = () => {
+    abortRef.current?.abort();
   };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -140,11 +146,21 @@ function ContactPage() {
     try {
       if (file) {
         setState("uploading");
+        setUploadDone(false);
+        setFileError("");
+        setProgress({ loaded: 0, total: file.size });
+        const controller = new AbortController();
+        abortRef.current = controller;
         const signed = await createLeadUploadUrl({ data: { fileName: file.name, size: file.size } });
-        const { error: upErr } = await supabase.storage
-          .from(ATTACHMENT_BUCKET)
-          .uploadToSignedUrl(signed.path, signed.token, file);
-        if (upErr) throw new Error(upErr.message);
+        await uploadWithProgress({
+          file,
+          path: signed.path,
+          token: signed.token,
+          signal: controller.signal,
+          onProgress: (loaded, total) => setProgress({ loaded, total }),
+        });
+        abortRef.current = null;
+        setUploadDone(true);
         attachmentPath = signed.path;
         attachmentName = file.name.slice(0, 200);
       }
@@ -160,10 +176,25 @@ function ContactPage() {
       setState("sent");
       form.reset();
       clearFile();
-    } catch {
+    } catch (err) {
+      abortRef.current = null;
+      setProgress(null);
+      setUploadDone(false);
+      if (err instanceof DOMException && err.name === "AbortError") {
+        setState("idle");
+        setFileError("Envoi du fichier annulé. Vos informations sont conservées.");
+        return;
+      }
+      if (file && !attachmentPath) {
+        setState("idle");
+        setFileError("L'envoi du fichier a échoué, réessayez.");
+        return;
+      }
       setState("error");
     }
   };
+
+
 
 
   const onNewsletter = async (e: React.FormEvent<HTMLFormElement>) => {
