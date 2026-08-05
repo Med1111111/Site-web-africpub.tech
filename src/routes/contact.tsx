@@ -411,14 +411,22 @@ function ContactPage() {
             <button
               type="submit"
               disabled={state === "sending" || state === "uploading"}
-              className="mt-7 w-full rounded-full bg-brand px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.02] sm:w-auto"
+              className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.02] disabled:opacity-70 disabled:hover:scale-100 sm:w-auto"
             >
+              {(state === "uploading" || state === "sending") && (
+                <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+              )}
               {state === "uploading"
-                ? "Envoi du fichier…"
+                ? `Envoi du fichier… ${
+                    progress ? Math.min(100, Math.round((progress.loaded / Math.max(1, progress.total)) * 100)) : 0
+                  } %`
                 : state === "sending"
-                  ? "Envoi en cours…"
+                  ? file
+                    ? "Enregistrement de la demande…"
+                    : "Envoi en cours…"
                   : "Envoyer la demande"}
             </button>
+
 
           </form>
         </Reveal>
