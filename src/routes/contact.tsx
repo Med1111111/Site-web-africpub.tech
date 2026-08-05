@@ -317,20 +317,80 @@ function ContactPage() {
                   onChange={(e) => pickFile(e.target.files?.[0] ?? null)}
                 />
                 {file ? (
-                  <div className="flex flex-wrap items-center gap-3 text-sm">
-                    <Paperclip className="size-4 shrink-0 text-brand" aria-hidden="true" />
-                    <span className="min-w-0 flex-1 truncate">{file.name}</span>
-                    <span className="text-xs text-muted-foreground">{formatBytes(file.size)}</span>
-                    <button
-                      type="button"
-                      onClick={clearFile}
-                      className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      <X className="size-3.5" aria-hidden="true" />
-                      Retirer
-                    </button>
+                  <div className="grid gap-2">
+                    <div className="flex flex-wrap items-center gap-3 text-sm">
+                      <Paperclip className="size-4 shrink-0 text-brand" aria-hidden="true" />
+                      <span className="min-w-0 flex-1 truncate">{file.name}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {progress && state === "uploading"
+                          ? `${formatBytes(progress.loaded)} / ${formatBytes(progress.total)}`
+                          : formatBytes(file.size)}
+                      </span>
+                      {state === "uploading" ? (
+                        <button
+                          type="button"
+                          onClick={cancelUpload}
+                          className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                          <X className="size-3.5" aria-hidden="true" />
+                          Annuler
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={clearFile}
+                          className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                          <X className="size-3.5" aria-hidden="true" />
+                          Retirer
+                        </button>
+                      )}
+                    </div>
+
+                    {(state === "uploading" || uploadDone) && progress && (
+                      <div>
+                        <div
+                          role="progressbar"
+                          aria-label="Progression de l'envoi du fichier"
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                          aria-valuenow={
+                            uploadDone
+                              ? 100
+                              : Math.min(100, Math.round((progress.loaded / Math.max(1, progress.total)) * 100))
+                          }
+                          className="h-1.5 w-full overflow-hidden rounded-full bg-foreground/10"
+                        >
+                          <div
+                            className="h-full rounded-full bg-gradient-to-r from-brand to-orange-500 transition-[width] duration-200"
+                            style={{
+                              width: `${
+                                uploadDone
+                                  ? 100
+                                  : Math.min(100, Math.round((progress.loaded / Math.max(1, progress.total)) * 100))
+                              }%`,
+                            }}
+                          />
+                        </div>
+                        <p role="status" aria-live="polite" className="mt-1.5 flex items-center gap-1.5 text-xs text-muted-foreground">
+                          {uploadDone ? (
+                            <>
+                              <Check className="size-3.5 text-brand" aria-hidden="true" />
+                              Fichier envoyé
+                            </>
+                          ) : (
+                            <>
+                              <Loader2 className="size-3.5 animate-spin text-brand" aria-hidden="true" />
+                              Envoi du fichier…{" "}
+                              {Math.min(100, Math.round((progress.loaded / Math.max(1, progress.total)) * 100))} %
+                            </>
+                          )}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 ) : (
+
                   <label htmlFor="attachment" className="flex cursor-pointer items-center gap-3 text-sm text-muted-foreground">
                     <Paperclip className="size-4 shrink-0 text-brand" aria-hidden="true" />
                     <span>
