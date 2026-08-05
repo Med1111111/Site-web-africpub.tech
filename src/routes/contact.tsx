@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { z } from "zod";
-import { Phone, Mail, MapPin, Clock, ExternalLink, Paperclip, X, Loader2, Check } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, ExternalLink, Paperclip, X, Loader2, Check, AlertTriangle, RotateCw } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
 import { services } from "@/lib/site-data";
@@ -9,10 +9,12 @@ import { createLeadUploadUrl, submitContactMessage, subscribeNewsletter } from "
 import {
   ATTACHMENT_ACCEPT,
   ATTACHMENT_MAX_BYTES,
+  describeUploadError,
   formatBytes,
   isAllowedAttachment,
   uploadWithProgress,
 } from "@/lib/leads-upload";
+
 
 
 
@@ -90,11 +92,16 @@ function ContactPage() {
   const [dragging, setDragging] = useState(false);
   const [progress, setProgress] = useState<{ loaded: number; total: number } | null>(null);
   const [uploadDone, setUploadDone] = useState(false);
+  const [uploadFailure, setUploadFailure] = useState<
+    { message: string; hint: string; canRetry: boolean } | null
+  >(null);
   const fileInput = useRef<HTMLInputElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
 
 
   const pickFile = (next: File | null) => {
+    setUploadFailure(null);
     if (!next) {
       setFile(null);
       setFileError("");
@@ -119,6 +126,7 @@ function ContactPage() {
     setFileError("");
     setProgress(null);
     setUploadDone(false);
+    setUploadFailure(null);
     if (fileInput.current) fileInput.current.value = "";
   };
 
@@ -126,9 +134,7 @@ function ContactPage() {
     abortRef.current?.abort();
   };
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.currentTarget;
+  const runSubmit = async (form: HTMLFormElement, opts?: { skipFile?: boolean }) => {
     const data = Object.fromEntries(new FormData(form));
     const result = schema.safeParse({ ...data, company: data.company ?? "" });
     if (!result.success) {
@@ -140,20 +146,24 @@ function ContactPage() {
       return;
     }
     setErrors({});
+    setUploadFailure(null);
 
+    const withFile = file && !opts?.skipFile ? file : null;
     let attachmentPath = "";
     let attachmentName = "";
     try {
-      if (file) {
+      if (withFile) {
         setState("uploading");
         setUploadDone(false);
         setFileError("");
-        setProgress({ loaded: 0, total: file.size });
+        setProgress({ loaded: 0, total: withFile.size });
         const controller = new AbortController();
         abortRef.current = controller;
-        const signed = await createLeadUploadUrl({ data: { fileName: file.name, size: file.size } });
+        const signed = await createLeadUploadUrl({
+          data: { fileName: withFile.name, size: withFile.size },
+        });
         await uploadWithProgress({
-          file,
+          file: withFile,
           path: signed.path,
           token: signed.token,
           signal: controller.signal,
@@ -162,7 +172,7 @@ function ContactPage() {
         abortRef.current = null;
         setUploadDone(true);
         attachmentPath = signed.path;
-        attachmentName = file.name.slice(0, 200);
+        attachmentName = withFile.name.slice(0, 200);
       }
 
       setState("sending");
@@ -185,14 +195,21 @@ function ContactPage() {
         setFileError("Envoi du fichier annulé. Vos informations sont conservées.");
         return;
       }
-      if (file && !attachmentPath) {
+      if (withFile && !attachmentPath) {
         setState("idle");
-        setFileError("L'envoi du fichier a échoué, réessayez.");
+        setUploadFailure(describeUploadError(err));
         return;
       }
       setState("error");
     }
   };
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    formRef.current = e.currentTarget;
+    await runSubmit(e.currentTarget);
+  };
+
 
 
 
@@ -248,14 +265,35 @@ function ContactPage() {
               </p>
             )}
             {state === "error" && (
-              <p role="alert" className="mb-6 rounded-2xl glass-soft px-4 py-3 text-sm text-destructive">
-                L'envoi a échoué. Réessayez, ou contactez-nous directement sur{" "}
-                <a href="https://wa.me/213540481810" target="_blank" rel="noreferrer noopener" className="underline">
-                  WhatsApp
-                </a>
-                .
-              </p>
+              <div role="alert" className="mb-6 rounded-2xl glass-soft px-4 py-3 text-sm">
+                <p className="flex items-start gap-2 font-medium text-destructive">
+                  <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                  <span>L'enregistrement de votre demande a échoué.</span>
+                </p>
+                <p className="mt-1 pl-6 text-xs text-muted-foreground">
+                  Vérifiez votre connexion Internet, puis réessayez — vos informations sont conservées.
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2 pl-6">
+                  <button
+                    type="button"
+                    onClick={() => formRef.current && runSubmit(formRef.current)}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-brand px-4 py-2 text-xs font-semibold text-primary-foreground transition-transform hover:scale-[1.03]"
+                  >
+                    <RotateCw className="size-3.5" aria-hidden="true" />
+                    Réessayer
+                  </button>
+                  <a
+                    href="https://wa.me/213540481810"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs text-muted-foreground underline transition-colors hover:text-foreground"
+                  >
+                    Nous écrire sur WhatsApp
+                  </a>
+                </div>
+              </div>
             )}
+
 
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
@@ -403,6 +441,46 @@ function ContactPage() {
                 )}
               </div>
               {fileError && <p role="alert" className="mt-1 text-xs text-destructive">{fileError}</p>}
+              {uploadFailure && (
+                <div
+                  role="alert"
+                  className="mt-3 rounded-2xl glass-soft px-4 py-3 text-sm"
+                >
+                  <p className="flex items-start gap-2 font-medium text-destructive">
+                    <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+                    <span>{uploadFailure.message}</span>
+                  </p>
+                  <p className="mt-1 pl-6 text-xs text-muted-foreground">{uploadFailure.hint}</p>
+                  <div className="mt-3 flex flex-wrap gap-2 pl-6">
+                    {uploadFailure.canRetry && (
+                      <button
+                        type="button"
+                        onClick={() => formRef.current && runSubmit(formRef.current)}
+                        className="inline-flex items-center gap-1.5 rounded-full bg-brand px-4 py-2 text-xs font-semibold text-primary-foreground transition-transform hover:scale-[1.03]"
+                      >
+                        <RotateCw className="size-3.5" aria-hidden="true" />
+                        Réessayer l'envoi
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => formRef.current && runSubmit(formRef.current, { skipFile: true })}
+                      className="inline-flex items-center gap-1.5 rounded-full glass-soft px-4 py-2 text-xs font-medium text-foreground transition-colors hover:text-brand"
+                    >
+                      Envoyer la demande sans le fichier
+                    </button>
+                    <a
+                      href="https://wa.me/213540481810"
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs text-muted-foreground underline transition-colors hover:text-foreground"
+                    >
+                      Nous l'envoyer par WhatsApp
+                    </a>
+                  </div>
+                </div>
+              )}
+
             </div>
 
             {/* Honeypot anti-spam, masqué aux utilisateurs et aux lecteurs d'écran */}
