@@ -24,26 +24,40 @@ function publicClient() {
   });
 }
 
-/* ---------- Lectures publiques (site vitrine) ---------- */
+/* ---------- Lectures publiques (site vitrine) ----------
+ * Ces lectures alimentent des pages publiques rendues côté serveur : une panne
+ * réseau passagère (ex. « error code: 1016 » renvoyé par le CDN) ne doit jamais
+ * faire écran blanc. On journalise et on retourne une valeur de repli.
+ */
 
 export const listPublicPortfolio = createServerFn({ method: "GET" }).handler(async () => {
-  const { data, error } = await publicClient()
-    .from("portfolio_items")
-    .select("id, title, category, city, description, image_url, sort_order, published, created_at, updated_at")
-    .eq("published", true)
-    .order("sort_order", { ascending: true });
-  if (error) throw new Error(error.message);
-  return data as PortfolioItem[];
+  try {
+    const { data, error } = await publicClient()
+      .from("portfolio_items")
+      .select("id, title, category, city, description, image_url, sort_order, published, created_at, updated_at")
+      .eq("published", true)
+      .order("sort_order", { ascending: true });
+    if (error) throw new Error(error.message);
+    return data as PortfolioItem[];
+  } catch (err) {
+    console.error("listPublicPortfolio failed", err);
+    return [] as PortfolioItem[];
+  }
 });
 
 export const listPublicTestimonials = createServerFn({ method: "GET" }).handler(async () => {
-  const { data, error } = await publicClient()
-    .from("testimonials")
-    .select("id, quote, name, role, rating, sort_order, published, created_at, updated_at")
-    .eq("published", true)
-    .order("sort_order", { ascending: true });
-  if (error) throw new Error(error.message);
-  return data as Testimonial[];
+  try {
+    const { data, error } = await publicClient()
+      .from("testimonials")
+      .select("id, quote, name, role, rating, sort_order, published, created_at, updated_at")
+      .eq("published", true)
+      .order("sort_order", { ascending: true });
+    if (error) throw new Error(error.message);
+    return data as Testimonial[];
+  } catch (err) {
+    console.error("listPublicTestimonials failed", err);
+    return [] as Testimonial[];
+  }
 });
 
 /* ---------- Espace admin ---------- */
@@ -149,13 +163,18 @@ export const deleteTestimonial = createServerFn({ method: "POST" })
 /* ---------- Réglages globaux du site ---------- */
 
 export const getPublicSiteSettings = createServerFn({ method: "GET" }).handler(async () => {
-  const { data, error } = await publicClient()
-    .from("site_settings")
-    .select("*")
-    .limit(1)
-    .maybeSingle();
-  if (error) throw new Error(error.message);
-  return data as SiteSettings | null;
+  try {
+    const { data, error } = await publicClient()
+      .from("site_settings")
+      .select("*")
+      .limit(1)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    return data as SiteSettings | null;
+  } catch (err) {
+    console.error("getPublicSiteSettings failed", err);
+    return null as SiteSettings | null;
+  }
 });
 
 const settingsInput = z.object({
