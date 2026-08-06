@@ -20,8 +20,6 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import { services } from "@/lib/site-data";
 import { registerServiceWorker } from "@/lib/register-sw";
 
-
-
 function NotFoundComponent() {
   return (
     <div className="flex min-h-dvh items-center justify-center px-4">
@@ -83,13 +81,39 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { title: "Afric Pub — Enseignes lumineuses & signalétique en Algérie" },
-      { property: "og:title", content: "Afric Pub — Enseignes lumineuses & signalétique en Algérie" },
-      { name: "twitter:title", content: "Afric Pub — Enseignes lumineuses & signalétique en Algérie" },
-      { name: "description", content: "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format, habillage de véhicules et branding partout en Algérie." },
-      { property: "og:description", content: "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format, habillage de véhicules et branding partout en Algérie." },
-      { name: "twitter:description", content: "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format, habillage de véhicules et branding partout en Algérie." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/01667926-8ecd-4d55-8c9b-7df71a2bfb92" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/01667926-8ecd-4d55-8c9b-7df71a2bfb92" },
+      {
+        property: "og:title",
+        content: "Afric Pub — Enseignes lumineuses & signalétique en Algérie",
+      },
+      {
+        name: "twitter:title",
+        content: "Afric Pub — Enseignes lumineuses & signalétique en Algérie",
+      },
+      {
+        name: "description",
+        content:
+          "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format, habillage de véhicules et branding partout en Algérie.",
+      },
+      {
+        property: "og:description",
+        content:
+          "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format, habillage de véhicules et branding partout en Algérie.",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format, habillage de véhicules et branding partout en Algérie.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/01667926-8ecd-4d55-8c9b-7df71a2bfb92",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/01667926-8ecd-4d55-8c9b-7df71a2bfb92",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -109,15 +133,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Organization",
-          "@id": "https://premium-afric-vision.lovable.app/#organization",
+          "@id": "https://africpub.tech/#organization",
           name: "Afric Pub",
-          url: "https://premium-afric-vision.lovable.app",
+          url: "https://africpub.tech",
           logo: {
             "@type": "ImageObject",
-            url: "https://premium-afric-vision.lovable.app/__l5e/assets-v1/0ccd4f80-e125-4c61-b5a8-374f0e84bde0/logo.png",
+            url: "https://africpub.tech/__l5e/assets-v1/0ccd4f80-e125-4c61-b5a8-374f0e84bde0/logo.png",
           },
           image:
-            "https://premium-afric-vision.lovable.app/__l5e/assets-v1/0ccd4f80-e125-4c61-b5a8-374f0e84bde0/logo.png",
+            "https://africpub.tech/__l5e/assets-v1/0ccd4f80-e125-4c61-b5a8-374f0e84bde0/logo.png",
           description:
             "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format et branding en Algérie.",
           sameAs: [
@@ -147,19 +171,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebSite",
-          "@id": "https://premium-afric-vision.lovable.app/#website",
-          url: "https://premium-afric-vision.lovable.app",
+          "@id": "https://africpub.tech/#website",
+          url: "https://africpub.tech",
           name: "Afric Pub",
           alternateName: "Afric Pub Communication Globale",
           description:
             "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format et branding en Algérie.",
           inLanguage: "fr",
-          publisher: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
+          publisher: { "@id": "https://africpub.tech/#organization" },
           potentialAction: {
             "@type": "SearchAction",
             target: {
               "@type": "EntryPoint",
-              urlTemplate: "https://premium-afric-vision.lovable.app/recherche?q={search_term_string}",
+              urlTemplate: "https://africpub.tech/recherche?q={search_term_string}",
             },
             "query-input": "required name=search_term_string",
           },
@@ -170,17 +194,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "ProfessionalService",
-          "@id": "https://premium-afric-vision.lovable.app/#localbusiness",
+          "@id": "https://africpub.tech/#localbusiness",
           name: "Afric Pub",
           alternateName: "Afric Pub Communication Globale",
-          url: "https://premium-afric-vision.lovable.app",
-          logo: "https://premium-afric-vision.lovable.app/__l5e/assets-v1/0ccd4f80-e125-4c61-b5a8-374f0e84bde0/logo.png",
+          url: "https://africpub.tech",
+          logo: "https://africpub.tech/__l5e/assets-v1/0ccd4f80-e125-4c61-b5a8-374f0e84bde0/logo.png",
           image:
-            "https://premium-afric-vision.lovable.app/__l5e/assets-v1/0ccd4f80-e125-4c61-b5a8-374f0e84bde0/logo.png",
+            "https://africpub.tech/__l5e/assets-v1/0ccd4f80-e125-4c61-b5a8-374f0e84bde0/logo.png",
           description:
             "Agence de communication globale à Alger : enseignes lumineuses LED, habillage Alucobond 3D, signalétique, découpe CNC, impression petit et grand format, packaging et stands d'exposition.",
-          parentOrganization: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
-          isPartOf: { "@id": "https://premium-afric-vision.lovable.app/#website" },
+          parentOrganization: { "@id": "https://africpub.tech/#organization" },
+          isPartOf: { "@id": "https://africpub.tech/#website" },
           telephone: "+213540481810",
           email: "contact@africpub.dz",
           priceRange: "$$",
@@ -221,12 +245,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               "@type": "Offer",
               itemOffered: {
                 "@type": "Service",
-                "@id": `https://premium-afric-vision.lovable.app/services#${s.slug}`,
+                "@id": `https://africpub.tech/services#${s.slug}`,
                 name: s.title,
                 description: s.desc,
                 serviceType: s.title,
                 areaServed: { "@type": "Country", name: "Algérie" },
-                provider: { "@id": "https://premium-afric-vision.lovable.app/#localbusiness" },
+                provider: { "@id": "https://africpub.tech/#localbusiness" },
               },
             })),
           },
@@ -261,8 +285,6 @@ function RootComponent() {
   useEffect(() => {
     registerServiceWorker();
   }, []);
-
-
 
   return (
     <QueryClientProvider client={queryClient}>

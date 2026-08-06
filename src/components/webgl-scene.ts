@@ -8,7 +8,11 @@ export async function startScene(el: HTMLElement): Promise<() => void> {
 
   let renderer: InstanceType<typeof THREE.WebGLRenderer>;
   try {
-    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "low-power" });
+    renderer = new THREE.WebGLRenderer({
+      alpha: true,
+      antialias: true,
+      powerPreference: "low-power",
+    });
   } catch {
     return () => {}; // pas de contexte WebGL : le dégradé CSS reste visible
   }

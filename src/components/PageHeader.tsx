@@ -19,7 +19,9 @@ export default function PageHeader({
         <h1 className="mt-6 text-4xl font-bold sm:text-6xl">
           <span className="text-gradient">{title}</span>
         </h1>
-        {sub && <p className="mx-auto mt-5 max-w-2xl text-base text-muted-foreground sm:text-lg">{sub}</p>}
+        {sub && (
+          <p className="mx-auto mt-5 max-w-2xl text-base text-muted-foreground sm:text-lg">{sub}</p>
+        )}
       </Reveal>
     </header>
   );

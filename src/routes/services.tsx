@@ -4,7 +4,7 @@ import { Reveal } from "@/components/Reveal";
 import { ProcessSteps } from "@/components/ProcessSteps";
 import { services } from "@/lib/site-data";
 
-const SITE_URL = "https://premium-afric-vision.lovable.app";
+const SITE_URL = "https://africpub.tech";
 const SERVICES_URL = `${SITE_URL}/services`;
 const SERVICES_TITLE = "Services — Enseignes, signalétique & impression | Afric Pub";
 const SERVICES_DESC =
@@ -97,7 +97,6 @@ export const Route = createFileRoute("/services")({
   }),
 });
 
-
 function ServicesPage() {
   return (
     <div className="px-3 sm:px-6">
@@ -111,7 +110,10 @@ function ServicesPage() {
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((s, i) => (
             <Reveal as="li" key={s.slug} delay={i * 70}>
-              <article id={s.slug} className="group h-full overflow-hidden rounded-3xl glass card-3d p-3 scroll-mt-24">
+              <article
+                id={s.slug}
+                className="group h-full overflow-hidden rounded-3xl glass card-3d p-3 scroll-mt-24"
+              >
                 <img
                   src={s.image}
                   alt={s.alt}
@@ -132,13 +134,14 @@ function ServicesPage() {
 
       <section aria-labelledby="methodologie-title" className="mx-auto mt-24 max-w-7xl">
         <Reveal>
-          <h2 id="methodologie-title" className="text-3xl font-bold sm:text-4xl">Méthodologie</h2>
+          <h2 id="methodologie-title" className="text-3xl font-bold sm:text-4xl">
+            Méthodologie
+          </h2>
         </Reveal>
         <div className="mt-10">
           <ProcessSteps label="Les étapes de notre méthodologie" />
         </div>
       </section>
-
 
       <section className="mx-auto mt-20 max-w-7xl">
         <Reveal>

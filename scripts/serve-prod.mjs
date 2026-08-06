@@ -16,7 +16,9 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DIST = path.join(ROOT, "dist");
 
 const args = process.argv.slice(2);
-const port = args.includes("--port") ? args[args.indexOf("--port") + 1] : (process.env.E2E_PORT ?? "4173");
+const port = args.includes("--port")
+  ? args[args.indexOf("--port") + 1]
+  : (process.env.E2E_PORT ?? "4173");
 
 if (!existsSync(path.join(DIST, "server", "index.mjs"))) {
   console.error("Build introuvable : lancez `bun run build` avant de servir la production.");

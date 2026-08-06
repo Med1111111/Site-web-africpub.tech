@@ -9,7 +9,11 @@ export default defineTool({
     "Liste les demandes de devis et messages reçus via le formulaire de contact. Réservé aux administrateurs.",
   inputSchema: {
     status: z.string().trim().optional().describe("Filtrer par statut (nouveau, traité…)."),
-    limit: z.number().int().optional().describe("Nombre maximum de résultats (défaut 25, max 100)."),
+    limit: z
+      .number()
+      .int()
+      .optional()
+      .describe("Nombre maximum de résultats (défaut 25, max 100)."),
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ status, limit }, ctx) => {

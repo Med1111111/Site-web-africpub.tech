@@ -17,9 +17,18 @@ export default defineTool({
     cta_title: z.string().trim().optional(),
     cta_sub: z.string().trim().optional(),
     cta_label: z.string().trim().optional(),
-    whatsapp_number: z.string().trim().optional().describe("Numéro WhatsApp au format international sans +, ex. 213540481810."),
+    whatsapp_number: z
+      .string()
+      .trim()
+      .optional()
+      .describe("Numéro WhatsApp au format international sans +, ex. 213540481810."),
   },
-  annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: false },
+  annotations: {
+    readOnlyHint: false,
+    destructiveHint: true,
+    idempotentHint: true,
+    openWorldHint: false,
+  },
   handler: async (input, ctx) => {
     if (!ctx.isAuthenticated()) {
       return { content: [{ type: "text", text: "Non authentifié." }], isError: true };
@@ -38,8 +47,14 @@ export default defineTool({
       .maybeSingle();
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
     if (!data) {
-      return { content: [{ type: "text", text: "Réglages introuvables ou accès refusé." }], isError: true };
+      return {
+        content: [{ type: "text", text: "Réglages introuvables ou accès refusé." }],
+        isError: true,
+      };
     }
-    return { content: [{ type: "text", text: JSON.stringify(data) }], structuredContent: { settings: data } };
+    return {
+      content: [{ type: "text", text: JSON.stringify(data) }],
+      structuredContent: { settings: data },
+    };
   },
 });

@@ -37,7 +37,7 @@ jobs:
 
       - name: Audit du site déployé (en-têtes HTTP réels)
         env:
-          TARGET_URL: ${{ github.event.inputs.target_url || vars.SECURITY_TARGET_URL || 'https://premium-afric-vision.lovable.app' }}
+          TARGET_URL: ${{ github.event.inputs.target_url || vars.SECURITY_TARGET_URL || 'https://africpub.tech' }}
         run: bun run security:check -- --url "$TARGET_URL"
 
       - name: Audit des dépendances

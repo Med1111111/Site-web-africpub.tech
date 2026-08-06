@@ -8,7 +8,6 @@ export type PortfolioItem = Database["public"]["Tables"]["portfolio_items"]["Row
 export type Testimonial = Database["public"]["Tables"]["testimonials"]["Row"];
 export type SiteSettings = Database["public"]["Tables"]["site_settings"]["Row"];
 
-
 function publicClient() {
   const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
   return createClient<Database>(process.env["SUPABASE_URL"]!, key, {
@@ -16,7 +15,8 @@ function publicClient() {
     global: {
       fetch: (input, init) => {
         const h = new Headers(init?.headers);
-        if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) h.delete("Authorization");
+        if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`)
+          h.delete("Authorization");
         h.set("apikey", key);
         return fetch(input, { ...init, headers: h });
       },
@@ -29,7 +29,9 @@ function publicClient() {
 export const listPublicPortfolio = createServerFn({ method: "GET" }).handler(async () => {
   const { data, error } = await publicClient()
     .from("portfolio_items")
-    .select("id, title, category, city, description, image_url, sort_order, published, created_at, updated_at")
+    .select(
+      "id, title, category, city, description, image_url, sort_order, published, created_at, updated_at",
+    )
     .eq("published", true)
     .order("sort_order", { ascending: true });
   if (error) throw new Error(error.message);

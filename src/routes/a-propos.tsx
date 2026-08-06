@@ -16,13 +16,19 @@ export const Route = createFileRoute("/a-propos")({
       },
       { property: "og:type", content: "website" },
       { property: "og:title", content: "À propos — Afric Pub" },
-      { property: "og:description", content: "Notre histoire, notre atelier et nos engagements qualité." },
-      { property: "og:url", content: "https://premium-afric-vision.lovable.app/a-propos" },
+      {
+        property: "og:description",
+        content: "Notre histoire, notre atelier et nos engagements qualité.",
+      },
+      { property: "og:url", content: "https://africpub.tech/a-propos" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "À propos — Afric Pub" },
-      { name: "twitter:description", content: "Notre histoire, notre atelier et nos engagements qualité." },
+      {
+        name: "twitter:description",
+        content: "Notre histoire, notre atelier et nos engagements qualité.",
+      },
     ],
-    links: [{ rel: "canonical", href: "https://premium-afric-vision.lovable.app/a-propos" }],
+    links: [{ rel: "canonical", href: "https://africpub.tech/a-propos" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -31,22 +37,32 @@ export const Route = createFileRoute("/a-propos")({
           "@graph": [
             {
               "@type": "AboutPage",
-              "@id": "https://premium-afric-vision.lovable.app/a-propos#webpage",
-              url: "https://premium-afric-vision.lovable.app/a-propos",
+              "@id": "https://africpub.tech/a-propos#webpage",
+              url: "https://africpub.tech/a-propos",
               name: "À propos — Afric Pub, agence de communication globale",
               description:
                 "Mission, vision, valeurs et atelier d'Afric Pub : 18 ans d'expérience en enseignes lumineuses et communication visuelle en Algérie.",
               inLanguage: "fr",
-              isPartOf: { "@id": "https://premium-afric-vision.lovable.app/#website" },
-              about: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
-              publisher: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
+              isPartOf: { "@id": "https://africpub.tech/#website" },
+              about: { "@id": "https://africpub.tech/#organization" },
+              publisher: { "@id": "https://africpub.tech/#organization" },
             },
             {
               "@type": "BreadcrumbList",
-              "@id": "https://premium-afric-vision.lovable.app/a-propos#breadcrumb",
+              "@id": "https://africpub.tech/a-propos#breadcrumb",
               itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Accueil", item: "https://premium-afric-vision.lovable.app/" },
-                { "@type": "ListItem", position: 2, name: "À propos", item: "https://premium-afric-vision.lovable.app/a-propos" },
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Accueil",
+                  item: "https://africpub.tech/",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "À propos",
+                  item: "https://africpub.tech/a-propos",
+                },
               ],
             },
           ],
@@ -54,13 +70,21 @@ export const Route = createFileRoute("/a-propos")({
       },
     ],
   }),
-
 });
 
 const values = [
-  { title: "Exigence", desc: "Contrôle qualité à chaque étape, du fichier de découpe à la pose finale." },
-  { title: "Sécurité", desc: "Structures calculées, câblage aux normes, équipes habilitées travail en hauteur." },
-  { title: "Durabilité", desc: "Matériaux certifiés, LED basse consommation, recyclage des chutes." },
+  {
+    title: "Exigence",
+    desc: "Contrôle qualité à chaque étape, du fichier de découpe à la pose finale.",
+  },
+  {
+    title: "Sécurité",
+    desc: "Structures calculées, câblage aux normes, équipes habilitées travail en hauteur.",
+  },
+  {
+    title: "Durabilité",
+    desc: "Matériaux certifiés, LED basse consommation, recyclage des chutes.",
+  },
   { title: "Proximité", desc: "Un chef de projet unique, joignable, du brief au SAV." },
 ];
 
@@ -85,12 +109,13 @@ function AboutPage() {
           <div className="h-full rounded-3xl glass p-8">
             <h2 className="text-2xl font-semibold">Mission</h2>
             <p className="mt-3 text-muted-foreground">
-              Rendre chaque marque immédiatement identifiable dans l'espace physique, avec des dispositifs
-              fiables, durables et parfaitement exécutés.
+              Rendre chaque marque immédiatement identifiable dans l'espace physique, avec des
+              dispositifs fiables, durables et parfaitement exécutés.
             </p>
             <h2 className="mt-8 text-2xl font-semibold">Vision</h2>
             <p className="mt-3 text-muted-foreground">
-              Devenir la référence maghrébine de la communication visuelle intégrée, alliant industrie et design.
+              Devenir la référence maghrébine de la communication visuelle intégrée, alliant
+              industrie et design.
             </p>
           </div>
         </Reveal>

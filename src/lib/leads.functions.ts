@@ -1,13 +1,20 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { allowLeadAttempt, leadsPublicClient, looksLikeSpam, visitorFingerprint } from "./leads.server";
+import {
+  allowLeadAttempt,
+  leadsPublicClient,
+  looksLikeSpam,
+  visitorFingerprint,
+} from "./leads.server";
 import {
   ATTACHMENT_BUCKET,
   ATTACHMENT_EXTENSIONS,
   ATTACHMENT_MAX_BYTES,
   attachmentExtension,
 } from "./leads-upload";
+import { syncBrevoContact } from "./crm/brevo.server";
+import { syncHubspotContact } from "./crm/hubspot.server";
 import type { Database } from "@/integrations/supabase/types";
 
 export type ContactMessage = Database["public"]["Tables"]["contact_messages"]["Row"];
@@ -68,7 +75,6 @@ export const getLeadAttachmentUrl = createServerFn({ method: "POST" })
     return { url: signed.signedUrl };
   });
 
-
 /* ---------- Soumissions publiques ---------- */
 
 export const submitContactMessage = createServerFn({ method: "POST" })
@@ -127,6 +133,19 @@ export const submitContactMessage = createServerFn({ method: "POST" })
     });
 
     if (error) throw new Error(error.message);
+
+    // CRM : best-effort, en tâche de fond — n'attend pas la réponse et n'échoue
+    // jamais la soumission (la ligne Supabase ci-dessus est la source de vérité).
+    const crmPayload = {
+      email: data.email,
+      name: data.name,
+      phone: data.phone,
+      service: data.service,
+      message: data.message,
+    };
+    void syncBrevoContact({ ...crmPayload, source: "contact" });
+    void syncHubspotContact(crmPayload);
+
     return { ok: true };
   });
 
@@ -165,6 +184,9 @@ export const subscribeNewsletter = createServerFn({ method: "POST" })
       .insert({ email: data.email.toLowerCase() });
     // 23505 = déjà inscrit : succès silencieux
     if (error && error.code !== "23505") throw new Error(error.message);
+
+    void syncBrevoContact({ email: data.email, source: "newsletter" });
+
     return { ok: true };
   });
 

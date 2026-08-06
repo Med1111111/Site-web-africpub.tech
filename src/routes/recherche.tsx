@@ -5,7 +5,7 @@ import PageHeader from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
 import { services, projects, faq } from "@/lib/site-data";
 
-const SITE_URL = "https://premium-afric-vision.lovable.app";
+const SITE_URL = "https://africpub.tech";
 const SEARCH_URL = `${SITE_URL}/recherche`;
 const TITLE = "Recherche — Trouvez un service ou une réalisation | Afric Pub";
 const DESC =
@@ -43,7 +43,13 @@ function search(query: string): Result[] {
 
   for (const s of services) {
     if (normalize(`${s.title} ${s.desc}`).includes(q)) {
-      results.push({ title: s.title, excerpt: s.desc, to: "/services", hash: s.slug, kind: "Service" });
+      results.push({
+        title: s.title,
+        excerpt: s.desc,
+        to: "/services",
+        hash: s.slug,
+        kind: "Service",
+      });
     }
   }
   for (const p of projects) {
@@ -270,7 +276,10 @@ function SearchPage() {
           </ul>
 
           {totalPages > 1 && (
-            <nav aria-label="Pagination des résultats" className="mt-8 flex items-center justify-center gap-2">
+            <nav
+              aria-label="Pagination des résultats"
+              className="mt-8 flex items-center justify-center gap-2"
+            >
               <Link
                 to="/recherche"
                 search={{ q, page: Math.max(1, current - 1) }}

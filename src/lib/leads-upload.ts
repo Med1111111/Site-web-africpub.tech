@@ -37,13 +37,7 @@ export function formatBytes(bytes: number): string {
 }
 
 export type UploadErrorCode =
-  | "offline"
-  | "network"
-  | "timeout"
-  | "too-large"
-  | "rejected"
-  | "server"
-  | "unknown";
+  "offline" | "network" | "timeout" | "too-large" | "rejected" | "server" | "unknown";
 
 /** Erreur d'upload typée, pour produire un message clair et actionnable. */
 export class UploadError extends Error {
@@ -58,7 +52,11 @@ export class UploadError extends Error {
 }
 
 /** Message lisible + action conseillée pour l'utilisateur. */
-export function describeUploadError(err: unknown): { message: string; hint: string; canRetry: boolean } {
+export function describeUploadError(err: unknown): {
+  message: string;
+  hint: string;
+  canRetry: boolean;
+} {
   const code: UploadErrorCode =
     err instanceof UploadError
       ? err.code
@@ -181,4 +179,3 @@ export function uploadWithProgress(options: {
     xhr.send(file);
   });
 }
-
