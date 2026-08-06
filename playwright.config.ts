@@ -28,7 +28,11 @@ export default defineConfig({
     : {
         webServer: {
           command: `node scripts/serve-prod.mjs --port ${PORT}`,
-          url: BASE_URL,
+          // `port` (pas `url`) : Playwright attend juste que le port accepte les
+          // connexions. Avec `url`, il exige un statut 2xx/3xx sur "/" — or les
+          // tests CSP visitent volontairement des pages qui peuvent répondre en
+          // erreur (ex. Supabase indisponible), ce qui ferait timeout la sonde.
+          port: PORT,
           reuseExistingServer: !process.env.CI,
           timeout: 180_000,
           stdout: "pipe",
