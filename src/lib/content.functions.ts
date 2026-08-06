@@ -163,13 +163,18 @@ export const deleteTestimonial = createServerFn({ method: "POST" })
 /* ---------- Réglages globaux du site ---------- */
 
 export const getPublicSiteSettings = createServerFn({ method: "GET" }).handler(async () => {
-  const { data, error } = await publicClient()
-    .from("site_settings")
-    .select("*")
-    .limit(1)
-    .maybeSingle();
-  if (error) throw new Error(error.message);
-  return data as SiteSettings | null;
+  try {
+    const { data, error } = await publicClient()
+      .from("site_settings")
+      .select("*")
+      .limit(1)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    return data as SiteSettings | null;
+  } catch (err) {
+    console.error("getPublicSiteSettings failed", err);
+    return null as SiteSettings | null;
+  }
 });
 
 const settingsInput = z.object({
