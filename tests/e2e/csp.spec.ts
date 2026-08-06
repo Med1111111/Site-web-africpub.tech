@@ -3,7 +3,16 @@ import { expect, test, type Page, type Response } from "@playwright/test";
 import { CSP_DIRECTIVES } from "../../src/lib/security-headers";
 
 /** Routes publiques couvertes par l'audit CSP. */
-const ROUTES = ["/", "/services", "/portfolio", "/a-propos", "/contact", "/recherche", "/faq", "/auth"];
+const ROUTES = [
+  "/",
+  "/services",
+  "/portfolio",
+  "/a-propos",
+  "/contact",
+  "/recherche",
+  "/faq",
+  "/auth",
+];
 
 /** Directives dont l'absence rendrait la politique inopérante. */
 const REQUIRED_DIRECTIVES = [
@@ -74,7 +83,6 @@ async function injectIntoDocument(page: Page, route: string, snippet: string): P
   );
 }
 
-
 test.describe("CSP — en-têtes envoyés par le serveur", () => {
   for (const route of ROUTES) {
     test(`${route} renvoie une CSP appliquée (non report-only)`, async ({ page }) => {
@@ -136,8 +144,6 @@ test.describe("CSP — blocages effectifs dans le navigateur", () => {
       expect(result?.fn, `new Function() n'a pas été bloqué sur ${route}`).toBe("EvalError");
     });
 
-
-
     test(`${route} bloque un script externe non autorisé`, async ({ page }) => {
       const violations = await collectViolations(page);
       await gotoRoute(page, route);
@@ -179,7 +185,9 @@ test.describe("CSP — blocages effectifs dans le navigateur", () => {
       });
 
       expect(
-        violations.some((v) => v.directive.startsWith("object-src") || v.directive.startsWith("frame-src")),
+        violations.some(
+          (v) => v.directive.startsWith("object-src") || v.directive.startsWith("frame-src"),
+        ),
         `object-src / frame-src ne bloquent rien sur ${route}`,
       ).toBe(true);
     });
@@ -215,7 +223,6 @@ test.describe("CSP — le site reste fonctionnel", () => {
         ),
         `erreurs console liées à la CSP sur ${route}`,
       ).toEqual([]);
-
 
       // L'hydratation doit avoir eu lieu : la navigation client fonctionne.
       await expect(page.locator("body")).toBeVisible();

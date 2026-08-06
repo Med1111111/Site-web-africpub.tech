@@ -9,7 +9,6 @@ import {
   updateContactMessageStatus,
 } from "@/lib/leads.functions";
 
-
 const btnGhost = "min-h-11 rounded-full glass-soft px-4 text-sm font-medium";
 
 const waNumber = "213540481810";
@@ -21,7 +20,10 @@ function formatDate(iso: string) {
 export default function LeadsManager() {
   const qc = useQueryClient();
   const list = useQuery({ queryKey: ["admin-leads"], queryFn: () => listContactMessages() });
-  const subs = useQuery({ queryKey: ["admin-newsletter"], queryFn: () => listNewsletterSubscribers() });
+  const subs = useQuery({
+    queryKey: ["admin-newsletter"],
+    queryFn: () => listNewsletterSubscribers(),
+  });
 
   const setStatus = useMutation({
     mutationFn: (v: { id: string; status: (typeof CONTACT_STATUSES)[number] }) =>
@@ -50,7 +52,8 @@ export default function LeadsManager() {
         {list.isLoading && <p className="text-sm text-muted-foreground">Chargement…</p>}
         {list.data?.length === 0 && (
           <p className="rounded-3xl glass p-6 text-sm text-muted-foreground">
-            Aucune demande pour le moment. Les soumissions du formulaire de contact apparaîtront ici.
+            Aucune demande pour le moment. Les soumissions du formulaire de contact apparaîtront
+            ici.
           </p>
         )}
         {list.data?.map((m) => (
@@ -74,7 +77,10 @@ export default function LeadsManager() {
               </a>
               {m.phone && (
                 <>
-                  <a className={`${btnGhost} inline-flex items-center`} href={`tel:${m.phone.replace(/\s/g, "")}`}>
+                  <a
+                    className={`${btnGhost} inline-flex items-center`}
+                    href={`tel:${m.phone.replace(/\s/g, "")}`}
+                  >
                     {m.phone}
                   </a>
                   <a
@@ -105,7 +111,6 @@ export default function LeadsManager() {
               )}
             </div>
 
-
             <div className="mt-4 flex flex-wrap items-center gap-2">
               <label className="text-xs text-muted-foreground" htmlFor={`status-${m.id}`}>
                 Statut
@@ -115,7 +120,10 @@ export default function LeadsManager() {
                 className="min-h-11 rounded-2xl glass-soft px-3 text-sm outline-none focus:ring-2 focus:ring-brand/60"
                 value={m.status}
                 onChange={(e) =>
-                  setStatus.mutate({ id: m.id, status: e.target.value as (typeof CONTACT_STATUSES)[number] })
+                  setStatus.mutate({
+                    id: m.id,
+                    status: e.target.value as (typeof CONTACT_STATUSES)[number],
+                  })
                 }
               >
                 {CONTACT_STATUSES.map((s) => (
@@ -141,7 +149,10 @@ export default function LeadsManager() {
       <section className="rounded-3xl glass p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-lg font-semibold">
-            Newsletter <span className="text-sm text-muted-foreground">({subs.data?.length ?? 0} inscrits)</span>
+            Newsletter{" "}
+            <span className="text-sm text-muted-foreground">
+              ({subs.data?.length ?? 0} inscrits)
+            </span>
           </h2>
           {emails && (
             <button

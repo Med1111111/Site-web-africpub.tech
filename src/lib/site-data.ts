@@ -28,7 +28,6 @@ import realTotemWebp from "@/assets/realisation-totem.jpg?w=480;768;1024&format=
 import realPackagingAvif from "@/assets/realisation-packaging.jpg?w=480;768;1024&format=avif&as=srcset";
 import realPackagingWebp from "@/assets/realisation-packaging.jpg?w=480;768;1024&format=webp&as=srcset";
 
-
 export type Service = {
   slug: string;
   title: string;
@@ -121,7 +120,6 @@ export const services: Service[] = [
   },
 ];
 
-
 export const stats = [
   { value: "1 200+", label: "Projets livrés" },
   { value: "58", label: "Wilayas couvertes" },
@@ -180,30 +178,43 @@ export const projects = [
   },
 ];
 
-
-
 export const categories = ["Tous", "Enseignes", "Signalétique", "Véhicules", "Grand format"];
 
 export const process = [
-  { step: "01", title: "Brief & audit", desc: "Analyse du site, contraintes techniques et réglementaires." },
+  {
+    step: "01",
+    title: "Brief & audit",
+    desc: "Analyse du site, contraintes techniques et réglementaires.",
+  },
   { step: "02", title: "Conception 3D", desc: "Simulation photoréaliste et validation client." },
-  { step: "03", title: "Fabrication", desc: "Atelier intégré : découpe, LED, assemblage, contrôle qualité." },
-  { step: "04", title: "Pose & SAV", desc: "Installation par équipes certifiées et maintenance garantie." },
+  {
+    step: "03",
+    title: "Fabrication",
+    desc: "Atelier intégré : découpe, LED, assemblage, contrôle qualité.",
+  },
+  {
+    step: "04",
+    title: "Pose & SAV",
+    desc: "Installation par équipes certifiées et maintenance garantie.",
+  },
 ];
 
 export const testimonials = [
   {
-    quote: "Une enseigne posée en 12 jours, sans un seul retard. Le rendu nocturne dépasse la simulation 3D.",
+    quote:
+      "Une enseigne posée en 12 jours, sans un seul retard. Le rendu nocturne dépasse la simulation 3D.",
     name: "Karim B.",
     role: "Directeur retail, Alger",
   },
   {
-    quote: "La signalétique de nos trois sites a été harmonisée en une seule campagne. Travail rigoureux.",
+    quote:
+      "La signalétique de nos trois sites a été harmonisée en une seule campagne. Travail rigoureux.",
     name: "Nadia M.",
     role: "Responsable communication",
   },
   {
-    quote: "Le covering de notre flotte de 24 véhicules est impeccable après deux ans d'exploitation.",
+    quote:
+      "Le covering de notre flotte de 24 véhicules est impeccable après deux ans d'exploitation.",
     name: "Yacine T.",
     role: "Directeur logistique",
   },

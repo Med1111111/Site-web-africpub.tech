@@ -9,8 +9,15 @@ export default defineTool({
     "Liste les réalisations du portfolio Afric Pub (titre, catégorie, ville, description, image, publication).",
   inputSchema: {
     published_only: z.boolean().optional().describe("Ne renvoyer que les réalisations publiées."),
-    category: z.string().optional().describe("Filtrer sur une catégorie exacte (Enseignes, Signalétique…)."),
-    limit: z.number().int().optional().describe("Nombre maximum de résultats (défaut 50, max 100)."),
+    category: z
+      .string()
+      .optional()
+      .describe("Filtrer sur une catégorie exacte (Enseignes, Signalétique…)."),
+    limit: z
+      .number()
+      .int()
+      .optional()
+      .describe("Nombre maximum de résultats (défaut 50, max 100)."),
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ published_only, category, limit }, ctx) => {
@@ -20,7 +27,9 @@ export default defineTool({
     const max = Math.min(Math.max(limit ?? 50, 1), 100);
     let query = supabaseForUser(ctx)
       .from("portfolio_items")
-      .select("id, title, category, city, description, image_url, sort_order, published, updated_at")
+      .select(
+        "id, title, category, city, description, image_url, sort_order, published, updated_at",
+      )
       .order("sort_order", { ascending: true })
       .limit(max);
     if (published_only) query = query.eq("published", true);

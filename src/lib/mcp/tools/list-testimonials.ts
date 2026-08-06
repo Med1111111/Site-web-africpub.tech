@@ -8,7 +8,11 @@ export default defineTool({
   description: "Liste les témoignages clients d'Afric Pub (citation, auteur, note, publication).",
   inputSchema: {
     published_only: z.boolean().optional().describe("Ne renvoyer que les témoignages publiés."),
-    limit: z.number().int().optional().describe("Nombre maximum de résultats (défaut 50, max 100)."),
+    limit: z
+      .number()
+      .int()
+      .optional()
+      .describe("Nombre maximum de résultats (défaut 50, max 100)."),
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ published_only, limit }, ctx) => {

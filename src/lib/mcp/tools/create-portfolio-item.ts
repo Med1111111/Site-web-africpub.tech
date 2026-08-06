@@ -9,7 +9,11 @@ export default defineTool({
     "Ajoute une réalisation au portfolio Afric Pub. Réservé aux administrateurs de l'application.",
   inputSchema: {
     title: z.string().trim().describe("Titre de la réalisation."),
-    category: z.string().trim().optional().describe("Catégorie (Enseignes, Signalétique, Véhicules, Grand format…)."),
+    category: z
+      .string()
+      .trim()
+      .optional()
+      .describe("Catégorie (Enseignes, Signalétique, Véhicules, Grand format…)."),
     city: z.string().trim().optional().describe("Ville ou wilaya du chantier."),
     description: z.string().trim().optional().describe("Description courte du projet."),
     image_url: z.string().trim().optional().describe("URL absolue du visuel."),

@@ -37,6 +37,8 @@ jobs:
 
       - name: Audit du site déployé (en-têtes HTTP réels)
         env:
+          # Reste sur le site actuellement en ligne tant que vars.SECURITY_TARGET_URL
+          # n'a pas été basculé sur https://africpub.tech (après déploiement VPS + DNS).
           TARGET_URL: ${{ github.event.inputs.target_url || vars.SECURITY_TARGET_URL || 'https://premium-afric-vision.lovable.app' }}
         run: bun run security:check -- --url "$TARGET_URL"
 
@@ -46,6 +48,16 @@ jobs:
   csp-e2e:
     name: Tests E2E CSP (Playwright)
     runs-on: ubuntu-latest
+    # Clé Supabase "publishable" : conçue pour être publique (protégée par RLS côté
+    # base), nécessaire au build et au SSR pour que les pages de données répondent
+    # 200 pendant les tests. Ne jamais mettre ici une clé service_role/secrète.
+    env:
+      SUPABASE_PROJECT_ID: ztddotfrmpvgwqlkculj
+      SUPABASE_PUBLISHABLE_KEY: sb_publishable_lErVHi67TBOytUm2wfxdcg_noQwJxYf
+      SUPABASE_URL: https://ztddotfrmpvgwqlkculj.supabase.co
+      VITE_SUPABASE_PROJECT_ID: ztddotfrmpvgwqlkculj
+      VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_lErVHi67TBOytUm2wfxdcg_noQwJxYf
+      VITE_SUPABASE_URL: https://ztddotfrmpvgwqlkculj.supabase.co
     steps:
       - uses: actions/checkout@v4
 

@@ -30,7 +30,7 @@ const SCOPE_LABELS: Record<string, string> = {
 export const Route = createFileRoute("/.lovable/oauth/consent")({
   ssr: false,
   validateSearch: (s: Record<string, unknown>) => ({
-    authorization_id: typeof s['authorization_id'] === "string" ? s['authorization_id'] : "",
+    authorization_id: typeof s["authorization_id"] === "string" ? s["authorization_id"] : "",
   }),
   beforeLoad: async ({ search, location }) => {
     if (!search.authorization_id) throw new Error("Paramètre authorization_id manquant.");
@@ -57,7 +57,12 @@ export const Route = createFileRoute("/.lovable/oauth/consent")({
       </p>
     </main>
   ),
-  head: () => ({ meta: [{ title: "Autoriser une application — Afric Pub" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({
+    meta: [
+      { title: "Autoriser une application — Afric Pub" },
+      { name: "robots", content: "noindex" },
+    ],
+  }),
 });
 
 function ConsentPage() {
@@ -102,7 +107,8 @@ function ConsentPage() {
 
         {details?.client?.redirect_uri && (
           <p className="mt-4 break-all text-xs text-muted-foreground">
-            Redirection vers&nbsp;: <span className="text-foreground">{details.client.redirect_uri}</span>
+            Redirection vers&nbsp;:{" "}
+            <span className="text-foreground">{details.client.redirect_uri}</span>
           </p>
         )}
 
@@ -117,11 +123,15 @@ function ConsentPage() {
         )}
 
         <p className="mt-6 text-xs text-muted-foreground">
-          Cela ne contourne pas les permissions de l'application ni les règles de sécurité de la base de données.
+          Cela ne contourne pas les permissions de l'application ni les règles de sécurité de la
+          base de données.
         </p>
 
         {error && (
-          <p role="alert" className="mt-4 rounded-2xl bg-destructive/15 px-4 py-3 text-sm text-destructive">
+          <p
+            role="alert"
+            className="mt-4 rounded-2xl bg-destructive/15 px-4 py-3 text-sm text-destructive"
+          >
             {error}
           </p>
         )}

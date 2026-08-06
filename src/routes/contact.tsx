@@ -1,11 +1,27 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { z } from "zod";
-import { Phone, Mail, MapPin, Clock, ExternalLink, Paperclip, X, Loader2, Check, AlertTriangle, RotateCw } from "lucide-react";
+import {
+  Phone,
+  Mail,
+  MapPin,
+  Clock,
+  ExternalLink,
+  Paperclip,
+  X,
+  Loader2,
+  Check,
+  AlertTriangle,
+  RotateCw,
+} from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
 import { services } from "@/lib/site-data";
-import { createLeadUploadUrl, submitContactMessage, subscribeNewsletter } from "@/lib/leads.functions";
+import {
+  createLeadUploadUrl,
+  submitContactMessage,
+  subscribeNewsletter,
+} from "@/lib/leads.functions";
 import {
   ATTACHMENT_ACCEPT,
   ATTACHMENT_MAX_BYTES,
@@ -14,9 +30,6 @@ import {
   isAllowedAttachment,
   uploadWithProgress,
 } from "@/lib/leads-upload";
-
-
-
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
@@ -31,12 +44,12 @@ export const Route = createFileRoute("/contact")({
       { property: "og:type", content: "website" },
       { property: "og:title", content: "Contact — Afric Pub" },
       { property: "og:description", content: "Étude technique et devis gratuits sous 24 à 48h." },
-      { property: "og:url", content: "https://premium-afric-vision.lovable.app/contact" },
+      { property: "og:url", content: "https://africpub.tech/contact" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Contact — Afric Pub" },
       { name: "twitter:description", content: "Étude technique et devis gratuits sous 24 à 48h." },
     ],
-    links: [{ rel: "canonical", href: "https://premium-afric-vision.lovable.app/contact" }],
+    links: [{ rel: "canonical", href: "https://africpub.tech/contact" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -45,22 +58,32 @@ export const Route = createFileRoute("/contact")({
           "@graph": [
             {
               "@type": "ContactPage",
-              "@id": "https://premium-afric-vision.lovable.app/contact#webpage",
-              url: "https://premium-afric-vision.lovable.app/contact",
+              "@id": "https://africpub.tech/contact#webpage",
+              url: "https://africpub.tech/contact",
               name: "Contact & devis gratuit — Afric Pub",
               description:
                 "Demandez votre devis gratuit pour une enseigne lumineuse, de la signalétique ou une impression grand format. Réponse sous 24h.",
               inLanguage: "fr",
-              isPartOf: { "@id": "https://premium-afric-vision.lovable.app/#website" },
-              about: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
-              publisher: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
+              isPartOf: { "@id": "https://africpub.tech/#website" },
+              about: { "@id": "https://africpub.tech/#organization" },
+              publisher: { "@id": "https://africpub.tech/#organization" },
             },
             {
               "@type": "BreadcrumbList",
-              "@id": "https://premium-afric-vision.lovable.app/contact#breadcrumb",
+              "@id": "https://africpub.tech/contact#breadcrumb",
               itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Accueil", item: "https://premium-afric-vision.lovable.app/" },
-                { "@type": "ListItem", position: 2, name: "Contact", item: "https://premium-afric-vision.lovable.app/contact" },
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Accueil",
+                  item: "https://africpub.tech/",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Contact",
+                  item: "https://africpub.tech/contact",
+                },
               ],
             },
           ],
@@ -68,7 +91,6 @@ export const Route = createFileRoute("/contact")({
       },
     ],
   }),
-
 });
 
 // Validation stricte côté client (longueurs bornées, trim, anti-spam honeypot).
@@ -83,7 +105,9 @@ const schema = z.object({
 
 function ContactPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [state, setState] = useState<"idle" | "sending" | "uploading" | "sent" | "error" | "throttled">("idle");
+  const [state, setState] = useState<
+    "idle" | "sending" | "uploading" | "sent" | "error" | "throttled"
+  >("idle");
   const [news, setNews] = useState<"idle" | "sending" | "sent" | "error" | "throttled">("idle");
   // Horodatage d'ouverture : un envoi en moins de 2,5 s est considéré comme automatisé.
   const [mountedAt] = useState(() => Date.now());
@@ -92,13 +116,14 @@ function ContactPage() {
   const [dragging, setDragging] = useState(false);
   const [progress, setProgress] = useState<{ loaded: number; total: number } | null>(null);
   const [uploadDone, setUploadDone] = useState(false);
-  const [uploadFailure, setUploadFailure] = useState<
-    { message: string; hint: string; canRetry: boolean } | null
-  >(null);
+  const [uploadFailure, setUploadFailure] = useState<{
+    message: string;
+    hint: string;
+    canRetry: boolean;
+  } | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
-
 
   const pickFile = (next: File | null) => {
     setUploadFailure(null);
@@ -109,7 +134,9 @@ function ContactPage() {
     }
     if (!isAllowedAttachment(next.name)) {
       setFile(null);
-      setFileError("Format non accepté. Formats autorisés : AI, EPS, SVG, PDF, JPG, PNG, WEBP, OBJ, SKP, DWG.");
+      setFileError(
+        "Format non accepté. Formats autorisés : AI, EPS, SVG, PDF, JPG, PNG, WEBP, OBJ, SKP, DWG.",
+      );
       return;
     }
     if (next.size > ATTACHMENT_MAX_BYTES) {
@@ -210,10 +237,6 @@ function ContactPage() {
     await runSubmit(e.currentTarget);
   };
 
-
-
-
-
   const onNewsletter = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -250,15 +273,26 @@ function ContactPage() {
         <Reveal>
           <form onSubmit={onSubmit} noValidate className="rounded-3xl glass p-8">
             {state === "sent" && (
-              <p role="status" className="mb-6 rounded-2xl bg-brand px-4 py-3 text-sm text-primary-foreground">
+              <p
+                role="status"
+                className="mb-6 rounded-2xl bg-brand px-4 py-3 text-sm text-primary-foreground"
+              >
                 Merci ! Votre demande a bien été enregistrée, nous revenons vers vous sous 24h.
               </p>
             )}
             {state === "throttled" && (
-              <p role="alert" className="mb-6 rounded-2xl glass-soft px-4 py-3 text-sm text-destructive">
+              <p
+                role="alert"
+                className="mb-6 rounded-2xl glass-soft px-4 py-3 text-sm text-destructive"
+              >
                 Vous avez déjà envoyé plusieurs demandes récemment. Merci de patienter une heure, ou
                 écrivez-nous sur{" "}
-                <a href="https://wa.me/213540481810" target="_blank" rel="noreferrer noopener" className="underline">
+                <a
+                  href="https://wa.me/213540481810"
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="underline"
+                >
                   WhatsApp
                 </a>
                 .
@@ -271,7 +305,8 @@ function ContactPage() {
                   <span>L'enregistrement de votre demande a échoué.</span>
                 </p>
                 <p className="mt-1 pl-6 text-xs text-muted-foreground">
-                  Vérifiez votre connexion Internet, puis réessayez — vos informations sont conservées.
+                  Vérifiez votre connexion Internet, puis réessayez — vos informations sont
+                  conservées.
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2 pl-6">
                   <button
@@ -294,42 +329,85 @@ function ContactPage() {
               </div>
             )}
 
-
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
-                <label htmlFor="name" className="text-sm font-medium">Nom complet</label>
-                <input id="name" name="name" required maxLength={100} className={field} placeholder="Votre nom" />
+                <label htmlFor="name" className="text-sm font-medium">
+                  Nom complet
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  required
+                  maxLength={100}
+                  className={field}
+                  placeholder="Votre nom"
+                />
                 {errors.name && <p className="mt-1 text-xs text-destructive">{errors.name}</p>}
               </div>
               <div>
-                <label htmlFor="email" className="text-sm font-medium">Email</label>
-                <input id="email" name="email" type="email" required maxLength={255} className={field} placeholder="vous@entreprise.dz" />
+                <label htmlFor="email" className="text-sm font-medium">
+                  Email
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  maxLength={255}
+                  className={field}
+                  placeholder="vous@entreprise.dz"
+                />
                 {errors.email && <p className="mt-1 text-xs text-destructive">{errors.email}</p>}
               </div>
               <div>
-                <label htmlFor="phone" className="text-sm font-medium">Téléphone (optionnel)</label>
-                <input id="phone" name="phone" type="tel" maxLength={30} className={field} placeholder="+213 …" />
+                <label htmlFor="phone" className="text-sm font-medium">
+                  Téléphone (optionnel)
+                </label>
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  maxLength={30}
+                  className={field}
+                  placeholder="+213 …"
+                />
               </div>
               <div>
-                <label htmlFor="service" className="text-sm font-medium">Service souhaité</label>
+                <label htmlFor="service" className="text-sm font-medium">
+                  Service souhaité
+                </label>
                 <select id="service" name="service" className={field}>
                   {services.map((s) => (
-                    <option key={s.slug} value={s.title}>{s.title}</option>
+                    <option key={s.slug} value={s.title}>
+                      {s.title}
+                    </option>
                   ))}
                 </select>
               </div>
             </div>
 
             <div className="mt-5">
-              <label htmlFor="message" className="text-sm font-medium">Votre projet</label>
-              <textarea id="message" name="message" rows={5} required maxLength={1500} className={field} placeholder="Dimensions, lieu, délais…" />
+              <label htmlFor="message" className="text-sm font-medium">
+                Votre projet
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows={5}
+                required
+                maxLength={1500}
+                className={field}
+                placeholder="Dimensions, lieu, délais…"
+              />
               {errors.message && <p className="mt-1 text-xs text-destructive">{errors.message}</p>}
             </div>
 
             <div className="mt-5">
               <label htmlFor="attachment" className="text-sm font-medium">
                 Joindre votre logo / photo de la façade{" "}
-                <span className="font-normal text-muted-foreground">(vectoriel, photo ou plan 3D)</span>
+                <span className="font-normal text-muted-foreground">
+                  (vectoriel, photo ou plan 3D)
+                </span>
               </label>
               <div
                 onDragOver={(e) => {
@@ -395,7 +473,10 @@ function ContactPage() {
                           aria-valuenow={
                             uploadDone
                               ? 100
-                              : Math.min(100, Math.round((progress.loaded / Math.max(1, progress.total)) * 100))
+                              : Math.min(
+                                  100,
+                                  Math.round((progress.loaded / Math.max(1, progress.total)) * 100),
+                                )
                           }
                           className="h-1.5 w-full overflow-hidden rounded-full bg-foreground/10"
                         >
@@ -405,12 +486,21 @@ function ContactPage() {
                               width: `${
                                 uploadDone
                                   ? 100
-                                  : Math.min(100, Math.round((progress.loaded / Math.max(1, progress.total)) * 100))
+                                  : Math.min(
+                                      100,
+                                      Math.round(
+                                        (progress.loaded / Math.max(1, progress.total)) * 100,
+                                      ),
+                                    )
                               }%`,
                             }}
                           />
                         </div>
-                        <p role="status" aria-live="polite" className="mt-1.5 flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <p
+                          role="status"
+                          aria-live="polite"
+                          className="mt-1.5 flex items-center gap-1.5 text-xs text-muted-foreground"
+                        >
                           {uploadDone ? (
                             <>
                               <Check className="size-3.5 text-brand" aria-hidden="true" />
@@ -418,9 +508,16 @@ function ContactPage() {
                             </>
                           ) : (
                             <>
-                              <Loader2 className="size-3.5 animate-spin text-brand" aria-hidden="true" />
+                              <Loader2
+                                className="size-3.5 animate-spin text-brand"
+                                aria-hidden="true"
+                              />
                               Envoi du fichier…{" "}
-                              {Math.min(100, Math.round((progress.loaded / Math.max(1, progress.total)) * 100))} %
+                              {Math.min(
+                                100,
+                                Math.round((progress.loaded / Math.max(1, progress.total)) * 100),
+                              )}{" "}
+                              %
                             </>
                           )}
                         </p>
@@ -428,8 +525,10 @@ function ContactPage() {
                     )}
                   </div>
                 ) : (
-
-                  <label htmlFor="attachment" className="flex cursor-pointer items-center gap-3 text-sm text-muted-foreground">
+                  <label
+                    htmlFor="attachment"
+                    className="flex cursor-pointer items-center gap-3 text-sm text-muted-foreground"
+                  >
                     <Paperclip className="size-4 shrink-0 text-brand" aria-hidden="true" />
                     <span>
                       Cliquez ou déposez un fichier ici — optionnel
@@ -440,12 +539,13 @@ function ContactPage() {
                   </label>
                 )}
               </div>
-              {fileError && <p role="alert" className="mt-1 text-xs text-destructive">{fileError}</p>}
+              {fileError && (
+                <p role="alert" className="mt-1 text-xs text-destructive">
+                  {fileError}
+                </p>
+              )}
               {uploadFailure && (
-                <div
-                  role="alert"
-                  className="mt-3 rounded-2xl glass-soft px-4 py-3 text-sm"
-                >
+                <div role="alert" className="mt-3 rounded-2xl glass-soft px-4 py-3 text-sm">
                   <p className="flex items-start gap-2 font-medium text-destructive">
                     <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
                     <span>{uploadFailure.message}</span>
@@ -464,7 +564,9 @@ function ContactPage() {
                     )}
                     <button
                       type="button"
-                      onClick={() => formRef.current && runSubmit(formRef.current, { skipFile: true })}
+                      onClick={() =>
+                        formRef.current && runSubmit(formRef.current, { skipFile: true })
+                      }
                       className="inline-flex items-center gap-1.5 rounded-full glass-soft px-4 py-2 text-xs font-medium text-foreground transition-colors hover:text-brand"
                     >
                       Envoyer la demande sans le fichier
@@ -480,11 +582,17 @@ function ContactPage() {
                   </div>
                 </div>
               )}
-
             </div>
 
             {/* Honeypot anti-spam, masqué aux utilisateurs et aux lecteurs d'écran */}
-            <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+            <input
+              type="text"
+              name="company"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="hidden"
+            />
 
             <button
               type="submit"
@@ -496,7 +604,12 @@ function ContactPage() {
               )}
               {state === "uploading"
                 ? `Envoi du fichier… ${
-                    progress ? Math.min(100, Math.round((progress.loaded / Math.max(1, progress.total)) * 100)) : 0
+                    progress
+                      ? Math.min(
+                          100,
+                          Math.round((progress.loaded / Math.max(1, progress.total)) * 100),
+                        )
+                      : 0
                   } %`
                 : state === "sending"
                   ? file
@@ -504,8 +617,6 @@ function ContactPage() {
                     : "Envoi en cours…"
                   : "Envoyer la demande"}
             </button>
-
-
           </form>
         </Reveal>
 
@@ -518,7 +629,9 @@ function ContactPage() {
                   <MapPin className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
                   <span>
                     Bouismail, Tipaza, Algérie
-                    <span className="block text-xs text-muted-foreground/80">(Pose et intervention sur 58 Wilayas)</span>
+                    <span className="block text-xs text-muted-foreground/80">
+                      (Pose et intervention sur 58 Wilayas)
+                    </span>
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
@@ -528,13 +641,19 @@ function ContactPage() {
                 <li className="flex items-start gap-3">
                   <Phone className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
                   <span className="grid gap-1">
-                    <a href="tel:+213540481810" className="hover:text-foreground">+213 540 48 18 10</a>
-                    <a href="tel:+213559119888" className="hover:text-foreground">+213 559 11 98 88</a>
+                    <a href="tel:+213540481810" className="hover:text-foreground">
+                      +213 540 48 18 10
+                    </a>
+                    <a href="tel:+213559119888" className="hover:text-foreground">
+                      +213 559 11 98 88
+                    </a>
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <Mail className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
-                  <a href="mailto:contact@africpub.com" className="hover:text-foreground">contact@africpub.com</a>
+                  <a href="mailto:contact@africpub.com" className="hover:text-foreground">
+                    contact@africpub.com
+                  </a>
                 </li>
               </ul>
               <a
@@ -549,23 +668,51 @@ function ContactPage() {
             </div>
             <div className="rounded-3xl glass p-7">
               <h2 className="text-lg font-semibold">Newsletter</h2>
-              <p className="mt-2 text-sm text-muted-foreground">Nos réalisations et conseils, une fois par mois.</p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Nos réalisations et conseils, une fois par mois.
+              </p>
               <form onSubmit={onNewsletter} className="mt-4 grid gap-2">
-                <label htmlFor="news" className="sr-only">Votre email</label>
-                <input id="news" name="news" type="email" required maxLength={255} className={field} placeholder="vous@entreprise.dz" />
+                <label htmlFor="news" className="sr-only">
+                  Votre email
+                </label>
+                <input
+                  id="news"
+                  name="news"
+                  type="email"
+                  required
+                  maxLength={255}
+                  className={field}
+                  placeholder="vous@entreprise.dz"
+                />
                 {/* Honeypot anti-spam */}
-                <input type="text" name="company_news" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
-                <button disabled={news === "sending"} className="rounded-full glass-soft px-5 py-3 text-sm font-semibold disabled:opacity-60">
+                <input
+                  type="text"
+                  name="company_news"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="hidden"
+                />
+                <button
+                  disabled={news === "sending"}
+                  className="rounded-full glass-soft px-5 py-3 text-sm font-semibold disabled:opacity-60"
+                >
                   {news === "sending" ? "Inscription…" : "S'inscrire"}
                 </button>
                 {news === "sent" && (
-                  <p role="status" className="text-xs text-muted-foreground">Merci, votre inscription est enregistrée.</p>
+                  <p role="status" className="text-xs text-muted-foreground">
+                    Merci, votre inscription est enregistrée.
+                  </p>
                 )}
                 {news === "throttled" && (
-                  <p role="alert" className="text-xs text-destructive">Trop de tentatives, réessayez dans une heure.</p>
+                  <p role="alert" className="text-xs text-destructive">
+                    Trop de tentatives, réessayez dans une heure.
+                  </p>
                 )}
                 {news === "error" && (
-                  <p role="alert" className="text-xs text-destructive">Inscription impossible pour le moment.</p>
+                  <p role="alert" className="text-xs text-destructive">
+                    Inscription impossible pour le moment.
+                  </p>
                 )}
               </form>
             </div>

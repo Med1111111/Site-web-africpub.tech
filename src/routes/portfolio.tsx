@@ -9,8 +9,7 @@ import { ResponsiveImage } from "@/components/ResponsiveImage";
 import { categories, projects } from "@/lib/site-data";
 import stand from "@/assets/stand.jpg.asset.json";
 
-
-const SITE_URL = "https://premium-afric-vision.lovable.app";
+const SITE_URL = "https://africpub.tech";
 const PORTFOLIO_URL = `${SITE_URL}/portfolio`;
 const PORTFOLIO_TITLE = "Portfolio — Réalisations Afric Pub en Algérie";
 const PORTFOLIO_DESC =
@@ -81,7 +80,6 @@ export const Route = createFileRoute("/portfolio")({
             })),
           },
         }),
-
       },
       {
         type: "application/ld+json",
@@ -103,7 +101,10 @@ function PortfolioPage() {
   const [lightbox, setLightbox] = useState<number | null>(null);
 
   // Réalisations gérées depuis l'espace admin, repli sur le contenu statique.
-  const { data } = useQuery({ queryKey: ["public-portfolio"], queryFn: () => listPublicPortfolio() });
+  const { data } = useQuery({
+    queryKey: ["public-portfolio"],
+    queryFn: () => listPublicPortfolio(),
+  });
 
   const items =
     data && data.length > 0
@@ -124,8 +125,6 @@ function PortfolioPage() {
           alt: p.alt,
         }));
 
-
-
   const visible = items
     .map((p, i) => ({ ...p, index: i }))
     .filter((p) => filter === "Tous" || p.category === filter);
@@ -140,7 +139,11 @@ function PortfolioPage() {
 
       <section className="mx-auto mt-12 max-w-7xl">
         <Reveal>
-          <div role="tablist" aria-label="Filtrer par catégorie" className="flex flex-wrap justify-center gap-2">
+          <div
+            role="tablist"
+            aria-label="Filtrer par catégorie"
+            className="flex flex-wrap justify-center gap-2"
+          >
             {categories.map((c) => (
               <button
                 key={c}
@@ -148,7 +151,9 @@ function PortfolioPage() {
                 aria-selected={filter === c}
                 onClick={() => setFilter(c)}
                 className={`min-h-11 rounded-full px-5 py-2.5 text-sm transition-colors ${
-                  filter === c ? "bg-brand text-primary-foreground" : "glass-soft text-muted-foreground hover:text-foreground"
+                  filter === c
+                    ? "bg-brand text-primary-foreground"
+                    : "glass-soft text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {c}
@@ -178,7 +183,9 @@ function PortfolioPage() {
 
                 <span className="flex items-center justify-between px-3 py-4">
                   <span className="text-sm font-medium">{p.title}</span>
-                  <span className="rounded-full glass-soft px-3 py-1 text-xs text-muted-foreground">{p.category}</span>
+                  <span className="rounded-full glass-soft px-3 py-1 text-xs text-muted-foreground">
+                    {p.category}
+                  </span>
                 </span>
               </button>
             </Reveal>
@@ -194,7 +201,10 @@ function PortfolioPage() {
           className="fixed inset-0 z-[60] grid place-items-center bg-black/70 p-4 backdrop-blur-md"
           onClick={() => setLightbox(null)}
         >
-          <div className="w-full max-w-3xl rounded-3xl glass p-3" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="w-full max-w-3xl rounded-3xl glass p-3"
+            onClick={(e) => e.stopPropagation()}
+          >
             <ResponsiveImage
               src={items[lightbox].img}
               avif={items[lightbox].avif}

@@ -18,13 +18,15 @@ const HERO_ASSETS: string[] = [
   "/__l5e/assets-v1/e7e509ce-512d-4ea7-879b-8a6e9f445341/enseigne-3d.png",
 ];
 
-
 export default defineConfig({
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Ignored inside the Lovable sandbox (preset stays forced to cloudflare-module there);
+  // applies to builds run elsewhere (CI, VPS) — targets a plain Node server for self-hosting.
+  nitro: { preset: "node-server" },
   vite: {
     plugins: [
       imagetools(),
@@ -34,12 +36,14 @@ export default defineConfig({
         registerType: "autoUpdate",
         injectRegister: null,
         filename: "sw.js",
-        outDir: "dist/client",
+        // Nitro serves static assets from .output/public, not dist/client — the service
+        // worker must be emitted there or /sw.js 404s and registration silently no-ops.
+        outDir: ".output/public",
         devOptions: { enabled: false },
         manifest: false,
         includeAssets: ["favicon.png", "manifest.webmanifest"],
         workbox: {
-          globDirectory: "dist/client",
+          globDirectory: ".output/public",
           // Pré-cache : app shell + visuels critiques du hero
           globPatterns: ["**/*.{js,css,html,webmanifest}"],
           additionalManifestEntries: HERO_ASSETS.map((url) => ({ url, revision: null })),
@@ -49,7 +53,15 @@ export default defineConfig({
           clientsClaim: true,
           skipWaiting: true,
           navigateFallback: "/",
-          navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//, /^\/_serverFn\//, /^\/mcp/, /^\/\.mcp/, /^\/\.well-known/, /^\/\.lovable/],
+          navigateFallbackDenylist: [
+            /^\/~oauth/,
+            /^\/api\//,
+            /^\/_serverFn\//,
+            /^\/mcp/,
+            /^\/\.mcp/,
+            /^\/\.well-known/,
+            /^\/\.lovable/,
+          ],
           runtimeCaching: [
             {
               // Navigations HTML : toujours le réseau d'abord, repli cache hors-ligne

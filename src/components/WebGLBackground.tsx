@@ -48,7 +48,9 @@ export default function WebGLBackground() {
     const removeTriggers = () => {
       events.forEach((ev) => window.removeEventListener(ev, start));
       if (idleId !== undefined && "cancelIdleCallback" in window) {
-        (window as Window & { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(idleId);
+        (window as Window & { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(
+          idleId,
+        );
       }
       if (timeoutId !== undefined) window.clearTimeout(timeoutId);
     };
@@ -70,9 +72,11 @@ export default function WebGLBackground() {
 
     events.forEach((ev) => window.addEventListener(ev, start, { passive: true, once: true }));
 
-    const ric = (window as Window & {
-      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
-    }).requestIdleCallback;
+    const ric = (
+      window as Window & {
+        requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+      }
+    ).requestIdleCallback;
     if (ric) {
       idleId = ric(() => start(), { timeout: 3000 });
     } else {

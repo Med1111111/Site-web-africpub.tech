@@ -14,14 +14,20 @@ export const Route = createFileRoute("/faq")({
           "Réponses aux questions fréquentes : délais de fabrication, couverture nationale, devis gratuit, garanties LED et autorisations de pose.",
       },
       { property: "og:title", content: "FAQ — Afric Pub" },
-      { property: "og:description", content: "Délais, garanties, devis et autorisations : tout ce qu'il faut savoir." },
+      {
+        property: "og:description",
+        content: "Délais, garanties, devis et autorisations : tout ce qu'il faut savoir.",
+      },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://premium-afric-vision.lovable.app/faq" },
+      { property: "og:url", content: "https://africpub.tech/faq" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "FAQ — Afric Pub" },
-      { name: "twitter:description", content: "Délais, garanties, devis et autorisations : tout ce qu'il faut savoir." },
+      {
+        name: "twitter:description",
+        content: "Délais, garanties, devis et autorisations : tout ce qu'il faut savoir.",
+      },
     ],
-    links: [{ rel: "canonical", href: "https://premium-afric-vision.lovable.app/faq" }],
+    links: [{ rel: "canonical", href: "https://africpub.tech/faq" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -30,36 +36,36 @@ export const Route = createFileRoute("/faq")({
           "@graph": [
             {
               "@type": "FAQPage",
-              "@id": "https://premium-afric-vision.lovable.app/faq#faqpage",
-              url: "https://premium-afric-vision.lovable.app/faq",
+              "@id": "https://africpub.tech/faq#faqpage",
+              url: "https://africpub.tech/faq",
               name: "FAQ — Afric Pub",
               description:
                 "Réponses aux questions fréquentes : délais de fabrication, couverture nationale, devis gratuit, garanties LED et autorisations de pose.",
               inLanguage: "fr",
-              isPartOf: { "@id": "https://premium-afric-vision.lovable.app/#website" },
-              publisher: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
+              isPartOf: { "@id": "https://africpub.tech/#website" },
+              publisher: { "@id": "https://africpub.tech/#organization" },
               mainEntity: faq.map((f, i) => ({
                 "@type": "Question",
-                "@id": `https://premium-afric-vision.lovable.app/faq#question-${i + 1}`,
+                "@id": `https://africpub.tech/faq#question-${i + 1}`,
                 name: f.q,
                 acceptedAnswer: { "@type": "Answer", text: f.a },
               })),
             },
             {
               "@type": "BreadcrumbList",
-              "@id": "https://premium-afric-vision.lovable.app/faq#breadcrumb",
+              "@id": "https://africpub.tech/faq#breadcrumb",
               itemListElement: [
                 {
                   "@type": "ListItem",
                   position: 1,
                   name: "Accueil",
-                  item: "https://premium-afric-vision.lovable.app/",
+                  item: "https://africpub.tech/",
                 },
                 {
                   "@type": "ListItem",
                   position: 2,
                   name: "FAQ",
-                  item: "https://premium-afric-vision.lovable.app/faq",
+                  item: "https://africpub.tech/faq",
                 },
               ],
             },
@@ -68,13 +74,16 @@ export const Route = createFileRoute("/faq")({
       },
     ],
   }),
-
 });
 
 function FaqPage() {
   return (
     <div className="px-3 sm:px-6">
-      <PageHeader eyebrow="FAQ" title="Questions fréquentes" sub="Les réponses aux demandes les plus courantes de nos clients." />
+      <PageHeader
+        eyebrow="FAQ"
+        title="Questions fréquentes"
+        sub="Les réponses aux demandes les plus courantes de nos clients."
+      />
 
       <section className="mx-auto mt-14 max-w-3xl">
         <ul className="grid gap-3">
@@ -84,7 +93,12 @@ function FaqPage() {
                 <summary className="cursor-pointer list-none text-base font-semibold marker:hidden">
                   <span className="flex items-center justify-between gap-4">
                     {f.q}
-                    <span aria-hidden="true" className="text-primary transition-transform group-open:rotate-45">＋</span>
+                    <span
+                      aria-hidden="true"
+                      className="text-primary transition-transform group-open:rotate-45"
+                    >
+                      ＋
+                    </span>
                   </span>
                 </summary>
                 <p className="mt-3 text-sm text-muted-foreground">{f.a}</p>

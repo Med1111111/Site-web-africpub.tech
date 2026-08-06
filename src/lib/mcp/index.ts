@@ -10,7 +10,7 @@ import updateSiteSettings from "./tools/update-site-settings";
 
 // L'émetteur OAuth doit être l'hôte Supabase direct : la référence projet est
 // la seule valeur inchangée après publication (inlinée par Vite au build).
-const projectRef = import.meta.env['VITE_SUPABASE_PROJECT_ID'] ?? "project-ref-unset";
+const projectRef = import.meta.env["VITE_SUPABASE_PROJECT_ID"] ?? "project-ref-unset";
 
 export default defineMcp({
   name: "afric-brilliance",

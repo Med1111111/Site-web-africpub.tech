@@ -9,17 +9,24 @@ export const Route = createFileRoute("/confidentialite")({
       { title: "Politique de confidentialité — Afric Pub" },
       {
         name: "description",
-        content: "Comment Afric Pub collecte, utilise et protège vos données personnelles lors d'une demande de devis.",
+        content:
+          "Comment Afric Pub collecte, utilise et protège vos données personnelles lors d'une demande de devis.",
       },
       { property: "og:type", content: "website" },
       { property: "og:title", content: "Politique de confidentialité — Afric Pub" },
-      { property: "og:description", content: "Collecte, usage et protection de vos données personnelles." },
-      { property: "og:url", content: "https://premium-afric-vision.lovable.app/confidentialite" },
+      {
+        property: "og:description",
+        content: "Collecte, usage et protection de vos données personnelles.",
+      },
+      { property: "og:url", content: "https://africpub.tech/confidentialite" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Politique de confidentialité — Afric Pub" },
-      { name: "twitter:description", content: "Collecte, usage et protection de vos données personnelles." },
+      {
+        name: "twitter:description",
+        content: "Collecte, usage et protection de vos données personnelles.",
+      },
     ],
-    links: [{ rel: "canonical", href: "https://premium-afric-vision.lovable.app/confidentialite" }],
+    links: [{ rel: "canonical", href: "https://africpub.tech/confidentialite" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -28,24 +35,30 @@ export const Route = createFileRoute("/confidentialite")({
           "@graph": [
             {
               "@type": "WebPage",
-              "@id": "https://premium-afric-vision.lovable.app/confidentialite#webpage",
-              url: "https://premium-afric-vision.lovable.app/confidentialite",
+              "@id": "https://africpub.tech/confidentialite#webpage",
+              url: "https://africpub.tech/confidentialite",
               name: "Politique de confidentialité — Afric Pub",
-              description: "Comment Afric Pub collecte, utilise et protège vos données personnelles.",
+              description:
+                "Comment Afric Pub collecte, utilise et protège vos données personnelles.",
               inLanguage: "fr",
-              isPartOf: { "@id": "https://premium-afric-vision.lovable.app/#website" },
-              publisher: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
+              isPartOf: { "@id": "https://africpub.tech/#website" },
+              publisher: { "@id": "https://africpub.tech/#organization" },
             },
             {
               "@type": "BreadcrumbList",
-              "@id": "https://premium-afric-vision.lovable.app/confidentialite#breadcrumb",
+              "@id": "https://africpub.tech/confidentialite#breadcrumb",
               itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Accueil", item: "https://premium-afric-vision.lovable.app/" },
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Accueil",
+                  item: "https://africpub.tech/",
+                },
                 {
                   "@type": "ListItem",
                   position: 2,
                   name: "Politique de confidentialité",
-                  item: "https://premium-afric-vision.lovable.app/confidentialite",
+                  item: "https://africpub.tech/confidentialite",
                 },
               ],
             },
@@ -54,7 +67,6 @@ export const Route = createFileRoute("/confidentialite")({
       },
     ],
   }),
-
 });
 
 const sections = [
@@ -87,7 +99,11 @@ const sections = [
 function PrivacyPage() {
   return (
     <div className="px-3 sm:px-6">
-      <PageHeader eyebrow="Légal" title="Politique de confidentialité" sub="Dernière mise à jour : juillet 2026." />
+      <PageHeader
+        eyebrow="Légal"
+        title="Politique de confidentialité"
+        sub="Dernière mise à jour : juillet 2026."
+      />
       <section className="mx-auto mt-12 grid max-w-3xl gap-3">
         {sections.map((s, i) => (
           <Reveal key={s.title} delay={i * 50}>

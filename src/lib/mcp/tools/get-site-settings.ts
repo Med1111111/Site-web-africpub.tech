@@ -14,7 +14,9 @@ export default defineTool({
     }
     const { data, error } = await supabaseForUser(ctx)
       .from("site_settings")
-      .select("id, site_title, site_description, hero_badge, cta_title, cta_sub, cta_label, whatsapp_number, stats, updated_at")
+      .select(
+        "id, site_title, site_description, hero_badge, cta_title, cta_sub, cta_label, whatsapp_number, stats, updated_at",
+      )
       .eq("singleton", true)
       .maybeSingle();
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };

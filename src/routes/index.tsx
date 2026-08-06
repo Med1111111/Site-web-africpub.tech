@@ -4,15 +4,15 @@ import { Facebook, Instagram, MapPin, MessageCircle, Youtube } from "lucide-reac
 
 import { Reveal } from "@/components/Reveal";
 import { ProcessSteps } from "@/components/ProcessSteps";
+import { CountUp } from "@/components/CountUp";
 import { useApp } from "@/lib/app-context";
+import { useMagnetic } from "@/hooks/use-magnetic";
 import { getPublicSiteSettings } from "@/lib/content.functions";
 import { clients, projects, services } from "@/lib/site-data";
 import { ResponsiveImage } from "@/components/ResponsiveImage";
 
-
 import standCutout from "@/assets/stand-cutout.png.asset.json";
 import enseigne3d from "@/assets/enseigne-3d.png.asset.json";
-
 
 const siteSettingsQuery = {
   queryKey: ["site-settings"] as const,
@@ -30,54 +30,55 @@ export const Route = createFileRoute("/")({
         content:
           "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format, habillage de véhicules et branding partout en Algérie.",
       },
-      { property: "og:title", content: "Afric Pub — Enseignes lumineuses & signalétique en Algérie" },
+      {
+        property: "og:title",
+        content: "Afric Pub — Enseignes lumineuses & signalétique en Algérie",
+      },
       {
         property: "og:description",
-        content: "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format, habillage de véhicules et branding partout en Algérie.",
+        content:
+          "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format, habillage de véhicules et branding partout en Algérie.",
       },
-      { property: "og:url", content: "https://premium-afric-vision.lovable.app/" },
+      { property: "og:url", content: "https://africpub.tech/" },
     ],
-    links: [
-      { rel: "canonical", href: "https://premium-afric-vision.lovable.app/" },
-    ],
+    links: [{ rel: "canonical", href: "https://africpub.tech/" }],
     scripts: [
       {
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebPage",
-          "@id": "https://premium-afric-vision.lovable.app/#webpage",
-          url: "https://premium-afric-vision.lovable.app/",
+          "@id": "https://africpub.tech/#webpage",
+          url: "https://africpub.tech/",
           name: "Afric Pub — Enseignes lumineuses & signalétique en Algérie",
           description:
             "Agence de communication globale : enseignes lumineuses, signalétique, impression grand format, habillage de véhicules et branding partout en Algérie.",
           inLanguage: "fr",
-          isPartOf: { "@id": "https://premium-afric-vision.lovable.app/#website" },
-          about: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
-          publisher: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
+          isPartOf: { "@id": "https://africpub.tech/#website" },
+          about: { "@id": "https://africpub.tech/#organization" },
+          publisher: { "@id": "https://africpub.tech/#organization" },
         }),
       },
     ],
   }),
-
 });
-
-
 
 const socials = [
   { label: "Facebook", href: "https://web.facebook.com/AFRICPUB", icon: Facebook },
   { label: "Instagram", href: "https://www.instagram.com/afric_pub/", icon: Instagram },
-  { label: "YouTube", href: "https://www.youtube.com/channel/UCCyWZb1m1H8CQJhh7FgmHlw", icon: Youtube },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/channel/UCCyWZb1m1H8CQJhh7FgmHlw",
+    icon: Youtube,
+  },
 ];
-
 
 function Home() {
   const { t } = useApp();
   // Données issues du loader : identiques au SSR, donc pas de décalage d'hydratation.
   const settings = Route.useLoaderData();
-
-
-
+  const ctaRef = useMagnetic<HTMLAnchorElement>();
+  const finalCtaRef = useMagnetic<HTMLAnchorElement>();
 
   return (
     <div className="px-3 sm:px-6">
@@ -93,9 +94,12 @@ function Home() {
             <br />
             {t("hero.title3")}
           </h1>
-          <p className="mt-6 max-w-xl text-base text-muted-foreground sm:text-lg">{t("hero.sub")}</p>
+          <p className="mt-6 max-w-xl text-base text-muted-foreground sm:text-lg">
+            {t("hero.sub")}
+          </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
+              ref={ctaRef}
               to="/contact"
               className="rounded-full bg-brand px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-glow)] transition-transform hover:scale-[1.04]"
             >
@@ -137,7 +141,6 @@ function Home() {
               </li>
             ))}
           </ul>
-
         </Reveal>
 
         <Reveal delay={120}>
@@ -155,7 +158,10 @@ function Home() {
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-x-4 bottom-2 -z-10 h-16 rounded-[100%] opacity-70 blur-2xl"
-              style={{ background: "radial-gradient(ellipse at center, rgba(255,120,50,0.55), transparent 70%)" }}
+              style={{
+                background:
+                  "radial-gradient(ellipse at center, rgba(255,120,50,0.55), transparent 70%)",
+              }}
             />
             <img
               src={standCutout.url}
@@ -191,7 +197,9 @@ function Home() {
                 { value: "1 200+", label: "Projets livrés" },
               ].map((s) => (
                 <li key={s.label} className="rounded-2xl glass-soft p-4 text-center">
-                  <p className="text-2xl font-extrabold text-gradient sm:text-3xl">{s.value}</p>
+                  <p className="text-2xl font-extrabold text-gradient sm:text-3xl">
+                    <CountUp value={s.value} />
+                  </p>
                   <p className="mt-1 text-xs text-muted-foreground">{s.label}</p>
                 </li>
               ))}
@@ -232,7 +240,6 @@ function Home() {
           <ProcessSteps />
         </div>
       </section>
-
 
       {/* ---------- SERVICES ---------- */}
       <section aria-labelledby="services-title" className="mx-auto mt-28 max-w-7xl">
@@ -298,26 +305,33 @@ function Home() {
           ))}
         </ul>
 
-
         <Reveal>
           <div className="mt-8">
-            <Link to="/portfolio" className="inline-flex rounded-full glass px-6 py-3 text-sm font-semibold">
+            <Link
+              to="/portfolio"
+              className="inline-flex rounded-full glass px-6 py-3 text-sm font-semibold"
+            >
               Voir tout le portfolio
             </Link>
           </div>
         </Reveal>
       </section>
 
-
       {/* ---------- CLIENTS ---------- */}
       <section aria-labelledby="clients-title" className="mx-auto mt-28 max-w-7xl">
         <Reveal>
-          <h2 id="clients-title" className="text-center text-sm uppercase tracking-[0.3em] text-muted-foreground">
+          <h2
+            id="clients-title"
+            className="text-center text-sm uppercase tracking-[0.3em] text-muted-foreground"
+          >
             {t("section.clients")}
           </h2>
           <ul className="mt-8 flex flex-wrap items-center justify-center gap-3">
             {clients.map((c) => (
-              <li key={c} className="rounded-full glass-soft px-6 py-3 text-sm text-muted-foreground">
+              <li
+                key={c}
+                className="rounded-full glass-soft px-6 py-3 text-sm text-muted-foreground"
+              >
                 {c}
               </li>
             ))}
@@ -325,16 +339,18 @@ function Home() {
         </Reveal>
       </section>
 
-
-
-
       {/* ---------- CTA ---------- */}
       <section className="mx-auto mt-28 max-w-7xl">
         <Reveal>
           <div className="relative overflow-hidden rounded-3xl glass glow p-10 text-center sm:p-16">
-            <h2 className="text-3xl font-bold sm:text-5xl">{settings?.cta_title || t("cta.title")}</h2>
-            <p className="mx-auto mt-4 max-w-xl text-muted-foreground">{settings?.cta_sub || t("cta.sub")}</p>
+            <h2 className="text-3xl font-bold sm:text-5xl">
+              {settings?.cta_title || t("cta.title")}
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
+              {settings?.cta_sub || t("cta.sub")}
+            </p>
             <Link
+              ref={finalCtaRef}
               to="/contact"
               className="mt-8 inline-flex rounded-full bg-brand px-8 py-4 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.04]"
             >

@@ -11,7 +11,8 @@ export function leadsPublicClient() {
     global: {
       fetch: (input, init) => {
         const h = new Headers(init?.headers);
-        if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) h.delete("Authorization");
+        if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`)
+          h.delete("Authorization");
         h.set("apikey", key);
         return fetch(input, { ...init, headers: h });
       },
@@ -93,7 +94,8 @@ export function looksLikeSpam(input: {
   // User-agent absent ou signature d'outil automatisé.
   const ua = userAgent.toLowerCase();
   if (!ua) return true;
-  if (/(curl|wget|python-requests|httpclient|scrapy|headlesschrome|bot\b|spider)/.test(ua)) return true;
+  if (/(curl|wget|python-requests|httpclient|scrapy|headlesschrome|bot\b|spider)/.test(ua))
+    return true;
 
   // Trop de liens dans le message.
   const links = message.match(/https?:\/\/|www\.|\[url/gi) ?? [];
@@ -115,7 +117,8 @@ export function looksLikeSpam(input: {
   if (/(.)\1{14,}/.test(message)) return true;
 
   // Adresses jetables les plus courantes.
-  if (/@(mailinator|yopmail|guerrillamail|10minutemail|tempmail|trashmail)\./i.test(email)) return true;
+  if (/@(mailinator|yopmail|guerrillamail|10minutemail|tempmail|trashmail)\./i.test(email))
+    return true;
 
   return false;
 }

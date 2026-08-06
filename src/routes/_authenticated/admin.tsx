@@ -25,7 +25,11 @@ export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
     meta: [
       { title: "Administration — Afric Pub" },
-      { name: "description", content: "Tableau de bord d'administration : gestion du portfolio et des témoignages Afric Pub." },
+      {
+        name: "description",
+        content:
+          "Tableau de bord d'administration : gestion du portfolio et des témoignages Afric Pub.",
+      },
       { property: "og:title", content: "Administration — Afric Pub" },
       { property: "og:description", content: "Gestion du contenu du site Afric Pub." },
       { name: "robots", content: "noindex" },
@@ -33,8 +37,10 @@ export const Route = createFileRoute("/_authenticated/admin")({
   }),
 });
 
-const field = "min-h-11 w-full rounded-2xl glass-soft px-4 text-sm outline-none focus:ring-2 focus:ring-brand/60";
-const btn = "min-h-11 rounded-full bg-brand px-5 text-sm font-semibold text-primary-foreground disabled:opacity-60";
+const field =
+  "min-h-11 w-full rounded-2xl glass-soft px-4 text-sm outline-none focus:ring-2 focus:ring-brand/60";
+const btn =
+  "min-h-11 rounded-full bg-brand px-5 text-sm font-semibold text-primary-foreground disabled:opacity-60";
 const btnGhost = "min-h-11 rounded-full glass-soft px-4 text-sm font-medium";
 
 type PortfolioDraft = Omit<PortfolioItem, "created_at" | "updated_at" | "id"> & { id?: string };
@@ -72,7 +78,6 @@ function AdminPage() {
   });
   const newLeads = (leads.data ?? []).filter((m) => m.status === "nouveau").length;
 
-
   async function signOut() {
     await qc.cancelQueries();
     qc.clear();
@@ -87,7 +92,11 @@ function AdminPage() {
   if (!status.data?.isAdmin) {
     return (
       <div className="px-3 sm:px-6">
-        <PageHeader eyebrow="Accès restreint" title="Compte non administrateur" sub="Votre compte n'a pas encore le rôle administrateur." />
+        <PageHeader
+          eyebrow="Accès restreint"
+          title="Compte non administrateur"
+          sub="Votre compte n'a pas encore le rôle administrateur."
+        />
         <div className="mx-auto mt-10 max-w-md rounded-3xl glass p-8 text-center">
           <p className="text-sm text-muted-foreground">
             Identifiant du compte : <span className="font-mono text-xs">{status.data?.userId}</span>
@@ -102,7 +111,11 @@ function AdminPage() {
 
   return (
     <div className="px-3 sm:px-6">
-      <PageHeader eyebrow="Administration" title="Tableau de bord" sub="Suivez les demandes de devis et gérez le contenu du site." />
+      <PageHeader
+        eyebrow="Administration"
+        title="Tableau de bord"
+        sub="Suivez les demandes de devis et gérez le contenu du site."
+      />
 
       <div className="mx-auto mt-10 flex max-w-5xl flex-wrap items-center justify-between gap-3">
         <div role="tablist" aria-label="Sections" className="flex gap-2">
@@ -113,14 +126,18 @@ function AdminPage() {
               aria-selected={tab === k}
               onClick={() => setTab(k)}
               className={`min-h-11 rounded-full px-5 text-sm transition-colors ${
-                tab === k ? "bg-brand text-primary-foreground" : "glass-soft text-muted-foreground hover:text-foreground"
+                tab === k
+                  ? "bg-brand text-primary-foreground"
+                  : "glass-soft text-muted-foreground hover:text-foreground"
               }`}
             >
               {k === "leads" ? (
                 <>
                   Demandes
                   {newLeads > 0 && (
-                    <span className="ml-2 rounded-full bg-primary-foreground/20 px-2 py-0.5 text-xs">{newLeads}</span>
+                    <span className="ml-2 rounded-full bg-primary-foreground/20 px-2 py-0.5 text-xs">
+                      {newLeads}
+                    </span>
                   )}
                 </>
               ) : k === "portfolio" ? (
@@ -149,7 +166,6 @@ function AdminPage() {
           <SettingsManager />
         )}
       </div>
-
     </div>
   );
 }
@@ -189,11 +205,35 @@ function PortfolioManager() {
         }}
         className="h-fit space-y-3 rounded-3xl glass p-6"
       >
-        <h2 className="text-lg font-semibold">{draft.id ? "Modifier la réalisation" : "Nouvelle réalisation"}</h2>
-        <input className={field} placeholder="Titre" required value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} />
-        <input className={field} placeholder="Catégorie" required value={draft.category} onChange={(e) => setDraft({ ...draft, category: e.target.value })} />
-        <input className={field} placeholder="Ville" value={draft.city} onChange={(e) => setDraft({ ...draft, city: e.target.value })} />
-        <input className={field} placeholder="URL de l'image" value={draft.image_url} onChange={(e) => setDraft({ ...draft, image_url: e.target.value })} />
+        <h2 className="text-lg font-semibold">
+          {draft.id ? "Modifier la réalisation" : "Nouvelle réalisation"}
+        </h2>
+        <input
+          className={field}
+          placeholder="Titre"
+          required
+          value={draft.title}
+          onChange={(e) => setDraft({ ...draft, title: e.target.value })}
+        />
+        <input
+          className={field}
+          placeholder="Catégorie"
+          required
+          value={draft.category}
+          onChange={(e) => setDraft({ ...draft, category: e.target.value })}
+        />
+        <input
+          className={field}
+          placeholder="Ville"
+          value={draft.city}
+          onChange={(e) => setDraft({ ...draft, city: e.target.value })}
+        />
+        <input
+          className={field}
+          placeholder="URL de l'image"
+          value={draft.image_url}
+          onChange={(e) => setDraft({ ...draft, image_url: e.target.value })}
+        />
         <textarea
           className="w-full rounded-2xl glass-soft p-4 text-sm outline-none focus:ring-2 focus:ring-brand/60"
           rows={3}
@@ -211,7 +251,11 @@ function PortfolioManager() {
             aria-label="Ordre d'affichage"
           />
           <label className="flex items-center gap-2 text-sm text-muted-foreground">
-            <input type="checkbox" checked={draft.published} onChange={(e) => setDraft({ ...draft, published: e.target.checked })} />
+            <input
+              type="checkbox"
+              checked={draft.published}
+              onChange={(e) => setDraft({ ...draft, published: e.target.checked })}
+            />
             Publié
           </label>
         </div>
@@ -229,11 +273,15 @@ function PortfolioManager() {
 
       <ul className="space-y-3">
         {list.data?.map((p) => (
-          <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 rounded-3xl glass p-5">
+          <li
+            key={p.id}
+            className="flex flex-wrap items-center justify-between gap-3 rounded-3xl glass p-5"
+          >
             <div>
               <p className="text-sm font-medium">{p.title}</p>
               <p className="text-xs text-muted-foreground">
-                {p.category} · {p.city || "—"} · #{p.sort_order} · {p.published ? "publié" : "brouillon"}
+                {p.category} · {p.city || "—"} · #{p.sort_order} ·{" "}
+                {p.published ? "publié" : "brouillon"}
               </p>
             </div>
             <div className="flex gap-2">
@@ -246,7 +294,11 @@ function PortfolioManager() {
             </div>
           </li>
         ))}
-        {list.data?.length === 0 && <li className="rounded-3xl glass p-6 text-sm text-muted-foreground">Aucune réalisation.</li>}
+        {list.data?.length === 0 && (
+          <li className="rounded-3xl glass p-6 text-sm text-muted-foreground">
+            Aucune réalisation.
+          </li>
+        )}
       </ul>
     </div>
   );
@@ -287,7 +339,9 @@ function TestimonialManager() {
         }}
         className="h-fit space-y-3 rounded-3xl glass p-6"
       >
-        <h2 className="text-lg font-semibold">{draft.id ? "Modifier le témoignage" : "Nouveau témoignage"}</h2>
+        <h2 className="text-lg font-semibold">
+          {draft.id ? "Modifier le témoignage" : "Nouveau témoignage"}
+        </h2>
         <textarea
           className="w-full rounded-2xl glass-soft p-4 text-sm outline-none focus:ring-2 focus:ring-brand/60"
           rows={4}
@@ -296,8 +350,19 @@ function TestimonialManager() {
           value={draft.quote}
           onChange={(e) => setDraft({ ...draft, quote: e.target.value })}
         />
-        <input className={field} placeholder="Nom" required value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} />
-        <input className={field} placeholder="Fonction" value={draft.role} onChange={(e) => setDraft({ ...draft, role: e.target.value })} />
+        <input
+          className={field}
+          placeholder="Nom"
+          required
+          value={draft.name}
+          onChange={(e) => setDraft({ ...draft, name: e.target.value })}
+        />
+        <input
+          className={field}
+          placeholder="Fonction"
+          value={draft.role}
+          onChange={(e) => setDraft({ ...draft, role: e.target.value })}
+        />
         <div className="flex items-center gap-3">
           <input
             type="number"
@@ -317,7 +382,11 @@ function TestimonialManager() {
             aria-label="Ordre d'affichage"
           />
           <label className="flex items-center gap-2 text-sm text-muted-foreground">
-            <input type="checkbox" checked={draft.published} onChange={(e) => setDraft({ ...draft, published: e.target.checked })} />
+            <input
+              type="checkbox"
+              checked={draft.published}
+              onChange={(e) => setDraft({ ...draft, published: e.target.checked })}
+            />
             Publié
           </label>
         </div>
@@ -335,11 +404,15 @@ function TestimonialManager() {
 
       <ul className="space-y-3">
         {list.data?.map((tm) => (
-          <li key={tm.id} className="flex flex-wrap items-center justify-between gap-3 rounded-3xl glass p-5">
+          <li
+            key={tm.id}
+            className="flex flex-wrap items-center justify-between gap-3 rounded-3xl glass p-5"
+          >
             <div className="max-w-md">
               <p className="text-sm">“{tm.quote}”</p>
               <p className="mt-1 text-xs text-muted-foreground">
-                {tm.name} · {tm.role || "—"} · {tm.rating}/5 · {tm.published ? "publié" : "brouillon"}
+                {tm.name} · {tm.role || "—"} · {tm.rating}/5 ·{" "}
+                {tm.published ? "publié" : "brouillon"}
               </p>
             </div>
             <div className="flex gap-2">
@@ -352,7 +425,9 @@ function TestimonialManager() {
             </div>
           </li>
         ))}
-        {list.data?.length === 0 && <li className="rounded-3xl glass p-6 text-sm text-muted-foreground">Aucun témoignage.</li>}
+        {list.data?.length === 0 && (
+          <li className="rounded-3xl glass p-6 text-sm text-muted-foreground">Aucun témoignage.</li>
+        )}
       </ul>
     </div>
   );
@@ -362,7 +437,10 @@ type StatRow = { value: string; label: string };
 
 function SettingsManager() {
   const qc = useQueryClient();
-  const settings = useQuery({ queryKey: ["site-settings"], queryFn: () => getPublicSiteSettings() });
+  const settings = useQuery({
+    queryKey: ["site-settings"],
+    queryFn: () => getPublicSiteSettings(),
+  });
   const [draft, setDraft] = useState<null | {
     id: string;
     site_title: string;
@@ -387,7 +465,9 @@ function SettingsManager() {
           cta_sub: settings.data.cta_sub,
           cta_label: settings.data.cta_label,
           whatsapp_number: settings.data.whatsapp_number,
-          stats: (Array.isArray(settings.data.stats) ? settings.data.stats : []) as unknown as StatRow[],
+          stats: (Array.isArray(settings.data.stats)
+            ? settings.data.stats
+            : []) as unknown as StatRow[],
         }
       : null);
 
@@ -418,7 +498,11 @@ function SettingsManager() {
 
       <label className="block text-sm text-muted-foreground">
         Titre du site
-        <input className={`${field} mt-1`} value={current.site_title} onChange={(e) => set({ site_title: e.target.value })} />
+        <input
+          className={`${field} mt-1`}
+          value={current.site_title}
+          onChange={(e) => set({ site_title: e.target.value })}
+        />
       </label>
 
       <label className="block text-sm text-muted-foreground">
@@ -433,23 +517,39 @@ function SettingsManager() {
 
       <label className="block text-sm text-muted-foreground">
         Badge d'accroche (hero)
-        <input className={`${field} mt-1`} value={current.hero_badge} onChange={(e) => set({ hero_badge: e.target.value })} />
+        <input
+          className={`${field} mt-1`}
+          value={current.hero_badge}
+          onChange={(e) => set({ hero_badge: e.target.value })}
+        />
       </label>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block text-sm text-muted-foreground">
           Titre CTA
-          <input className={`${field} mt-1`} value={current.cta_title} onChange={(e) => set({ cta_title: e.target.value })} />
+          <input
+            className={`${field} mt-1`}
+            value={current.cta_title}
+            onChange={(e) => set({ cta_title: e.target.value })}
+          />
         </label>
         <label className="block text-sm text-muted-foreground">
           Libellé du bouton CTA
-          <input className={`${field} mt-1`} value={current.cta_label} onChange={(e) => set({ cta_label: e.target.value })} />
+          <input
+            className={`${field} mt-1`}
+            value={current.cta_label}
+            onChange={(e) => set({ cta_label: e.target.value })}
+          />
         </label>
       </div>
 
       <label className="block text-sm text-muted-foreground">
         Sous-titre CTA
-        <input className={`${field} mt-1`} value={current.cta_sub} onChange={(e) => set({ cta_sub: e.target.value })} />
+        <input
+          className={`${field} mt-1`}
+          value={current.cta_sub}
+          onChange={(e) => set({ cta_sub: e.target.value })}
+        />
       </label>
 
       <label className="block text-sm text-muted-foreground">
@@ -471,7 +571,9 @@ function SettingsManager() {
                 value={s.value}
                 aria-label={`Valeur ${i + 1}`}
                 onChange={(e) => {
-                  const stats = current.stats.map((x, j) => (j === i ? { ...x, value: e.target.value } : x));
+                  const stats = current.stats.map((x, j) =>
+                    j === i ? { ...x, value: e.target.value } : x,
+                  );
                   set({ stats });
                 }}
               />
@@ -480,7 +582,9 @@ function SettingsManager() {
                 value={s.label}
                 aria-label={`Libellé ${i + 1}`}
                 onChange={(e) => {
-                  const stats = current.stats.map((x, j) => (j === i ? { ...x, label: e.target.value } : x));
+                  const stats = current.stats.map((x, j) =>
+                    j === i ? { ...x, label: e.target.value } : x,
+                  );
                   set({ stats });
                 }}
               />

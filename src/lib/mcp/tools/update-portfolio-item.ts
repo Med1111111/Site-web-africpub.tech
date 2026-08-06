@@ -20,7 +20,12 @@ export default defineTool({
     sort_order: z.number().int().optional(),
     published: z.boolean().optional().describe("Publier ou dépublier la réalisation."),
   },
-  annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: false },
+  annotations: {
+    readOnlyHint: false,
+    destructiveHint: true,
+    idempotentHint: true,
+    openWorldHint: false,
+  },
   handler: async ({ id, ...fields }, ctx) => {
     if (!ctx.isAuthenticated()) {
       return { content: [{ type: "text", text: "Non authentifié." }], isError: true };
@@ -29,7 +34,10 @@ export default defineTool({
       Object.entries(fields).filter(([, v]) => v !== undefined),
     ) as PortfolioUpdate;
     if (!id || Object.keys(patch).length === 0) {
-      return { content: [{ type: "text", text: "Fournir un id et au moins un champ à modifier." }], isError: true };
+      return {
+        content: [{ type: "text", text: "Fournir un id et au moins un champ à modifier." }],
+        isError: true,
+      };
     }
     const { data, error } = await supabaseForUser(ctx)
       .from("portfolio_items")
@@ -39,8 +47,14 @@ export default defineTool({
       .maybeSingle();
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
     if (!data) {
-      return { content: [{ type: "text", text: "Réalisation introuvable ou accès refusé." }], isError: true };
+      return {
+        content: [{ type: "text", text: "Réalisation introuvable ou accès refusé." }],
+        isError: true,
+      };
     }
-    return { content: [{ type: "text", text: JSON.stringify(data) }], structuredContent: { item: data } };
+    return {
+      content: [{ type: "text", text: JSON.stringify(data) }],
+      structuredContent: { item: data },
+    };
   },
 });

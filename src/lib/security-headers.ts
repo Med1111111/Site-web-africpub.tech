@@ -38,7 +38,9 @@ export const CSP_DIRECTIVES: Record<string, string[]> = {
 
 export function contentSecurityPolicy(): string {
   return Object.entries(CSP_DIRECTIVES)
-    .map(([directive, sources]) => (sources.length ? `${directive} ${sources.join(" ")}` : directive))
+    .map(([directive, sources]) =>
+      sources.length ? `${directive} ${sources.join(" ")}` : directive,
+    )
     .join("; ");
 }
 

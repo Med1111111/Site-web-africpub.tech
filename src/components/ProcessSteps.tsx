@@ -28,10 +28,17 @@ export function ProcessSteps({ label = "Les étapes de notre processus" }: { lab
                   className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand text-primary-foreground shadow-[0_0_30px_-6px_var(--color-primary)]"
                 >
                   <span className="absolute inset-0 rounded-full bg-brand blur-lg opacity-60" />
-                  <Icon className="relative h-6 w-6" strokeWidth={2} aria-hidden="true" focusable="false" />
+                  <Icon
+                    className="relative h-6 w-6"
+                    strokeWidth={2}
+                    aria-hidden="true"
+                    focusable="false"
+                  />
                 </span>
                 <span className="text-sm font-semibold text-primary">
-                  <span className="sr-only">Étape {i + 1} sur {process.length} : </span>
+                  <span className="sr-only">
+                    Étape {i + 1} sur {process.length} :{" "}
+                  </span>
                   <span aria-hidden="true">{p.step}</span>
                 </span>
               </div>
@@ -43,7 +50,6 @@ export function ProcessSteps({ label = "Les étapes de notre processus" }: { lab
       })}
     </ol>
   );
-
 }
 
 export default ProcessSteps;

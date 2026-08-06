@@ -13,13 +13,17 @@ function safeNext(value: unknown): string | null {
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
   validateSearch: (s: Record<string, unknown>): { next?: string } => {
-    const next = safeNext(s['next']);
+    const next = safeNext(s["next"]);
     return next ? { next } : {};
   },
   head: () => ({
     meta: [
       { title: "Connexion — Espace admin Afric Pub" },
-      { name: "description", content: "Connectez-vous à l'espace d'administration Afric Pub pour gérer le portfolio et les témoignages." },
+      {
+        name: "description",
+        content:
+          "Connectez-vous à l'espace d'administration Afric Pub pour gérer le portfolio et les témoignages.",
+      },
       { property: "og:title", content: "Connexion — Espace admin Afric Pub" },
       { property: "og:description", content: "Accès réservé à l'équipe Afric Pub." },
       { name: "robots", content: "noindex" },
@@ -41,7 +45,7 @@ function AuthPage() {
       if (next) window.location.replace(next);
       else navigate({ to: "/admin", replace: true });
     });
-  }, [navigate]);
+  }, [navigate, next]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -89,7 +93,11 @@ function AuthPage() {
 
   return (
     <div className="px-3 sm:px-6">
-      <PageHeader eyebrow="Espace réservé" title="Connexion admin" sub="Gérez le portfolio et les témoignages du site." />
+      <PageHeader
+        eyebrow="Espace réservé"
+        title="Connexion admin"
+        sub="Gérez le portfolio et les témoignages du site."
+      />
 
       <section className="mx-auto mt-12 max-w-md rounded-3xl glass p-8">
         <form onSubmit={onSubmit} className="space-y-4">
@@ -130,10 +138,14 @@ function AuthPage() {
         </form>
 
         <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="h-px flex-1 bg-white/10" /> ou <span className="h-px flex-1 bg-white/10" />
+          <span className="h-px flex-1 bg-white/10" /> ou{" "}
+          <span className="h-px flex-1 bg-white/10" />
         </div>
 
-        <button onClick={onGoogle} className="min-h-11 w-full rounded-full glass-soft px-5 text-sm font-medium">
+        <button
+          onClick={onGoogle}
+          className="min-h-11 w-full rounded-full glass-soft px-5 text-sm font-medium"
+        >
           Continuer avec Google
         </button>
 

@@ -20,7 +20,10 @@ export default defineTool({
       return { content: [{ type: "text", text: "Non authentifié." }], isError: true };
     }
     if (!input.quote || !input.name) {
-      return { content: [{ type: "text", text: "La citation et le nom sont obligatoires." }], isError: true };
+      return {
+        content: [{ type: "text", text: "La citation et le nom sont obligatoires." }],
+        isError: true,
+      };
     }
     const rating = Math.min(Math.max(input.rating ?? 5, 1), 5);
     const { data, error } = await supabaseForUser(ctx)
@@ -36,6 +39,9 @@ export default defineTool({
       .select()
       .single();
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
-    return { content: [{ type: "text", text: JSON.stringify(data) }], structuredContent: { item: data } };
+    return {
+      content: [{ type: "text", text: JSON.stringify(data) }],
+      structuredContent: { item: data },
+    };
   },
 });

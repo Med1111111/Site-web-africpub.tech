@@ -41,7 +41,13 @@ export default function Navbar() {
           }`}
         >
           <Link to="/" className="flex min-w-0 items-center gap-3" aria-label="Afric Pub — accueil">
-            <img src={logo.url} alt="Afric Pub" className="h-9 w-auto shrink-0" width={120} height={36} />
+            <img
+              src={logo.url}
+              alt="Afric Pub"
+              className="h-9 w-auto shrink-0"
+              width={120}
+              height={36}
+            />
           </Link>
 
           <ul className="hidden items-center justify-center gap-1 lg:flex">
@@ -65,7 +71,9 @@ export default function Navbar() {
                   onClick={() => setLang(l)}
                   aria-pressed={lang === l}
                   className={`rounded-full px-2.5 py-1 text-xs uppercase transition-colors ${
-                    lang === l ? "bg-brand text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                    lang === l
+                      ? "bg-brand text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   {l}
@@ -116,7 +124,9 @@ export default function Navbar() {
                   key={l}
                   onClick={() => setLang(l)}
                   className={`rounded-full px-3 py-2 text-xs uppercase ${
-                    lang === l ? "bg-brand text-primary-foreground" : "glass-soft text-muted-foreground"
+                    lang === l
+                      ? "bg-brand text-primary-foreground"
+                      : "glass-soft text-muted-foreground"
                   }`}
                 >
                   {l}

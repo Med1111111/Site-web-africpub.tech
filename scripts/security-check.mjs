@@ -11,7 +11,7 @@
  *
  * Usage :
  *   node scripts/security-check.mjs
- *   node scripts/security-check.mjs --url https://premium-afric-vision.lovable.app
+ *   node scripts/security-check.mjs --url https://africpub.tech
  *   node scripts/security-check.mjs --url http://localhost:8080 --allow-insecure
  */
 
@@ -61,7 +61,10 @@ async function auditCspPolicy() {
   }
 
   const directives = {};
-  const block = source.slice(source.indexOf("CSP_DIRECTIVES"), source.indexOf("export function contentSecurityPolicy"));
+  const block = source.slice(
+    source.indexOf("CSP_DIRECTIVES"),
+    source.indexOf("export function contentSecurityPolicy"),
+  );
   for (const match of block.matchAll(/"([a-z-]+)":\s*\[([^\]]*)\]/g)) {
     directives[match[1]] = [...match[2].matchAll(/"([^"]+)"/g)].map((m) => m[1]);
   }
@@ -78,7 +81,10 @@ async function auditCspPolicy() {
   }
   for (const directive of NO_WILDCARD) {
     if (directives[directive]?.some((s) => s === "*" || s === "https:" || s === "data:")) {
-      fail("csp", `${directive} contient une source trop large (${directives[directive].join(" ")}).`);
+      fail(
+        "csp",
+        `${directive} contient une source trop large (${directives[directive].join(" ")}).`,
+      );
     }
   }
   if (directives["frame-ancestors"]?.includes("'self'") === false) {
@@ -142,8 +148,14 @@ async function auditPublicRoutes() {
     if (/supabaseAdmin/.test(src) && !hasCheck) {
       fail("endpoints", `${rel} utilise le client privilégié sans vérifier l'appelant.`);
     }
-    if (/from\s+["']@\/integrations\/supabase\/client\.server["']/.test(src) && !/await import\(/.test(src)) {
-      fail("endpoints", `${rel} importe le client serveur au niveau du module (risque de fuite côté client).`);
+    if (
+      /from\s+["']@\/integrations\/supabase\/client\.server["']/.test(src) &&
+      !/await import\(/.test(src)
+    ) {
+      fail(
+        "endpoints",
+        `${rel} importe le client serveur au niveau du module (risque de fuite côté client).`,
+      );
     }
     if (!results.some((r) => r.level === "fail" && r.message.startsWith(rel))) {
       pass("endpoints", `${rel} : contrôle d'appelant présent.`);
@@ -151,7 +163,9 @@ async function auditPublicRoutes() {
   }
 
   // Les autres routes /api/* ne doivent pas se retrouver sous /public par erreur.
-  const apiFiles = (await walk(path.join(ROOT, "src/routes/api"))).filter((f) => /\.(ts|tsx)$/.test(f));
+  const apiFiles = (await walk(path.join(ROOT, "src/routes/api"))).filter((f) =>
+    /\.(ts|tsx)$/.test(f),
+  );
   pass("endpoints", `${apiFiles.length} route(s) API analysée(s).`);
 }
 
@@ -168,7 +182,10 @@ const FORBIDDEN_IN_CLIENT = [
 
 async function auditClientSecrets() {
   const files = (await walk(path.join(ROOT, "src"))).filter(
-    (f) => /\.(ts|tsx)$/.test(f) && !/\.server\.(ts|tsx)$/.test(f) && !f.includes("integrations/supabase/client.server"),
+    (f) =>
+      /\.(ts|tsx)$/.test(f) &&
+      !/\.server\.(ts|tsx)$/.test(f) &&
+      !f.includes("integrations/supabase/client.server"),
   );
 
   let leaks = 0;
@@ -199,7 +216,8 @@ const EXPECTED_HEADERS = {
   "content-security-policy": (v) =>
     REQUIRED_DIRECTIVES.every((d) => v.includes(d)) || "directives CSP incomplètes",
   "x-content-type-options": (v) => v.toLowerCase() === "nosniff" || "doit valoir nosniff",
-  "referrer-policy": (v) => /strict-origin|no-referrer/.test(v) || "politique de référent trop permissive",
+  "referrer-policy": (v) =>
+    /strict-origin|no-referrer/.test(v) || "politique de référent trop permissive",
   "permissions-policy": () => true,
   "strict-transport-security": (v) => /max-age=\d{7,}/.test(v) || "max-age trop court (< 4 mois)",
 };
@@ -240,7 +258,11 @@ async function auditLiveHeaders(origin) {
   // Les endpoints publics ne doivent pas accepter d'écriture non signée.
   const probe = new URL("/api/public/", origin);
   try {
-    const res = await fetch(probe, { method: "POST", body: "{}", headers: { "content-type": "application/json" } });
+    const res = await fetch(probe, {
+      method: "POST",
+      body: "{}",
+      headers: { "content-type": "application/json" },
+    });
     if (res.status >= 200 && res.status < 300) {
       fail("endpoints", `${probe} accepte un POST non authentifié (HTTP ${res.status}).`);
     } else {
