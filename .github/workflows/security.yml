@@ -37,7 +37,9 @@ jobs:
 
       - name: Audit du site déployé (en-têtes HTTP réels)
         env:
-          TARGET_URL: ${{ github.event.inputs.target_url || vars.SECURITY_TARGET_URL || 'https://africpub.tech' }}
+          # Reste sur le site actuellement en ligne tant que vars.SECURITY_TARGET_URL
+          # n'a pas été basculé sur https://africpub.tech (après déploiement VPS + DNS).
+          TARGET_URL: ${{ github.event.inputs.target_url || vars.SECURITY_TARGET_URL || 'https://premium-afric-vision.lovable.app' }}
         run: bun run security:check -- --url "$TARGET_URL"
 
       - name: Audit des dépendances
