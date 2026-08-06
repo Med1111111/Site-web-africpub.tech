@@ -21,7 +21,8 @@ const siteSettingsQuery = {
 
 export const Route = createFileRoute("/")({
   component: Home,
-  loader: ({ context }) => context.queryClient.ensureQueryData(siteSettingsQuery),
+  // Une panne réseau passagère ne doit pas blanchir l'accueil : repli sur les textes par défaut.
+  loader: ({ context }) => context.queryClient.ensureQueryData(siteSettingsQuery).catch(() => null),
   head: () => ({
     meta: [
       { title: "Afric Pub — Enseignes lumineuses & signalétique en Algérie" },
