@@ -44,12 +44,12 @@ export default function Footer() {
           <div>
             <h2 className="text-sm font-semibold">Contact</h2>
             <ul className="mt-4 grid gap-2 text-sm text-muted-foreground">
-              <li>Alger, Algérie</li>
+              <li>Bouismail, Tipaza, Algérie</li>
               <li>
-                <a href="mailto:contact@africpub.dz" className="hover:text-foreground">contact@africpub.dz</a>
+                <a href="mailto:contact@africpub.tech" className="hover:text-foreground">contact@africpub.tech</a>
               </li>
               <li>
-                <a href="tel:+213540481810" className="hover:text-foreground">+213 540 48 18 10</a>
+                <a href="tel:+213540481810" className="hover:text-foreground">+213 540 48 18 10{"\n\n"}</a>
               </li>
             </ul>
             <Link
