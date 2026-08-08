@@ -72,14 +72,18 @@ export const Route = createFileRoute("/contact")({
 });
 
 // Validation stricte côté client (longueurs bornées, trim, anti-spam honeypot).
+// Note : les valeurs sont trimées manuellement avant parse (voir runSubmit) pour
+// rester compatible quel que soit le build de la librairie de validation chargé.
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const schema = z.object({
-  name: z.string().trim().min(2, "Nom trop court").max(100),
-  email: z.string().trim().email("Email invalide").max(255),
-  phone: z.string().trim().max(30).optional().or(z.literal("")),
-  service: z.string().trim().max(80),
-  message: z.string().trim().min(10, "Décrivez votre projet (10 caractères min.)").max(1500),
+  name: z.string().min(2, "Nom trop court").max(100),
+  email: z.string().max(255).regex(EMAIL_RE, "Email invalide"),
+  phone: z.string().max(30).optional().or(z.literal("")),
+  service: z.string().max(80),
+  message: z.string().min(10, "Décrivez votre projet (10 caractères min.)").max(1500),
   company: z.string().max(0), // honeypot : doit rester vide
 });
+
 
 function ContactPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
