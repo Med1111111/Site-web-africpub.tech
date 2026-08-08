@@ -50,8 +50,7 @@ export default function Footer() {
               </li>
               <li>
                 <a href="tel:+213540481810" className="hover:text-foreground">
-                  +213 540 48 18 10{"\n"}
-                  +213 559 11 98 88{"\n"}
+                  +213 540 48 18 10
                 </a>
               </li>
             </ul>
