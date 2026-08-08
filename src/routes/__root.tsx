@@ -127,7 +127,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             "https://wa.me/213540481810",
           ],
           address: { "@type": "PostalAddress", addressCountry: "DZ", addressLocality: "Alger" },
-          email: "contact@africpub.dz",
+          email: "contact@africpub.tech",
           telephone: "+213540481810",
 
           contactPoint: [
@@ -135,7 +135,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               "@type": "ContactPoint",
               contactType: "customer service",
               telephone: "+213540481810",
-              email: "contact@africpub.dz",
+              email: "contact@africpub.tech",
               areaServed: "DZ",
               availableLanguage: ["fr", "ar", "en"],
             },
@@ -182,7 +182,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           parentOrganization: { "@id": "https://premium-afric-vision.lovable.app/#organization" },
           isPartOf: { "@id": "https://premium-afric-vision.lovable.app/#website" },
           telephone: "+213540481810",
-          email: "contact@africpub.dz",
+          email: "contact@africpub.tech",
           priceRange: "$$",
           currenciesAccepted: "DZD",
           paymentAccepted: "Espèces, Virement bancaire, Chèque",

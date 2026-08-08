@@ -76,7 +76,7 @@ const sections = [
   },
   {
     title: "Vos droits",
-    body: "Vous disposez d'un droit d'accès, de rectification et de suppression. Écrivez à contact@africpub.dz pour l'exercer.",
+    body: "Vous disposez d'un droit d'accès, de rectification et de suppression. Écrivez à contact@africpub.tech pour l'exercer.",
   },
   {
     title: "Cookies",
