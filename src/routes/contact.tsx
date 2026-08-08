@@ -534,7 +534,7 @@ function ContactPage() {
                 </li>
                 <li className="flex items-start gap-3">
                   <Mail className="mt-0.5 size-4 shrink-0 text-brand" aria-hidden="true" />
-                  <a href="mailto:contact@africpub.com" className="hover:text-foreground">contact@africpub.com</a>
+                  <a href="mailto:contact@africpub.tech" className="hover:text-foreground">contact@africpub.tech</a>
                 </li>
               </ul>
               <a
