@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useRef, useState } from "react";
-import { z } from "zod";
 import { Phone, Mail, MapPin, Clock, ExternalLink, Paperclip, X, Loader2, Check, AlertTriangle, RotateCw } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
@@ -71,18 +70,36 @@ export const Route = createFileRoute("/contact")({
 
 });
 
-// Validation stricte côté client (longueurs bornées, trim, anti-spam honeypot).
-// Note : les valeurs sont trimées manuellement avant parse (voir runSubmit) pour
-// rester compatible quel que soit le build de la librairie de validation chargé.
+// Validation stricte côté client, sans dépendance externe (le build navigateur
+// de la librairie de validation n'expose pas toujours les méthodes attendues).
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const schema = z.object({
-  name: z.string().min(2, "Nom trop court").max(100),
-  email: z.string().max(255).regex(EMAIL_RE, "Email invalide"),
-  phone: z.string().max(30).optional().or(z.literal("")),
-  service: z.string().max(80),
-  message: z.string().min(10, "Décrivez votre projet (10 caractères min.)").max(1500),
-  company: z.string().max(0), // honeypot : doit rester vide
-});
+
+function validateContact(data: Record<string, string>) {
+  const errors: Record<string, string> = {};
+  const name = data.name ?? "";
+  const email = data.email ?? "";
+  const phone = data.phone ?? "";
+  const service = data.service ?? "";
+  const message = data.message ?? "";
+  const company = data.company ?? "";
+
+  if (name.length < 2) errors.name = "Nom trop court";
+  else if (name.length > 100) errors.name = "Nom trop long (100 caractères max.)";
+
+  if (email.length > 255) errors.email = "Email trop long";
+  else if (!EMAIL_RE.test(email)) errors.email = "Email invalide";
+
+  if (phone.length > 30) errors.phone = "Téléphone trop long";
+  if (service.length > 80) errors.service = "Service invalide";
+
+  if (message.length < 10) errors.message = "Décrivez votre projet (10 caractères min.)";
+  else if (message.length > 1500) errors.message = "Message trop long (1500 caractères max.)";
+
+  if (company.length > 0) errors.company = "Champ invalide";
+
+  return errors;
+}
+
 
 
 function ContactPage() {
@@ -143,15 +160,13 @@ function ContactPage() {
     const data = Object.fromEntries(
       Object.entries(raw).map(([k, v]) => [k, typeof v === "string" ? v.trim() : v]),
     ) as Record<string, string>;
-    const result = schema.safeParse({ ...data, company: data.company ?? "" });
-    if (!result.success) {
-      const next: Record<string, string> = {};
-      result.error.issues.forEach((issue) => {
-        next[String(issue.path[0])] = issue.message;
-      });
-      setErrors(next);
+    const parsed = { ...data, company: data.company ?? "" };
+    const validationErrors = validateContact(parsed);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
+
     setErrors({});
     setUploadFailure(null);
 
@@ -184,7 +199,7 @@ function ContactPage() {
 
       setState("sending");
       const res = await submitContactMessage({
-        data: { ...result.data, elapsedMs: Date.now() - mountedAt, attachmentPath, attachmentName },
+        data: { ...parsed, elapsedMs: Date.now() - mountedAt, attachmentPath, attachmentName },
       });
       if (!res.ok) {
         setState("throttled");
