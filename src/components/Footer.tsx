@@ -49,7 +49,10 @@ export default function Footer() {
                 <a href="mailto:contact@africpub.tech" className="hover:text-foreground">contact@africpub.tech</a>
               </li>
               <li>
-                <a href="tel:+213540481810" className="hover:text-foreground">+213 540 48 18 10{"\n\n"}</a>
+                <a href="tel:+213540481810" className="hover:text-foreground">
+                  +213 540 48 18 10{"\n"}
+                  +213 559 11 98 88{"\n"}
+                </a>
               </li>
             </ul>
             <Link
