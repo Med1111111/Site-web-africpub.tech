@@ -303,7 +303,7 @@ function ContactPage() {
               </div>
               <div>
                 <label htmlFor="email" className="text-sm font-medium">Email</label>
-                <input id="email" name="email" type="email" required maxLength={255} className={field} placeholder="vous@entreprise.dz" />
+                <input id="email" name="email" type="email" required maxLength={255} className={field} placeholder="vous@entreprise.tech" />
                 {errors.email && <p className="mt-1 text-xs text-destructive">{errors.email}</p>}
               </div>
               <div>
