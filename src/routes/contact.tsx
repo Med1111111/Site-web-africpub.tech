@@ -139,7 +139,10 @@ function ContactPage() {
   };
 
   const runSubmit = async (form: HTMLFormElement, opts?: { skipFile?: boolean }) => {
-    const data = Object.fromEntries(new FormData(form));
+    const raw = Object.fromEntries(new FormData(form));
+    const data = Object.fromEntries(
+      Object.entries(raw).map(([k, v]) => [k, typeof v === "string" ? v.trim() : v]),
+    ) as Record<string, string>;
     const result = schema.safeParse({ ...data, company: data.company ?? "" });
     if (!result.success) {
       const next: Record<string, string> = {};
