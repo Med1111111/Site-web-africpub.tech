@@ -200,7 +200,7 @@ function ContactPage() {
 
       setState("sending");
       const res = await submitContactMessage({
-        data: { ...result.data, elapsedMs: Date.now() - mountedAt, attachmentPath, attachmentName },
+        data: { ...parsed, elapsedMs: Date.now() - mountedAt, attachmentPath, attachmentName },
       });
       if (!res.ok) {
         setState("throttled");
