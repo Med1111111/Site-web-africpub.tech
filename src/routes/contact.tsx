@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useRef, useState } from "react";
-import { z } from "zod";
 import { Phone, Mail, MapPin, Clock, ExternalLink, Paperclip, X, Loader2, Check, AlertTriangle, RotateCw } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import { Reveal } from "@/components/Reveal";
