@@ -161,15 +161,13 @@ function ContactPage() {
     const data = Object.fromEntries(
       Object.entries(raw).map(([k, v]) => [k, typeof v === "string" ? v.trim() : v]),
     ) as Record<string, string>;
-    const result = schema.safeParse({ ...data, company: data.company ?? "" });
-    if (!result.success) {
-      const next: Record<string, string> = {};
-      result.error.issues.forEach((issue) => {
-        next[String(issue.path[0])] = issue.message;
-      });
-      setErrors(next);
+    const parsed = { ...data, company: data.company ?? "" };
+    const validationErrors = validateContact(parsed);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
+
     setErrors({});
     setUploadFailure(null);
 
