@@ -81,6 +81,15 @@ export default function Footer() {
                   +213 540 48 18 10
                 </a>
               </p>
+              <p>
+                <a
+                  href="tel:+213559119888"
+                  aria-label="Appeler le +213 559 11 98 88"
+                  className={linkClass}
+                >
+                  +213 559 11 98 88
+                </a>
+              </p>
             </address>
             <Link
               to="/contact"
