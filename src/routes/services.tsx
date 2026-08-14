@@ -97,7 +97,6 @@ export const Route = createFileRoute("/services")({
   }),
 });
 
-
 function ServicesPage() {
   return (
     <div className="px-3 sm:px-6">
@@ -107,22 +106,24 @@ function ServicesPage() {
         sub="Atelier intégré, bureau d'études et équipes de pose certifiées : un seul interlocuteur pour tout votre dispositif de communication visuelle."
       />
 
-      <section className="mx-auto mt-16 max-w-7xl">
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <section aria-labelledby="services-list-title" className="mx-auto mt-20 max-w-4xl">
+        <h2 id="services-list-title" className="sr-only">
+          Nos services
+        </h2>
+        <ul className="divide-y divide-border/20">
           {services.map((s, i) => (
-            <Reveal as="li" key={s.slug} delay={i * 70}>
-              <article id={s.slug} className="group h-full overflow-hidden rounded-3xl glass card-3d p-3 scroll-mt-24">
-                <img
-                  src={s.image}
-                  alt={s.alt}
-                  loading="lazy"
-                  width={1024}
-                  height={640}
-                  className="h-52 w-full rounded-2xl object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="p-5">
-                  <h2 className="text-xl font-semibold">{s.title}</h2>
-                  <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+            <Reveal as="li" key={s.slug} delay={i * 60}>
+              <article id={s.slug} className="group scroll-mt-24 py-10 sm:py-12">
+                <div className="flex items-start gap-4 sm:gap-5">
+                  <span className="select-none pt-0.5 text-base text-primary/80 sm:text-lg" aria-hidden="true">
+                    {s.icon}
+                  </span>
+                  <div>
+                    <h3 className="text-lg font-semibold tracking-tight sm:text-xl">{s.title}</h3>
+                    <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+                      {s.desc}
+                    </p>
+                  </div>
                 </div>
               </article>
             </Reveal>
@@ -130,27 +131,29 @@ function ServicesPage() {
         </ul>
       </section>
 
-      <section aria-labelledby="methodologie-title" className="mx-auto mt-24 max-w-7xl">
+      <section aria-labelledby="methodologie-title" className="mx-auto mt-24 max-w-4xl">
         <Reveal>
-          <h2 id="methodologie-title" className="text-3xl font-bold sm:text-4xl">Méthodologie</h2>
+          <h2 id="methodologie-title" className="text-3xl font-bold tracking-tight sm:text-4xl">
+            Méthodologie
+          </h2>
         </Reveal>
         <div className="mt-10">
           <ProcessSteps label="Les étapes de notre méthodologie" />
         </div>
       </section>
 
-
-      <section className="mx-auto mt-20 max-w-7xl">
+      <section className="mx-auto mt-24 max-w-4xl pb-20 text-center">
         <Reveal>
-          <div className="rounded-3xl glass glow p-10 text-center sm:p-14">
-            <h2 className="text-2xl font-bold sm:text-4xl">Parlons de votre projet</h2>
-            <Link
-              to="/contact"
-              className="mt-6 inline-flex rounded-full bg-brand px-7 py-3.5 text-sm font-semibold text-primary-foreground"
-            >
-              Demander un devis
-            </Link>
-          </div>
+          <h2 className="text-2xl font-bold tracking-tight sm:text-4xl">Parlons de votre projet</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-sm text-muted-foreground sm:text-base">
+            Nous vous accompagnons de l'idée jusqu'à la pose. Demandez un devis personnalisé.
+          </p>
+          <Link
+            to="/contact"
+            className="mt-8 inline-flex rounded-full bg-brand px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.04]"
+          >
+            Demander un devis
+          </Link>
         </Reveal>
       </section>
     </div>
