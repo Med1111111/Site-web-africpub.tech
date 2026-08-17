@@ -31,7 +31,7 @@ const fr: Dict = {
   "section.testimonials": "Témoignages",
   "cta.title": "Un projet d'enseigne ou de signalétique ?",
   "cta.sub": "Réponse sous 24h. Étude et devis gratuits.",
-  "footer.rights": "Tous droits réservés.",
+  "footer.rights": "Tous les droits réservés.",
 };
 
 const en: Dict = {
