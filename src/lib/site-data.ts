@@ -65,8 +65,8 @@ export const services: Service[] = [
   },
   {
     slug: "decoupe-cnc",
-    title: "Découpe CNC",
-    desc: "Usinage numérique du MDF, PVC, plexiglas et composites : claustras, lettrages et décors ajourés.",
+    title: "Découpe CNC / LAZER / CO2",
+    desc: "Usinage numérique du MDF, PVC, Plexiglas Alucobond, decoration interieur et exterieur\u00a0",
     icon: "✕",
     image: cnc.url,
     alt: "Machine CNC usinant un panneau décoratif ajouré",
