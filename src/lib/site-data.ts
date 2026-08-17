@@ -73,8 +73,8 @@ export const services: Service[] = [
   },
   {
     slug: "roll-up",
-    title: "Roll-up & bannières",
-    desc: "Roll-up premium, X-banner, kakémonos et bannières salon. Impression haute définition et livraison rapide.",
+    title: "Impression grand format\u00a0",
+    desc: "impression de qualité spéciale exterieur sur tout type de support, autocollant, one way vision, bache, flag,\u00a0",
     icon: "▮",
     image: rollup.url,
     alt: "Roll-up publicitaires alignés dans un hall d'accueil",
