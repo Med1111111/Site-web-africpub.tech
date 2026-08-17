@@ -2,7 +2,7 @@ import enseigne from "@/assets/service-enseigne-lumineuse.jpg.asset.json";
 import alucobond from "@/assets/service-alucobond-3d.jpg.asset.json";
 import facade from "@/assets/service-facade-alucobond.jpg.asset.json";
 import cnc from "@/assets/service-decoupe-cnc.jpg.asset.json";
-import rollup from "@/assets/service-rollup-banniere.jpg.asset.json";
+import vinyleGrandFormat from "@/assets/service-vinyle-grand-format.jpg.asset.json";
 import petitFormat from "@/assets/service-impression-petit-format.jpg.asset.json";
 import triFold from "@/assets/service-print-tri-fold.jpg.asset.json";
 import packaging from "@/assets/service-packaging.jpg.asset.json";
