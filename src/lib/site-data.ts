@@ -1,4 +1,4 @@
-import enseigne from "@/assets/service-enseigne-africpub-terrasse-v2.jpg";
+import enseigne from "@/assets/service-enseigne-africpub-terrasse.jpg";
 import alucobond from "@/assets/service-alucobond-3d.jpg.asset.json";
 import facade from "@/assets/service-facade-alucobond.jpg.asset.json";
 import cnc from "@/assets/service-decoupe-cnc.jpg.asset.json";
