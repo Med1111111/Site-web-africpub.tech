@@ -44,7 +44,7 @@ export const services: Service[] = [
     title: "Enseigne lumineuse",
     desc: "Réalisation de letrage lumineux et panneaux publicitaire en petit et en grand model",
     icon: "✦",
-    image: enseigne.url,
+    image: enseigne,
     alt: "Enseigne lumineuse géante AFRIC PUB sur une terrasse avec chassis en aluminium et fer forgé, vue de nuit",
   },
   {
