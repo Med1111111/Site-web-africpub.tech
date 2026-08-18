@@ -76,8 +76,8 @@ export const services: Service[] = [
     title: "Impression grand format\u00a0",
     desc: "impression de qualité spéciale exterieur sur tout type de support, autocollant, one way vision, bache, flag,\u00a0",
     icon: "▮",
-    image: vinyleGrandFormat.url,
-    alt: "Technicien appliquant un vinyle autocollant grand format rouge et noir",
+    image: imprimanteAutocollant.url,
+    alt: "Imprimante grand format imprimant un rouleau d'autocollant rouge et noir",
   },
   {
     slug: "stands",
