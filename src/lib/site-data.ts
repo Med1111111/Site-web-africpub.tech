@@ -2,7 +2,7 @@ import enseigne from "@/assets/service-enseigne-lumineuse.jpg.asset.json";
 import alucobond from "@/assets/service-alucobond-3d.jpg.asset.json";
 import facade from "@/assets/service-facade-alucobond.jpg.asset.json";
 import cnc from "@/assets/service-decoupe-cnc.jpg.asset.json";
-import vinyleGrandFormat from "@/assets/service-vinyle-grand-format.jpg.asset.json";
+import imprimanteAutocollant from "@/assets/service-imprimante-autocollant-grand-format.jpg.asset.json";
 import petitFormat from "@/assets/service-impression-petit-format.jpg.asset.json";
 import triFold from "@/assets/service-print-tri-fold.jpg.asset.json";
 import packaging from "@/assets/service-packaging.jpg.asset.json";
@@ -76,8 +76,8 @@ export const services: Service[] = [
     title: "Impression grand format\u00a0",
     desc: "impression de qualité spéciale exterieur sur tout type de support, autocollant, one way vision, bache, flag,\u00a0",
     icon: "▮",
-    image: vinyleGrandFormat.url,
-    alt: "Technicien appliquant un vinyle autocollant grand format rouge et noir",
+    image: imprimanteAutocollant.url,
+    alt: "Imprimante grand format imprimant un rouleau d'autocollant rouge et noir",
   },
   {
     slug: "stands",
