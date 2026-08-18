@@ -1,4 +1,4 @@
-import enseigne from "@/assets/service-enseigne-lumineuse.jpg.asset.json";
+import enseigne from "@/assets/service-enseigne-africpub-terrasse.jpg";
 import alucobond from "@/assets/service-alucobond-3d.jpg.asset.json";
 import facade from "@/assets/service-facade-alucobond.jpg.asset.json";
 import cnc from "@/assets/service-decoupe-cnc.jpg.asset.json";
@@ -45,7 +45,7 @@ export const services: Service[] = [
     desc: "Réalisation de letrage lumineux et panneaux publicitaire en petit et en grand model",
     icon: "✦",
     image: enseigne.url,
-    alt: "Lettres boîtiers lumineuses à LED en cours de fabrication",
+    alt: "Enseigne lumineuse géante AFRIC PUB sur une terrasse avec chassis en aluminium et fer forgé, vue de nuit",
   },
   {
     slug: "alucobond-3d",
