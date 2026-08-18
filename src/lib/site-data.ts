@@ -42,7 +42,7 @@ export const services: Service[] = [
   {
     slug: "enseignes",
     title: "Enseigne lumineuse",
-    desc: "Lettres boîtiers LED, néon flex, caissons double face. Étude photométrique, fabrication atelier et pose certifiée.",
+    desc: ".",
     icon: "✦",
     image: enseigne.url,
     alt: "Lettres boîtiers lumineuses à LED en cours de fabrication",
