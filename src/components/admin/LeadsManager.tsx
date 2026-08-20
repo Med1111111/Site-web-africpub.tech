@@ -181,6 +181,15 @@ export default function LeadsManager() {
                   </option>
                 ))}
               </select>
+              {m.status !== "traité" && (
+                <button
+                  type="button"
+                  className={btnGhost}
+                  onClick={() => setStatus.mutate({ id: m.id, status: "traité" })}
+                >
+                  Marquer comme traitée
+                </button>
+              )}
               <button
                 type="button"
                 className={btnGhost}
