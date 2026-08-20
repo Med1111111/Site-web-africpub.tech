@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
@@ -20,6 +21,9 @@ function formatDate(iso: string) {
 
 export default function LeadsManager() {
   const qc = useQueryClient();
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"tous" | (typeof CONTACT_STATUSES)[number]>("tous");
+  const [openId, setOpenId] = useState<string | null>(null);
   const list = useQuery({ queryKey: ["admin-leads"], queryFn: () => listContactMessages() });
   const subs = useQuery({ queryKey: ["admin-newsletter"], queryFn: () => listNewsletterSubscribers() });
 
