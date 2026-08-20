@@ -119,7 +119,7 @@ function ServicesPage() {
                     {s.icon}
                   </span>
                   <div>
-                    <h3 className="text-lg font-semibold tracking-tight sm:text-xl">{s.title}</h3>
+                    <h3 className="whitespace-pre-line text-lg font-semibold tracking-tight sm:text-xl">{s.title}</h3>
                     <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base">
                       {s.desc}
                     </p>

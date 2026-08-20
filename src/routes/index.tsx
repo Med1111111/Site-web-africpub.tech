@@ -257,7 +257,7 @@ function Home() {
                   className="h-44 w-full rounded-2xl object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="p-4">
-                  <h3 className="text-xl font-semibold">{s.title}</h3>
+                  <h3 className="whitespace-pre-line text-xl font-semibold">{s.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
                 </div>
               </article>
