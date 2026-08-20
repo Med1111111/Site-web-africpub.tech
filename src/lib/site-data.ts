@@ -41,7 +41,7 @@ export type Service = {
 export const services: Service[] = [
   {
     slug: "enseignes",
-    title: "Enseigne lumineuse",
+    title: "Evennement",
     desc: "Réalisation de letrage lumineux et panneaux publicitaire en petit et en grand model",
     icon: "✦",
     image: enseigne.url,
@@ -49,7 +49,7 @@ export const services: Service[] = [
   },
   {
     slug: "alucobond-3d",
-    title: "Habillage Alucobond 3D",
+    title: "\u00a0Alucobond et daçade 3D",
     desc: "Façades en panneaux composites aluminium, facettes 3D, pliage sur mesure et structure porteuse.",
     icon: "◧",
     image: alucobond.url,
@@ -57,7 +57,7 @@ export const services: Service[] = [
   },
   {
     slug: "facades",
-    title: "Façades architecturales",
+    title: "Enseigne lumineuse",
     desc: "Bardage composite grande hauteur, calepinage, intégration lumière et pose sur ossature.",
     icon: "▦",
     image: facade.url,
@@ -65,7 +65,7 @@ export const services: Service[] = [
   },
   {
     slug: "decoupe-cnc",
-    title: "Découpe CNC / LAZER / CO2",
+    title: "Découpe CNC / LAZER / CO2 et décoration",
     desc: "Usinage numérique du MDF, PVC, Plexiglas Alucobond, decoration interieur et exterieur\u00a0",
     icon: "✕",
     image: cnc.url,
@@ -73,7 +73,7 @@ export const services: Service[] = [
   },
   {
     slug: "roll-up",
-    title: "Impression grand format\u00a0",
+    title: "Impression grand format\net petit format\nCadaux promotionels\n\u00a0",
     desc: "impression de qualité spéciale exterieur sur tout type de support, autocollant, one way vision, bache, flag,\u00a0",
     icon: "▮",
     image: imprimanteAutocollant.url,

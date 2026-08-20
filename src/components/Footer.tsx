@@ -33,7 +33,7 @@ export default function Footer() {
             <ul className="mt-4 grid gap-2 text-sm text-muted-foreground">
               {services.slice(0, 5).map((s) => (
                 <li key={s.slug}>
-                  <Link to="/services" hash={s.slug} className={linkClass}>
+                  <Link to="/services" hash={s.slug} className={`${linkClass} whitespace-pre-line`}>
                     {s.title}
                   </Link>
                 </li>
