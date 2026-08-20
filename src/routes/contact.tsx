@@ -273,7 +273,7 @@ function ContactPage() {
           <form onSubmit={onSubmit} noValidate className="rounded-3xl glass p-8">
             {state === "sent" && (
               <p role="status" className="mb-6 rounded-2xl bg-brand px-4 py-3 text-sm text-primary-foreground">
-                Merci ! Votre demande a bien été enregistrée, nous revenons vers vous sous 24h.
+                Merci pour votre message. Nous vous répondrons dans les meilleurs délais.
               </p>
             )}
             {state === "throttled" && (
