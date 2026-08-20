@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
@@ -20,6 +21,9 @@ function formatDate(iso: string) {
 
 export default function LeadsManager() {
   const qc = useQueryClient();
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"tous" | (typeof CONTACT_STATUSES)[number]>("tous");
+  const [openId, setOpenId] = useState<string | null>(null);
   const list = useQuery({ queryKey: ["admin-leads"], queryFn: () => listContactMessages() });
   const subs = useQuery({ queryKey: ["admin-newsletter"], queryFn: () => listNewsletterSubscribers() });
 
@@ -43,18 +47,57 @@ export default function LeadsManager() {
 
   const emails = (subs.data ?? []).map((s) => s.email).join(", ");
 
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return (list.data ?? []).filter((m) => {
+      if (statusFilter !== "tous" && m.status !== statusFilter) return false;
+      if (!q) return true;
+      return [m.name, m.email, m.phone, m.service, m.message].some((v) => (v ?? "").toLowerCase().includes(q));
+    });
+  }, [list.data, search, statusFilter]);
+
   return (
     <div className="grid gap-6">
       <section className="grid gap-4">
-        <h2 className="text-lg font-semibold">Demandes de devis</h2>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-lg font-semibold">
+            Demandes de devis{" "}
+            <span className="text-sm text-muted-foreground">({filtered.length})</span>
+          </h2>
+          <div className="flex w-full flex-wrap gap-2 sm:w-auto">
+            <input
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Rechercher (nom, email, message…)"
+              aria-label="Rechercher une demande"
+              className="min-h-11 w-full flex-1 rounded-2xl glass-soft px-4 text-sm outline-none focus:ring-2 focus:ring-brand/60 sm:w-64"
+            />
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
+              aria-label="Filtrer par statut"
+              className="min-h-11 rounded-2xl glass-soft px-3 text-sm outline-none focus:ring-2 focus:ring-brand/60"
+            >
+              <option value="tous">Tous les statuts</option>
+              {CONTACT_STATUSES.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
         {list.isLoading && <p className="text-sm text-muted-foreground">Chargement…</p>}
-        {list.data?.length === 0 && (
+        {!list.isLoading && filtered.length === 0 && (
           <p className="rounded-3xl glass p-6 text-sm text-muted-foreground">
-            Aucune demande pour le moment. Les soumissions du formulaire de contact apparaîtront ici.
+            {list.data?.length
+              ? "Aucune demande ne correspond à votre recherche."
+              : "Aucune demande pour le moment. Les soumissions du formulaire de contact apparaîtront ici."}
           </p>
         )}
-        {list.data?.map((m) => (
-          <article key={m.id} className="rounded-3xl glass p-6">
+        {filtered.map((m) => (
+          <article key={m.id} className="rounded-3xl glass p-5 sm:p-6">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <h3 className="font-semibold">
@@ -66,7 +109,21 @@ export default function LeadsManager() {
               <span className="rounded-full glass-soft px-3 py-1 text-xs">{m.status}</span>
             </div>
 
-            <p className="mt-4 whitespace-pre-line text-sm text-muted-foreground">{m.message}</p>
+            <p
+              className={`mt-4 whitespace-pre-line text-sm text-muted-foreground ${
+                openId === m.id ? "" : "line-clamp-3"
+              }`}
+            >
+              {m.message}
+            </p>
+            <button
+              type="button"
+              className="mt-2 text-xs underline text-muted-foreground"
+              onClick={() => setOpenId(openId === m.id ? null : m.id)}
+            >
+              {openId === m.id ? "Réduire" : "Voir le détail"}
+            </button>
+
 
             <div className="mt-4 flex flex-wrap gap-2 text-sm">
               <a className={`${btnGhost} inline-flex items-center`} href={`mailto:${m.email}`}>
@@ -124,6 +181,15 @@ export default function LeadsManager() {
                   </option>
                 ))}
               </select>
+              {m.status !== "traité" && (
+                <button
+                  type="button"
+                  className={btnGhost}
+                  onClick={() => setStatus.mutate({ id: m.id, status: "traité" })}
+                >
+                  Marquer comme traitée
+                </button>
+              )}
               <button
                 type="button"
                 className={btnGhost}
