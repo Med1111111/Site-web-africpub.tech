@@ -95,6 +95,8 @@ function validateContact(data: Record<string, string>) {
   if (message.length < 10) errors.message = "Décrivez votre projet (10 caractères min.)";
   else if (message.length > 1500) errors.message = "Message trop long (1500 caractères max.)";
 
+  if ((data.companyName ?? "").length > 120) errors.companyName = "Nom d'entreprise trop long (120 caractères max.)";
+
   if (company.length > 0) errors.company = "Champ invalide";
 
   return errors;
