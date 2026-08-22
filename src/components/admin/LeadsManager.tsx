@@ -59,6 +59,24 @@ export default function LeadsManager() {
   return (
     <div className="grid gap-6">
       <section className="grid gap-4">
+        <div className="grid gap-3 sm:grid-cols-3">
+          <div className="rounded-3xl glass p-5">
+            <p className="text-xs text-muted-foreground">Total des contacts</p>
+            <p className="mt-1 text-2xl font-semibold">{list.data?.length ?? 0}</p>
+          </div>
+          <div className="rounded-3xl glass p-5">
+            <p className="text-xs text-muted-foreground">Nouveaux contacts</p>
+            <p className="mt-1 text-2xl font-semibold text-brand">
+              {(list.data ?? []).filter((m) => m.status === "nouveau").length}
+            </p>
+          </div>
+          <div className="rounded-3xl glass p-5">
+            <p className="text-xs text-muted-foreground">Traités</p>
+            <p className="mt-1 text-2xl font-semibold">
+              {(list.data ?? []).filter((m) => m.status === "traité").length}
+            </p>
+          </div>
+        </div>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-lg font-semibold">
             Demandes de devis{" "}
