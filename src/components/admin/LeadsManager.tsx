@@ -59,6 +59,24 @@ export default function LeadsManager() {
   return (
     <div className="grid gap-6">
       <section className="grid gap-4">
+        <div className="grid gap-3 sm:grid-cols-3">
+          <div className="rounded-3xl glass p-5">
+            <p className="text-xs text-muted-foreground">Total des contacts</p>
+            <p className="mt-1 text-2xl font-semibold">{list.data?.length ?? 0}</p>
+          </div>
+          <div className="rounded-3xl glass p-5">
+            <p className="text-xs text-muted-foreground">Nouveaux contacts</p>
+            <p className="mt-1 text-2xl font-semibold text-brand">
+              {(list.data ?? []).filter((m) => m.status === "nouveau").length}
+            </p>
+          </div>
+          <div className="rounded-3xl glass p-5">
+            <p className="text-xs text-muted-foreground">Traités</p>
+            <p className="mt-1 text-2xl font-semibold">
+              {(list.data ?? []).filter((m) => m.status === "traité").length}
+            </p>
+          </div>
+        </div>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-lg font-semibold">
             Demandes de devis{" "}
@@ -102,9 +120,13 @@ export default function LeadsManager() {
               <div>
                 <h3 className="font-semibold">
                   {m.name}
+                  {m.company_name ? <span className="text-muted-foreground"> · {m.company_name}</span> : null}
                   {m.service ? <span className="text-muted-foreground"> — {m.service}</span> : null}
                 </h3>
-                <p className="mt-1 text-xs text-muted-foreground">{formatDate(m.created_at)}</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {formatDate(m.created_at)}
+                  {m.marketing_consent ? " · Consent. marketing ✓" : " · Consent. marketing ✕"}
+                </p>
               </div>
               <span className="rounded-full glass-soft px-3 py-1 text-xs">{m.status}</span>
             </div>
@@ -181,6 +203,15 @@ export default function LeadsManager() {
                   </option>
                 ))}
               </select>
+              {m.status === "nouveau" && (
+                <button
+                  type="button"
+                  className={btnGhost}
+                  onClick={() => setStatus.mutate({ id: m.id, status: "lu" })}
+                >
+                  Marquer comme lue
+                </button>
+              )}
               {m.status !== "traité" && (
                 <button
                   type="button"

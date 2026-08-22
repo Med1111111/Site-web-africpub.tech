@@ -95,6 +95,8 @@ function validateContact(data: Record<string, string>) {
   if (message.length < 10) errors.message = "Décrivez votre projet (10 caractères min.)";
   else if (message.length > 1500) errors.message = "Message trop long (1500 caractères max.)";
 
+  if ((data.companyName ?? "").length > 120) errors.companyName = "Nom d'entreprise trop long (120 caractères max.)";
+
   if (company.length > 0) errors.company = "Champ invalide";
 
   return errors;
@@ -161,6 +163,7 @@ function ContactPage() {
       Object.entries(raw).map(([k, v]) => [k, typeof v === "string" ? v.trim() : v]),
     ) as Record<string, string>;
     const parsed = { ...data, company: data.company ?? "" };
+    const marketingConsent = form.querySelector<HTMLInputElement>("#marketingConsent")?.checked ?? false;
     const validationErrors = validateContact(parsed);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -199,7 +202,7 @@ function ContactPage() {
 
       setState("sending");
       const res = await submitContactMessage({
-        data: { ...parsed, elapsedMs: Date.now() - mountedAt, attachmentPath, attachmentName },
+        data: { ...parsed, marketingConsent, elapsedMs: Date.now() - mountedAt, attachmentPath, attachmentName },
       });
       if (!res.ok) {
         setState("throttled");
@@ -340,7 +343,13 @@ function ContactPage() {
                   ))}
                 </select>
               </div>
+              <div className="sm:col-span-2">
+                <label htmlFor="companyName" className="text-sm font-medium">Entreprise (optionnel)</label>
+                <input id="companyName" name="companyName" maxLength={120} className={field} placeholder="Nom de votre société" />
+                {errors.companyName && <p className="mt-1 text-xs text-destructive">{errors.companyName}</p>}
+              </div>
             </div>
+
 
             <div className="mt-5">
               <label htmlFor="message" className="text-sm font-medium">Votre projet</label>
@@ -503,6 +512,19 @@ function ContactPage() {
                 </div>
               )}
 
+            </div>
+
+            <div className="mt-5 flex items-start gap-3 rounded-2xl glass-soft px-4 py-3">
+              <input
+                id="marketingConsent"
+                type="checkbox"
+                defaultChecked={false}
+                className="mt-0.5 size-4 shrink-0 accent-[var(--brand,#E30613)]"
+              />
+              <label htmlFor="marketingConsent" className="text-sm text-muted-foreground">
+                J'accepte de recevoir les actualités et offres commerciales d'Afric Pub par e-mail.
+                <span className="block text-xs text-muted-foreground/80">Facultatif — désinscription possible à tout moment.</span>
+              </label>
             </div>
 
             {/* Honeypot anti-spam, masqué aux utilisateurs et aux lecteurs d'écran */}

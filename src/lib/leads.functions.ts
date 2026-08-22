@@ -13,7 +13,7 @@ import type { Database } from "@/integrations/supabase/types";
 export type ContactMessage = Database["public"]["Tables"]["contact_messages"]["Row"];
 export type NewsletterSubscriber = Database["public"]["Tables"]["newsletter_subscribers"]["Row"];
 
-export const CONTACT_STATUSES = ["nouveau", "en cours", "traité", "archivé"] as const;
+export const CONTACT_STATUSES = ["nouveau", "lu", "en cours", "traité", "archivé"] as const;
 
 export type LeadResult = { ok: true } | { ok: false; reason: "throttled" };
 
@@ -80,6 +80,8 @@ export const submitContactMessage = createServerFn({ method: "POST" })
         phone: z.string().trim().max(30).optional().default(""),
         service: z.string().trim().max(80).optional().default(""),
         message: z.string().trim().min(10).max(1500),
+        companyName: z.string().trim().max(120).optional().default(""),
+        marketingConsent: z.boolean().optional().default(false),
         company: z.string().max(0).optional().default(""), // honeypot
         elapsedMs: z.number().int().min(0).max(86_400_000).optional().default(-1),
         attachmentPath: z
@@ -122,6 +124,8 @@ export const submitContactMessage = createServerFn({ method: "POST" })
       phone: data.phone,
       service: data.service,
       message: data.message,
+      company_name: data.companyName,
+      marketing_consent: data.marketingConsent,
       attachment_path: data.attachmentPath,
       attachment_name: data.attachmentName,
     });

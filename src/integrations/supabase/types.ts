@@ -18,9 +18,11 @@ export type Database = {
         Row: {
           attachment_name: string
           attachment_path: string
+          company_name: string
           created_at: string
           email: string
           id: string
+          marketing_consent: boolean
           message: string
           name: string
           phone: string
@@ -31,9 +33,11 @@ export type Database = {
         Insert: {
           attachment_name?: string
           attachment_path?: string
+          company_name?: string
           created_at?: string
           email: string
           id?: string
+          marketing_consent?: boolean
           message: string
           name: string
           phone?: string
@@ -44,9 +48,11 @@ export type Database = {
         Update: {
           attachment_name?: string
           attachment_path?: string
+          company_name?: string
           created_at?: string
           email?: string
           id?: string
+          marketing_consent?: boolean
           message?: string
           name?: string
           phone?: string
