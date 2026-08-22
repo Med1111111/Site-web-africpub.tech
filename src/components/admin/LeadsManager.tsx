@@ -120,9 +120,13 @@ export default function LeadsManager() {
               <div>
                 <h3 className="font-semibold">
                   {m.name}
+                  {m.company_name ? <span className="text-muted-foreground"> · {m.company_name}</span> : null}
                   {m.service ? <span className="text-muted-foreground"> — {m.service}</span> : null}
                 </h3>
-                <p className="mt-1 text-xs text-muted-foreground">{formatDate(m.created_at)}</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {formatDate(m.created_at)}
+                  {m.marketing_consent ? " · Consent. marketing ✓" : " · Consent. marketing ✕"}
+                </p>
               </div>
               <span className="rounded-full glass-soft px-3 py-1 text-xs">{m.status}</span>
             </div>
@@ -199,6 +203,15 @@ export default function LeadsManager() {
                   </option>
                 ))}
               </select>
+              {m.status === "nouveau" && (
+                <button
+                  type="button"
+                  className={btnGhost}
+                  onClick={() => setStatus.mutate({ id: m.id, status: "lu" })}
+                >
+                  Marquer comme lue
+                </button>
+              )}
               {m.status !== "traité" && (
                 <button
                   type="button"
