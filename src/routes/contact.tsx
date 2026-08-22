@@ -163,6 +163,7 @@ function ContactPage() {
       Object.entries(raw).map(([k, v]) => [k, typeof v === "string" ? v.trim() : v]),
     ) as Record<string, string>;
     const parsed = { ...data, company: data.company ?? "" };
+    const marketingConsent = form.querySelector<HTMLInputElement>("#marketingConsent")?.checked ?? false;
     const validationErrors = validateContact(parsed);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -201,7 +202,7 @@ function ContactPage() {
 
       setState("sending");
       const res = await submitContactMessage({
-        data: { ...parsed, elapsedMs: Date.now() - mountedAt, attachmentPath, attachmentName },
+        data: { ...parsed, marketingConsent, elapsedMs: Date.now() - mountedAt, attachmentPath, attachmentName },
       });
       if (!res.ok) {
         setState("throttled");
