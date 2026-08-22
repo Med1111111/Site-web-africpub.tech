@@ -514,6 +514,19 @@ function ContactPage() {
 
             </div>
 
+            <div className="mt-5 flex items-start gap-3 rounded-2xl glass-soft px-4 py-3">
+              <input
+                id="marketingConsent"
+                type="checkbox"
+                defaultChecked={false}
+                className="mt-0.5 size-4 shrink-0 accent-[var(--brand,#E30613)]"
+              />
+              <label htmlFor="marketingConsent" className="text-sm text-muted-foreground">
+                J'accepte de recevoir les actualités et offres commerciales d'Afric Pub par e-mail.
+                <span className="block text-xs text-muted-foreground/80">Facultatif — désinscription possible à tout moment.</span>
+              </label>
+            </div>
+
             {/* Honeypot anti-spam, masqué aux utilisateurs et aux lecteurs d'écran */}
             <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
 
