@@ -124,6 +124,8 @@ export const submitContactMessage = createServerFn({ method: "POST" })
       phone: data.phone,
       service: data.service,
       message: data.message,
+      company_name: data.companyName,
+      marketing_consent: data.marketingConsent,
       attachment_path: data.attachmentPath,
       attachment_name: data.attachmentName,
     });
