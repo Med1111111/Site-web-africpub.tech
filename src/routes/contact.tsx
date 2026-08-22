@@ -343,7 +343,13 @@ function ContactPage() {
                   ))}
                 </select>
               </div>
+              <div className="sm:col-span-2">
+                <label htmlFor="companyName" className="text-sm font-medium">Entreprise (optionnel)</label>
+                <input id="companyName" name="companyName" maxLength={120} className={field} placeholder="Nom de votre société" />
+                {errors.companyName && <p className="mt-1 text-xs text-destructive">{errors.companyName}</p>}
+              </div>
             </div>
+
 
             <div className="mt-5">
               <label htmlFor="message" className="text-sm font-medium">Votre projet</label>
