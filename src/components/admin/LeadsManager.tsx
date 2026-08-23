@@ -153,6 +153,8 @@ export default function LeadsManager() {
                 </h3>
                 <p className="mt-1 text-xs text-muted-foreground">
                   {formatDate(m.created_at)}
+                  {m.city_country ? ` · ${m.city_country}` : ""}
+                  {m.source ? ` · source : ${m.source}` : ""}
                   {m.marketing_consent ? " · Consent. marketing ✓" : " · Consent. marketing ✕"}
                 </p>
               </div>
