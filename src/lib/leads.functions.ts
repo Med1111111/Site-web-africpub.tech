@@ -232,3 +232,18 @@ export const listNewsletterSubscribers = createServerFn({ method: "GET" })
     if (error) throw new Error(error.message);
     return data as NewsletterSubscriber[];
   });
+
+/** Notes internes de l'administration (jamais exposées publiquement). */
+export const updateContactMessageNotes = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) =>
+    z.object({ id: z.string().uuid(), notes: z.string().max(4000) }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase
+      .from("contact_messages")
+      .update({ admin_notes: data.notes })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true as const };
+  });
