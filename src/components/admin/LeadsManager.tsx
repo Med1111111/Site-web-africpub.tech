@@ -108,7 +108,7 @@ export default function LeadsManager() {
               type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Rechercher (nom, email, message…)"
+              placeholder="Rechercher (nom, entreprise, email, ville…)"
               aria-label="Rechercher une demande"
               className="min-h-11 w-full flex-1 rounded-2xl glass-soft px-4 text-sm outline-none focus:ring-2 focus:ring-brand/60 sm:w-64"
             />
@@ -125,6 +125,13 @@ export default function LeadsManager() {
                 </option>
               ))}
             </select>
+            <input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+              aria-label="Afficher les demandes à partir de cette date"
+              className="min-h-11 rounded-2xl glass-soft px-3 text-sm outline-none focus:ring-2 focus:ring-brand/60"
+            />
           </div>
         </div>
         {list.isLoading && <p className="text-sm text-muted-foreground">Chargement…</p>}
