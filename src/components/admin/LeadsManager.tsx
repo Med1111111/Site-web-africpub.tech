@@ -7,6 +7,7 @@ import {
   getLeadAttachmentUrl,
   listContactMessages,
   listNewsletterSubscribers,
+  updateContactMessageNotes,
   updateContactMessageStatus,
 } from "@/lib/leads.functions";
 
