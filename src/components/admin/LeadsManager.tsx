@@ -7,6 +7,7 @@ import {
   getLeadAttachmentUrl,
   listContactMessages,
   listNewsletterSubscribers,
+  updateContactMessageNotes,
   updateContactMessageStatus,
 } from "@/lib/leads.functions";
 
@@ -24,6 +25,7 @@ export default function LeadsManager() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"tous" | (typeof CONTACT_STATUSES)[number]>("tous");
   const [openId, setOpenId] = useState<string | null>(null);
+  const [dateFrom, setDateFrom] = useState("");
   const list = useQuery({ queryKey: ["admin-leads"], queryFn: () => listContactMessages() });
   const subs = useQuery({ queryKey: ["admin-newsletter"], queryFn: () => listNewsletterSubscribers() });
 
@@ -31,6 +33,15 @@ export default function LeadsManager() {
     mutationFn: (v: { id: string; status: (typeof CONTACT_STATUSES)[number] }) =>
       updateContactMessageStatus({ data: v }),
     onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["admin-leads"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const saveNotes = useMutation({
+    mutationFn: (v: { id: string; notes: string }) => updateContactMessageNotes({ data: v }),
+    onSuccess: () => {
+      toast.success("Notes enregistrées");
       qc.invalidateQueries({ queryKey: ["admin-leads"] });
     },
     onError: (e: Error) => toast.error(e.message),
@@ -51,10 +62,20 @@ export default function LeadsManager() {
     const q = search.trim().toLowerCase();
     return (list.data ?? []).filter((m) => {
       if (statusFilter !== "tous" && m.status !== statusFilter) return false;
+      if (dateFrom && new Date(m.created_at) < new Date(dateFrom)) return false;
       if (!q) return true;
-      return [m.name, m.email, m.phone, m.service, m.message].some((v) => (v ?? "").toLowerCase().includes(q));
+      return [
+        m.name,
+        m.email,
+        m.phone,
+        m.service,
+        m.message,
+        m.company_name,
+        m.city_country,
+        m.source,
+      ].some((v) => (v ?? "").toLowerCase().includes(q));
     });
-  }, [list.data, search, statusFilter]);
+  }, [list.data, search, statusFilter, dateFrom]);
 
   return (
     <div className="grid gap-6">
@@ -87,7 +108,7 @@ export default function LeadsManager() {
               type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Rechercher (nom, email, message…)"
+              placeholder="Rechercher (nom, entreprise, email, ville…)"
               aria-label="Rechercher une demande"
               className="min-h-11 w-full flex-1 rounded-2xl glass-soft px-4 text-sm outline-none focus:ring-2 focus:ring-brand/60 sm:w-64"
             />
@@ -104,6 +125,13 @@ export default function LeadsManager() {
                 </option>
               ))}
             </select>
+            <input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => setDateFrom(e.target.value)}
+              aria-label="Afficher les demandes à partir de cette date"
+              className="min-h-11 rounded-2xl glass-soft px-3 text-sm outline-none focus:ring-2 focus:ring-brand/60"
+            />
           </div>
         </div>
         {list.isLoading && <p className="text-sm text-muted-foreground">Chargement…</p>}
@@ -125,6 +153,8 @@ export default function LeadsManager() {
                 </h3>
                 <p className="mt-1 text-xs text-muted-foreground">
                   {formatDate(m.created_at)}
+                  {m.city_country ? ` · ${m.city_country}` : ""}
+                  {m.source ? ` · source : ${m.source}` : ""}
                   {m.marketing_consent ? " · Consent. marketing ✓" : " · Consent. marketing ✕"}
                 </p>
               </div>
@@ -145,6 +175,26 @@ export default function LeadsManager() {
             >
               {openId === m.id ? "Réduire" : "Voir le détail"}
             </button>
+
+            {openId === m.id && (
+              <div className="mt-4">
+                <label className="text-xs text-muted-foreground" htmlFor={`notes-${m.id}`}>
+                  Notes internes (visibles uniquement par l'administration)
+                </label>
+                <textarea
+                  id={`notes-${m.id}`}
+                  defaultValue={m.admin_notes}
+                  rows={3}
+                  maxLength={4000}
+                  onBlur={(e) => {
+                    if (e.target.value !== m.admin_notes)
+                      saveNotes.mutate({ id: m.id, notes: e.target.value });
+                  }}
+                  className="mt-2 w-full rounded-2xl glass-soft px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand/60"
+                  placeholder="Suivi, budget estimé, prochaine relance…"
+                />
+              </div>
+            )}
 
 
             <div className="mt-4 flex flex-wrap gap-2 text-sm">

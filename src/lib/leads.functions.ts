@@ -13,7 +13,17 @@ import type { Database } from "@/integrations/supabase/types";
 export type ContactMessage = Database["public"]["Tables"]["contact_messages"]["Row"];
 export type NewsletterSubscriber = Database["public"]["Tables"]["newsletter_subscribers"]["Row"];
 
-export const CONTACT_STATUSES = ["nouveau", "lu", "en cours", "traité", "archivé"] as const;
+export const CONTACT_STATUSES = [
+  "nouveau",
+  "lu",
+  "en cours",
+  "contacté",
+  "qualifié",
+  "gagné",
+  "perdu",
+  "traité",
+  "archivé",
+] as const;
 
 export type LeadResult = { ok: true } | { ok: false; reason: "throttled" };
 
@@ -81,6 +91,8 @@ export const submitContactMessage = createServerFn({ method: "POST" })
         service: z.string().trim().max(80).optional().default(""),
         message: z.string().trim().min(10).max(1500),
         companyName: z.string().trim().max(120).optional().default(""),
+        cityCountry: z.string().trim().max(120).optional().default(""),
+        source: z.string().trim().max(80).optional().default("site-web"),
         marketingConsent: z.boolean().optional().default(false),
         company: z.string().max(0).optional().default(""), // honeypot
         elapsedMs: z.number().int().min(0).max(86_400_000).optional().default(-1),
@@ -125,6 +137,8 @@ export const submitContactMessage = createServerFn({ method: "POST" })
       service: data.service,
       message: data.message,
       company_name: data.companyName,
+      city_country: data.cityCountry,
+      source: data.source || "site-web",
       marketing_consent: data.marketingConsent,
       attachment_path: data.attachmentPath,
       attachment_name: data.attachmentName,
@@ -217,4 +231,19 @@ export const listNewsletterSubscribers = createServerFn({ method: "GET" })
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
     return data as NewsletterSubscriber[];
+  });
+
+/** Notes internes de l'administration (jamais exposées publiquement). */
+export const updateContactMessageNotes = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) =>
+    z.object({ id: z.string().uuid(), notes: z.string().max(4000) }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase
+      .from("contact_messages")
+      .update({ admin_notes: data.notes })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true as const };
   });

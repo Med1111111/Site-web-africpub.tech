@@ -96,6 +96,7 @@ function validateContact(data: Record<string, string>) {
   else if (message.length > 1500) errors.message = "Message trop long (1500 caractères max.)";
 
   if ((data.companyName ?? "").length > 120) errors.companyName = "Nom d'entreprise trop long (120 caractères max.)";
+  if ((data.cityCountry ?? "").length > 120) errors.cityCountry = "Ville / pays trop long (120 caractères max.)";
 
   if (company.length > 0) errors.company = "Champ invalide";
 
@@ -121,6 +122,7 @@ function ContactPage() {
   const fileInput = useRef<HTMLInputElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
+  const submittingRef = useRef(false);
 
 
   const pickFile = (next: File | null) => {
@@ -158,6 +160,17 @@ function ContactPage() {
   };
 
   const runSubmit = async (form: HTMLFormElement, opts?: { skipFile?: boolean }) => {
+    // Protection double-clic : un seul envoi à la fois.
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    try {
+      await doSubmit(form, opts);
+    } finally {
+      submittingRef.current = false;
+    }
+  };
+
+  const doSubmit = async (form: HTMLFormElement, opts?: { skipFile?: boolean }) => {
     const raw = Object.fromEntries(new FormData(form));
     const data = Object.fromEntries(
       Object.entries(raw).map(([k, v]) => [k, typeof v === "string" ? v.trim() : v]),
@@ -348,6 +361,12 @@ function ContactPage() {
                 <input id="companyName" name="companyName" maxLength={120} className={field} placeholder="Nom de votre société" />
                 {errors.companyName && <p className="mt-1 text-xs text-destructive">{errors.companyName}</p>}
               </div>
+              <div className="sm:col-span-2">
+                <label htmlFor="cityCountry" className="text-sm font-medium">Ville / Pays (optionnel)</label>
+                <input id="cityCountry" name="cityCountry" maxLength={120} className={field} placeholder="Bouismail, Tipaza — Algérie" />
+                {errors.cityCountry && <p className="mt-1 text-xs text-destructive">{errors.cityCountry}</p>}
+              </div>
+              <input type="hidden" name="source" value="site-web/contact" />
             </div>
 
 
