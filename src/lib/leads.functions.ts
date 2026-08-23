@@ -137,6 +137,8 @@ export const submitContactMessage = createServerFn({ method: "POST" })
       service: data.service,
       message: data.message,
       company_name: data.companyName,
+      city_country: data.cityCountry,
+      source: data.source || "site-web",
       marketing_consent: data.marketingConsent,
       attachment_path: data.attachmentPath,
       attachment_name: data.attachmentName,
