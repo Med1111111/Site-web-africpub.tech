@@ -25,6 +25,7 @@ export default function LeadsManager() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"tous" | (typeof CONTACT_STATUSES)[number]>("tous");
   const [openId, setOpenId] = useState<string | null>(null);
+  const [dateFrom, setDateFrom] = useState("");
   const list = useQuery({ queryKey: ["admin-leads"], queryFn: () => listContactMessages() });
   const subs = useQuery({ queryKey: ["admin-newsletter"], queryFn: () => listNewsletterSubscribers() });
 
@@ -32,6 +33,15 @@ export default function LeadsManager() {
     mutationFn: (v: { id: string; status: (typeof CONTACT_STATUSES)[number] }) =>
       updateContactMessageStatus({ data: v }),
     onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["admin-leads"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const saveNotes = useMutation({
+    mutationFn: (v: { id: string; notes: string }) => updateContactMessageNotes({ data: v }),
+    onSuccess: () => {
+      toast.success("Notes enregistrées");
       qc.invalidateQueries({ queryKey: ["admin-leads"] });
     },
     onError: (e: Error) => toast.error(e.message),
