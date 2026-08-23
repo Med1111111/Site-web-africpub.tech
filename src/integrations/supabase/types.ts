@@ -16,8 +16,10 @@ export type Database = {
     Tables: {
       contact_messages: {
         Row: {
+          admin_notes: string
           attachment_name: string
           attachment_path: string
+          city_country: string
           company_name: string
           created_at: string
           email: string
@@ -27,12 +29,15 @@ export type Database = {
           name: string
           phone: string
           service: string
+          source: string
           status: string
           updated_at: string
         }
         Insert: {
+          admin_notes?: string
           attachment_name?: string
           attachment_path?: string
+          city_country?: string
           company_name?: string
           created_at?: string
           email: string
@@ -42,12 +47,15 @@ export type Database = {
           name: string
           phone?: string
           service?: string
+          source?: string
           status?: string
           updated_at?: string
         }
         Update: {
+          admin_notes?: string
           attachment_name?: string
           attachment_path?: string
+          city_country?: string
           company_name?: string
           created_at?: string
           email?: string
@@ -57,6 +65,7 @@ export type Database = {
           name?: string
           phone?: string
           service?: string
+          source?: string
           status?: string
           updated_at?: string
         }
