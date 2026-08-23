@@ -62,10 +62,20 @@ export default function LeadsManager() {
     const q = search.trim().toLowerCase();
     return (list.data ?? []).filter((m) => {
       if (statusFilter !== "tous" && m.status !== statusFilter) return false;
+      if (dateFrom && new Date(m.created_at) < new Date(dateFrom)) return false;
       if (!q) return true;
-      return [m.name, m.email, m.phone, m.service, m.message].some((v) => (v ?? "").toLowerCase().includes(q));
+      return [
+        m.name,
+        m.email,
+        m.phone,
+        m.service,
+        m.message,
+        m.company_name,
+        m.city_country,
+        m.source,
+      ].some((v) => (v ?? "").toLowerCase().includes(q));
     });
-  }, [list.data, search, statusFilter]);
+  }, [list.data, search, statusFilter, dateFrom]);
 
   return (
     <div className="grid gap-6">
