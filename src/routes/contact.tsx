@@ -159,6 +159,17 @@ function ContactPage() {
   };
 
   const runSubmit = async (form: HTMLFormElement, opts?: { skipFile?: boolean }) => {
+    // Protection double-clic : un seul envoi à la fois.
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    try {
+      await doSubmit(form, opts);
+    } finally {
+      submittingRef.current = false;
+    }
+  };
+
+  const doSubmit = async (form: HTMLFormElement, opts?: { skipFile?: boolean }) => {
     const raw = Object.fromEntries(new FormData(form));
     const data = Object.fromEntries(
       Object.entries(raw).map(([k, v]) => [k, typeof v === "string" ? v.trim() : v]),
