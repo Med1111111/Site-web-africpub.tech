@@ -176,6 +176,26 @@ export default function LeadsManager() {
               {openId === m.id ? "Réduire" : "Voir le détail"}
             </button>
 
+            {openId === m.id && (
+              <div className="mt-4">
+                <label className="text-xs text-muted-foreground" htmlFor={`notes-${m.id}`}>
+                  Notes internes (visibles uniquement par l'administration)
+                </label>
+                <textarea
+                  id={`notes-${m.id}`}
+                  defaultValue={m.admin_notes}
+                  rows={3}
+                  maxLength={4000}
+                  onBlur={(e) => {
+                    if (e.target.value !== m.admin_notes)
+                      saveNotes.mutate({ id: m.id, notes: e.target.value });
+                  }}
+                  className="mt-2 w-full rounded-2xl glass-soft px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-brand/60"
+                  placeholder="Suivi, budget estimé, prochaine relance…"
+                />
+              </div>
+            )}
+
 
             <div className="mt-4 flex flex-wrap gap-2 text-sm">
               <a className={`${btnGhost} inline-flex items-center`} href={`mailto:${m.email}`}>
