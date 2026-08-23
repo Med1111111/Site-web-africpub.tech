@@ -122,6 +122,7 @@ function ContactPage() {
   const fileInput = useRef<HTMLInputElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
+  const submittingRef = useRef(false);
 
 
   const pickFile = (next: File | null) => {
