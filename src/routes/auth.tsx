@@ -48,7 +48,14 @@ function AuthPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      if (mode === "signin") {
+      if (mode === "reset") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (error) throw error;
+        toast.success("Si un compte existe, un lien de réinitialisation vient d'être envoyé.");
+        setMode("signin");
+      } else if (mode === "signin") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         if (next) window.location.replace(next);
@@ -74,6 +81,7 @@ function AuthPage() {
       setLoading(false);
     }
   }
+
 
   async function onGoogle() {
     const result = await lovable.auth.signInWithOAuth("google", {
