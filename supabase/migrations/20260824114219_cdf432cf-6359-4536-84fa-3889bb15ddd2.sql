@@ -1,0 +1,12 @@
+-- Accorde le rôle admin aux comptes propriétaires
+INSERT INTO public.user_roles (user_id, role)
+SELECT u.id, 'admin'::app_role
+FROM auth.users u
+WHERE lower(u.email) IN ('africpub@gmail.com', 'mehdi.mediouni93@gmail.com')
+ON CONFLICT (user_id, role) DO NOTHING;
+
+-- Révoque tout autre accès administrateur/éditeur inconnu
+DELETE FROM public.user_roles ur
+USING auth.users u
+WHERE ur.user_id = u.id
+  AND lower(u.email) NOT IN ('africpub@gmail.com', 'mehdi.mediouni93@gmail.com');

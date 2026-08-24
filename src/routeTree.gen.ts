@@ -20,6 +20,7 @@ import { Route as FaqRouteImport } from './routes/faq'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as RechercheRouteImport } from './routes/recherche'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
@@ -81,6 +82,11 @@ const RechercheRoute = RechercheRouteImport.update({
   path: '/recherche',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
@@ -126,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/mcp': typeof McpRoute
   '/portfolio': typeof PortfolioRoute
   '/recherche': typeof RechercheRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -144,6 +151,7 @@ export interface FileRoutesByTo {
   '/mcp': typeof McpRoute
   '/portfolio': typeof PortfolioRoute
   '/recherche': typeof RechercheRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -164,6 +172,7 @@ export interface FileRoutesById {
   '/mcp': typeof McpRoute
   '/portfolio': typeof PortfolioRoute
   '/recherche': typeof RechercheRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/services': typeof ServicesRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -184,6 +193,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/portfolio'
     | '/recherche'
+    | '/reset-password'
     | '/services'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
@@ -202,6 +212,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/portfolio'
     | '/recherche'
+    | '/reset-password'
     | '/services'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
@@ -221,6 +232,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/portfolio'
     | '/recherche'
+    | '/reset-password'
     | '/services'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
@@ -241,6 +253,7 @@ export interface RootRouteChildren {
   McpRoute: typeof McpRoute
   PortfolioRoute: typeof PortfolioRoute
   RechercheRoute: typeof RechercheRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   ServicesRoute: typeof ServicesRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
@@ -327,6 +340,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RechercheRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services': {
       id: '/services'
       path: '/services'
@@ -395,6 +415,7 @@ const rootRouteChildren: RootRouteChildren = {
   McpRoute: McpRoute,
   PortfolioRoute: PortfolioRoute,
   RechercheRoute: RechercheRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   ServicesRoute: ServicesRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:

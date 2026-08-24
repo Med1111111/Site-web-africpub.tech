@@ -30,10 +30,11 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const navigate = useNavigate();
   const { next } = Route.useSearch();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [mode, setMode] = useState<"signin" | "signup" | "reset">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -47,7 +48,14 @@ function AuthPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      if (mode === "signin") {
+      if (mode === "reset") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (error) throw error;
+        toast.success("Si un compte existe, un lien de réinitialisation vient d'être envoyé.");
+        setMode("signin");
+      } else if (mode === "signin") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         if (next) window.location.replace(next);
@@ -73,6 +81,7 @@ function AuthPage() {
       setLoading(false);
     }
   }
+
 
   async function onGoogle() {
     const result = await lovable.auth.signInWithOAuth("google", {
@@ -106,27 +115,44 @@ function AuthPage() {
               className="min-h-11 w-full rounded-2xl glass-soft px-4 text-sm outline-none focus:ring-2 focus:ring-brand/60"
             />
           </div>
-          <div>
-            <label htmlFor="password" className="mb-1.5 block text-sm text-muted-foreground">
-              Mot de passe
-            </label>
-            <input
-              id="password"
-              type="password"
-              required
-              minLength={8}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="min-h-11 w-full rounded-2xl glass-soft px-4 text-sm outline-none focus:ring-2 focus:ring-brand/60"
-            />
-          </div>
+          {mode !== "reset" && (
+            <div>
+              <label htmlFor="password" className="mb-1.5 block text-sm text-muted-foreground">
+                Mot de passe
+              </label>
+              <input
+                id="password"
+                type="password"
+                required
+                minLength={8}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="min-h-11 w-full rounded-2xl glass-soft px-4 text-sm outline-none focus:ring-2 focus:ring-brand/60"
+              />
+            </div>
+          )}
           <button
             type="submit"
             disabled={loading}
             className="min-h-11 w-full rounded-full bg-brand px-5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
           >
-            {loading ? "Patientez…" : mode === "signin" ? "Se connecter" : "Créer le compte"}
+            {loading
+              ? "Patientez…"
+              : mode === "signin"
+                ? "Se connecter"
+                : mode === "signup"
+                  ? "Créer le compte"
+                  : "Envoyer le lien de réinitialisation"}
           </button>
+          {mode !== "reset" && (
+            <button
+              type="button"
+              onClick={() => setMode("reset")}
+              className="w-full text-center text-xs text-muted-foreground underline underline-offset-4"
+            >
+              Mot de passe oublié ?
+            </button>
+          )}
         </form>
 
         <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
@@ -147,6 +173,7 @@ function AuthPage() {
             {mode === "signin" ? "Créer un compte" : "Se connecter"}
           </button>
         </p>
+
       </section>
     </div>
   );
