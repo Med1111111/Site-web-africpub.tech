@@ -25,6 +25,7 @@ export default function LeadsManager() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"tous" | (typeof CONTACT_STATUSES)[number]>("tous");
   const [openId, setOpenId] = useState<string | null>(null);
+  const [confirmId, setConfirmId] = useState<string | null>(null);
   const [dateFrom, setDateFrom] = useState("");
   const list = useQuery({ queryKey: ["admin-leads"], queryFn: () => listContactMessages() });
   const subs = useQuery({ queryKey: ["admin-newsletter"], queryFn: () => listNewsletterSubscribers() });
