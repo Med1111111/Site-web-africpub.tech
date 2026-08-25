@@ -271,15 +271,28 @@ export default function LeadsManager() {
                   Marquer comme traitée
                 </button>
               )}
-              <button
-                type="button"
-                className={btnGhost}
-                onClick={() => {
-                  if (confirm("Supprimer cette demande ?")) remove.mutate(m.id);
-                }}
-              >
-                Supprimer
-              </button>
+              {confirmId === m.id ? (
+                <span className="inline-flex items-center gap-2">
+                  <button
+                    type="button"
+                    className={`${btnGhost} text-brand`}
+                    disabled={remove.isPending}
+                    onClick={() => {
+                      setConfirmId(null);
+                      remove.mutate(m.id);
+                    }}
+                  >
+                    {remove.isPending ? "Suppression…" : "Confirmer la suppression"}
+                  </button>
+                  <button type="button" className={btnGhost} onClick={() => setConfirmId(null)}>
+                    Annuler
+                  </button>
+                </span>
+              ) : (
+                <button type="button" className={btnGhost} onClick={() => setConfirmId(m.id)}>
+                  Supprimer
+                </button>
+              )}
             </div>
           </article>
         ))}
