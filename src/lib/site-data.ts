@@ -73,7 +73,7 @@ export const services: Service[] = [
   },
   {
     slug: "roll-up",
-    title: "Impression grand format\net petit format\nCadaux promotionels\n\u00a0",
+    title: "Impression grand format et\nCadeaux promotionels\n",
     desc: "impression de qualité spéciale exterieur sur tout type de support, autocollant, one way vision, bache, flag,\u00a0",
     icon: "▮",
     image: imprimanteAutocollant.url,
@@ -89,15 +89,15 @@ export const services: Service[] = [
   },
   {
     slug: "impression-petit-format",
-    title: "Impression petit format",
-    desc: "Cartes de visite, flyers, dépliants, brochures et papeterie. Colorimétrie calibrée et finitions pelliculées.",
+    title: "Impression numerique petit format",
+    desc: "Cartes de visite, flyers, dépliants, brochures et prospectus, carnet NCR, catalogue , affichage en tout format,",
     icon: "▤",
     image: petitFormat.url,
     alt: "Pile de brochures imprimées en quadrichromie sortant de presse",
   },
   {
     slug: "print-commercial",
-    title: "Supports commerciaux",
+    title: "Supports de communicartion\u00a0",
     desc: "Dépliants 3 volets, catalogues, plaquettes et documents commerciaux entièrement conçus par notre studio.",
     icon: "◈",
     image: triFold.url,
