@@ -60,8 +60,8 @@ export const services: Service[] = [
     title: "Enseigne lumineuse",
     desc: "Bardage composite grande hauteur, calepinage, intégration lumière et pose sur ossature.",
     icon: "▦",
-    image: facade.url,
-    alt: "Façade architecturale en panneaux composites gris à facettes",
+    image: enseigne.url,
+    alt: "Enseigne lumineuse avec lettres boîtiers LED",
   },
   {
     slug: "decoupe-cnc",
@@ -73,7 +73,7 @@ export const services: Service[] = [
   },
   {
     slug: "roll-up",
-    title: "Impression grand format et\nCadeaux promotionels\n",
+    title: "Impression grand format et cadeaux promotionnels",
     desc: "impression de qualité spéciale exterieur sur tout type de support, autocollant, one way vision, bache, flag,\u00a0",
     icon: "▮",
     image: imprimanteAutocollant.url,
