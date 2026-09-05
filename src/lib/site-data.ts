@@ -42,7 +42,7 @@ export const services: Service[] = [
   {
     slug: "enseignes",
     title: "Evennement",
-    desc: "Réalisation de letrage lumineux et panneaux publicitaire en petit et en grand model",
+    desc: "Réalisation de letrage lumineux et panneaux publicitaire en petit et grande enseigne sur immeuble",
     icon: "✦",
     image: enseigne.url,
     alt: "Enseigne lumineuse avec lettres boîtiers LED",
