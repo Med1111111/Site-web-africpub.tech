@@ -41,15 +41,15 @@ export type Service = {
 export const services: Service[] = [
   {
     slug: "enseignes",
-    title: "Evennement",
+    title: "Événement",
     desc: "Réalisation de letrage lumineux et panneaux publicitaire en petit et grande enseigne sur immeuble",
     icon: "✦",
-    image: enseigne.url,
-    alt: "Enseigne lumineuse avec lettres boîtiers LED",
+    image: facade.url,
+    alt: "Façade architecturale en panneaux composites gris à facettes",
   },
   {
     slug: "alucobond-3d",
-    title: "\u00a0Alucobond et daçade 3D",
+    title: "Alucobond et façade 3D",
     desc: "Façades en panneaux composites aluminium, facettes 3D, pliage sur mesure et structure porteuse.",
     icon: "◧",
     image: alucobond.url,
@@ -60,8 +60,8 @@ export const services: Service[] = [
     title: "Enseigne lumineuse",
     desc: "Bardage composite grande hauteur, calepinage, intégration lumière et pose sur ossature.",
     icon: "▦",
-    image: facade.url,
-    alt: "Façade architecturale en panneaux composites gris à facettes",
+    image: enseigne.url,
+    alt: "Enseigne lumineuse avec lettres boîtiers LED",
   },
   {
     slug: "decoupe-cnc",
@@ -73,7 +73,7 @@ export const services: Service[] = [
   },
   {
     slug: "roll-up",
-    title: "Impression grand format et\nCadeaux promotionels\n",
+    title: "Impression grand format et cadeaux promotionnels",
     desc: "impression de qualité spéciale exterieur sur tout type de support, autocollant, one way vision, bache, flag,\u00a0",
     icon: "▮",
     image: imprimanteAutocollant.url,
@@ -97,7 +97,7 @@ export const services: Service[] = [
   },
   {
     slug: "print-commercial",
-    title: "Supports de communicartion\u00a0",
+    title: "Supports de communication",
     desc: "Dépliants 3 volets, catalogues, plaquettes et documents commerciaux entièrement conçus par notre studio.",
     icon: "◈",
     image: triFold.url,
