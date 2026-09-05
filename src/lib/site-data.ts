@@ -42,11 +42,11 @@ export type Service = {
 export const services: Service[] = [
   {
     slug: "enseignes",
-    title: "Événement",
-    desc: "Réalisation de letrage lumineux et panneaux publicitaire en petit et grande enseigne sur immeuble",
+    title: "Séminaires & Événements",
+    desc: "Organisation de séminaires, congrès et événements scientifiques avec signalétique, scénographie et supports imprimés sur mesure.",
     icon: "✦",
     image: evenement.url,
-    alt: "Stand événementiel premium AFRIC PUB en rouge et noir",
+    alt: "Salle de séminaire scientifique AFRIC PUB avec écran LED et public",
   },
   {
     slug: "alucobond-3d",
