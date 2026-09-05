@@ -51,10 +51,10 @@ export const services: Service[] = [
   {
     slug: "alucobond-3d",
     title: "Alucobond et façade 3D",
-    desc: "Façades en panneaux composites aluminium, facettes 3D, pliage sur mesure et structure porteuse.",
+    desc: "Façades architecturales en panneaux composites aluminium, facettes 3D, design contemporain et structure porteuse.",
     icon: "◧",
     image: alucobond.url,
-    alt: "Habillage de façade en Alucobond à facettes 3D",
+    alt: "Façade architecturale contemporaine en Alucobond 3D rouge et noir au coucher du soleil",
   },
   {
     slug: "facades",
