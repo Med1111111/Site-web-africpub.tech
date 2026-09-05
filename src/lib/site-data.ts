@@ -1,6 +1,7 @@
 import enseigne from "@/assets/service-enseigne-lumineuse.jpg.asset.json";
 import alucobond from "@/assets/service-alucobond-3d.jpg.asset.json";
 import facade from "@/assets/service-facade-alucobond.jpg.asset.json";
+import evenement from "@/assets/service-evenement.jpg.asset.json";
 import cnc from "@/assets/service-decoupe-cnc.jpg.asset.json";
 import imprimanteAutocollant from "@/assets/service-imprimante-autocollant-grand-format.jpg.asset.json";
 import petitFormat from "@/assets/service-impression-petit-format.jpg.asset.json";
@@ -44,8 +45,8 @@ export const services: Service[] = [
     title: "Événement",
     desc: "Réalisation de letrage lumineux et panneaux publicitaire en petit et grande enseigne sur immeuble",
     icon: "✦",
-    image: facade.url,
-    alt: "Façade architecturale en panneaux composites gris à facettes",
+    image: evenement.url,
+    alt: "Stand événementiel premium AFRIC PUB en rouge et noir",
   },
   {
     slug: "alucobond-3d",
